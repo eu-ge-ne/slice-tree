@@ -42,3 +42,11 @@ Deno.test("erase", () => {
 
   tree.erase(0, 1);
 });
+
+Deno.test("empty", () => {
+  const tree = new SliceTree();
+
+  assertEquals(tree.count, 0);
+  assertEquals(tree.line_count, 0);
+  assertEquals(tree.read(0).toArray().join(""), "");
+});
