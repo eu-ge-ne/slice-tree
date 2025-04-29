@@ -47,6 +47,17 @@ Deno.test("empty", () => {
   const tree = new SliceTree();
 
   assertEquals(tree.count, 0);
-  assertEquals(tree.line_count, 0);
+  assertEquals(tree.line_count, 1);
   assertEquals(tree.read(0).toArray().join(""), "");
+});
+
+Deno.test("write adds characters", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem ipsum");
+
+  assertEquals(tree.count, 11);
+  assertEquals(tree.line_count, 1);
+  assertEquals(tree.read(0).toArray().join(""), "Lorem ipsum");
+  assertEquals(tree.line(0).toArray().join(""), "Lorem ipsum");
 });
