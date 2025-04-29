@@ -22,9 +22,7 @@ jobs:
           deno-version: v2.x
 
       - run: deno fmt --check
-
       - run: deno lint
 
-      - run: deno test --coverage=cov
-
+      - run: deno test --coverage
       - run: deno coverage --lcov > cov.lcov
