@@ -33,6 +33,7 @@ export class SliceTree {
     this.#str = this.#str.slice(0, index) + text + this.#str.slice(index);
   }
 
-  erase(_index: number, _count: number): void {
+  erase(index: number, count: number): void {
+    this.#str = this.#str.slice(0, index) + this.#str.slice(index + count);
   }
 }

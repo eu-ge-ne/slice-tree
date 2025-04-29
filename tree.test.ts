@@ -74,3 +74,39 @@ Deno.test("write adds new lines", () => {
   assertEquals(tree.line(0).toArray().join(""), "Lorem ipsum\n");
   assertEquals(tree.line(1).toArray().join(""), "dolor sit amet");
 });
+
+Deno.test("erase removes characters", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem ipsum");
+  tree.erase(5, 6);
+
+  assertEquals(tree.count, 5);
+  assertEquals(tree.line_count, 1);
+  assertEquals(tree.read(0).toArray().join(""), "Lorem");
+  assertEquals(tree.line(0).toArray().join(""), "Lorem");
+});
+
+Deno.test("erase removes lines", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem ipsum\ndolor sit amet");
+  tree.erase(11, 15);
+
+  assertEquals(tree.count, 11);
+  assertEquals(tree.line_count, 1);
+  assertEquals(tree.read(0).toArray().join(""), "Lorem ipsum");
+  assertEquals(tree.line(0).toArray().join(""), "Lorem ipsum");
+});
+
+Deno.test("erase all leaves empty string", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem ipsum\ndolor sit amet");
+  tree.erase(0, 26);
+
+  assertEquals(tree.count, 0);
+  assertEquals(tree.line_count, 1);
+  assertEquals(tree.read(0).toArray().join(""), "");
+  assertEquals(tree.line(0).toArray().join(""), "");
+});
