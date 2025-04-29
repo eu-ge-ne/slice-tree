@@ -13,8 +13,20 @@ export class SliceTree {
     yield this.#str;
   }
 
-  *line(_index: number): Generator<string> {
-    yield this.#str;
+  *line(index: number): Generator<string> {
+    const line_breaks = this.#str.matchAll(/r?\n/gm).toArray().map((x) => ({
+      start: x.index,
+      end: x.index + x[0].length,
+    }));
+
+    if (index === 0) {
+      yield this.#str.slice(0, line_breaks[0]?.end);
+    } else {
+      yield this.#str.slice(
+        line_breaks[index - 1]?.end,
+        line_breaks[index]?.end,
+      );
+    }
   }
 
   write(index: number, text: string): void {
