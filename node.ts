@@ -1,5 +1,5 @@
 import { Buffer } from "./buffer.ts";
-import { rb_insert_after } from "./insertion.ts";
+import { insert_after } from "./insertion.ts";
 
 export interface Tree {
   root: Node;
@@ -75,7 +75,7 @@ export function split_node(tree: Tree, node: Node, i: number): Node {
   bubble_metadata(node);
 
   const next = create_node(buffer, start + i, count - i);
-  rb_insert_after(tree, node, next);
+  insert_after(tree, node, next);
 
   return next;
 }

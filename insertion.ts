@@ -1,28 +1,28 @@
 import { bubble_metadata, NIL, Node, Tree } from "./node.ts";
-import { tree_maximum, tree_minimum } from "./querying.ts";
+import { maximum, minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
-export function rb_insert_before(tree: Tree, parent: Node, child: Node): void {
+export function insert_before(tree: Tree, parent: Node, child: Node): void {
   if (parent.left === NIL) {
-    rb_insert_left(tree, parent, child);
+    insert_left(tree, parent, child);
   } else {
-    const x = tree_maximum(parent.left);
+    const x = maximum(parent.left);
 
-    rb_insert_right(tree, x, child);
+    insert_right(tree, x, child);
   }
 }
 
-export function rb_insert_after(tree: Tree, node: Node, child: Node): void {
+export function insert_after(tree: Tree, node: Node, child: Node): void {
   if (node.right === NIL) {
-    rb_insert_right(tree, node, child);
+    insert_right(tree, node, child);
   } else {
-    const x = tree_minimum(node.right);
+    const x = minimum(node.right);
 
-    rb_insert_left(tree, x, child);
+    insert_left(tree, x, child);
   }
 }
 
-export function rb_insert_left(tree: Tree, parent: Node, child: Node): void {
+export function insert_left(tree: Tree, parent: Node, child: Node): void {
   if (parent === NIL) {
     tree.root = child;
     child.p = tree.root;
@@ -32,10 +32,10 @@ export function rb_insert_left(tree: Tree, parent: Node, child: Node): void {
   }
 
   bubble_metadata(child);
-  rb_insert_fixup(tree, child);
+  insert_fixup(tree, child);
 }
 
-export function rb_insert_right(tree: Tree, parent: Node, child: Node): void {
+export function insert_right(tree: Tree, parent: Node, child: Node): void {
   if (parent === NIL) {
     tree.root = child;
     child.p = tree.root;
@@ -45,10 +45,10 @@ export function rb_insert_right(tree: Tree, parent: Node, child: Node): void {
   }
 
   bubble_metadata(child);
-  rb_insert_fixup(tree, child);
+  insert_fixup(tree, child);
 }
 
-function rb_insert_fixup(tree: Tree, z: Node): void {
+function insert_fixup(tree: Tree, z: Node): void {
   while (z.p.red) {
     if (z.p === z.p.p.left) {
       const y = z.p.p.right;

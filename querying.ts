@@ -1,6 +1,6 @@
 import { NIL, Node } from "./node.ts";
 
-export function tree_search(
+export function search(
   x: Node,
   i: number,
 ): { node: Node; offset: number } | undefined {
@@ -24,10 +24,7 @@ export function tree_search(
   return;
 }
 
-export function tree_search_line_position(
-  x: Node,
-  l: number,
-): number | undefined {
+export function search_line_position(x: Node, l: number): number | undefined {
   let n = 0;
 
   while (x !== NIL) {
@@ -52,7 +49,7 @@ export function tree_search_line_position(
   return;
 }
 
-export function tree_minimum(x: Node): Node {
+export function minimum(x: Node): Node {
   while (x.left !== NIL) {
     x = x.left;
   }
@@ -60,7 +57,7 @@ export function tree_minimum(x: Node): Node {
   return x;
 }
 
-export function tree_maximum(x: Node): Node {
+export function maximum(x: Node): Node {
   while (x.right !== NIL) {
     x = x.right;
   }
@@ -68,9 +65,9 @@ export function tree_maximum(x: Node): Node {
   return x;
 }
 
-export function tree_predecessor(x: Node): Node {
+export function predecessor(x: Node): Node {
   if (x.left !== NIL) {
-    return tree_maximum(x.left);
+    return maximum(x.left);
   } else {
     let y = x.p;
 
@@ -83,9 +80,9 @@ export function tree_predecessor(x: Node): Node {
   }
 }
 
-export function tree_successor(x: Node): Node {
+export function successor(x: Node): Node {
   if (x.right !== NIL) {
-    return tree_minimum(x.right);
+    return minimum(x.right);
   } else {
     let y = x.p;
 

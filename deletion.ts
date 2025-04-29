@@ -1,34 +1,34 @@
 import { bubble_metadata, NIL, Node, Tree } from "./node.ts";
-import { tree_minimum } from "./querying.ts";
+import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
-export function rb_delete_node(tree: Tree, z: Node): void {
+export function delete_node(tree: Tree, z: Node): void {
   let y = z;
   let y_original_color = y.red;
   let x: Node;
 
   if (z.left === NIL) {
     x = z.right;
-    rb_transplant(tree, z, z.right);
+    transplant(tree, z, z.right);
     bubble_metadata(z.right.p);
   } else if (z.right === NIL) {
     x = z.left;
-    rb_transplant(tree, z, z.left);
+    transplant(tree, z, z.left);
     bubble_metadata(z.left.p);
   } else {
-    y = tree_minimum(z.right);
+    y = minimum(z.right);
     y_original_color = y.red;
     x = y.right;
 
     if (y !== z.right) {
-      rb_transplant(tree, y, y.right);
+      transplant(tree, y, y.right);
       y.right = z.right;
       y.right.p = y;
     } else {
       x.p = y;
     }
 
-    rb_transplant(tree, z, y);
+    transplant(tree, z, y);
     y.left = z.left;
     y.left.p = y;
     y.red = z.red;
@@ -36,11 +36,11 @@ export function rb_delete_node(tree: Tree, z: Node): void {
   }
 
   if (!y_original_color) {
-    rb_delete_fixup(tree, x);
+    delete_fixup(tree, x);
   }
 }
 
-function rb_transplant(tree: Tree, u: Node, v: Node): void {
+function transplant(tree: Tree, u: Node, v: Node): void {
   if (u.p === NIL) {
     tree.root = v;
   } else if (u === u.p.left) {
@@ -52,7 +52,7 @@ function rb_transplant(tree: Tree, u: Node, v: Node): void {
   v.p = u.p;
 }
 
-function rb_delete_fixup(tree: Tree, x: Node): void {
+function delete_fixup(tree: Tree, x: Node): void {
   while (x !== tree.root && !x.red) {
     if (x === x.p.left) {
       let w = x.p.right;
@@ -104,5 +104,6 @@ function rb_delete_fixup(tree: Tree, x: Node): void {
       }
     }
   }
+
   x.red = false;
 }

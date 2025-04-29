@@ -1,6 +1,6 @@
 import { Buffer, create_buffer } from "./buffer.ts";
-import { rb_delete_node } from "./deletion.ts";
-import { rb_insert_left, rb_insert_right } from "./insertion.ts";
+import { delete_node } from "./deletion.ts";
+import { insert_left, insert_right } from "./insertion.ts";
 import {
   bubble_metadata,
   create_node,
@@ -10,11 +10,7 @@ import {
   split_node,
   Tree,
 } from "./node.ts";
-import {
-  tree_search,
-  tree_search_line_position,
-  tree_successor,
-} from "./querying.ts";
+import { search, search_line_position, successor } from "./querying.ts";
 
 export class SliceTree implements Tree {
   root = NIL;
@@ -30,7 +26,7 @@ export class SliceTree implements Tree {
   }
 
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
-    const first = tree_search(this.root, start);
+    const first = search(this.root, start);
     if (!first) {
       return "";
     }
@@ -40,26 +36,24 @@ export class SliceTree implements Tree {
     let n = Math.min(first.node.count - first.offset, remaining);
     remaining -= n;
     yield node_text(first.node, first.offset, first.offset + n);
-    let node = tree_successor(first.node);
+    let node = successor(first.node);
 
     while ((node !== NIL) && (remaining > 0)) {
       n = Math.min(node.count, remaining);
       remaining -= n;
       yield node_text(node, 0, n);
-      node = tree_successor(node);
+      node = successor(node);
     }
   }
 
   *line(index: number): Generator<string> {
-    const start = index === 0
-      ? 0
-      : tree_search_line_position(this.root, index - 1);
+    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
     if (typeof start === "undefined") {
       yield "";
       return;
     }
 
-    const end = tree_search_line_position(this.root, index);
+    const end = search_line_position(this.root, index);
 
     yield* this.read(start, end);
   }
@@ -84,7 +78,7 @@ export class SliceTree implements Tree {
       index -= node.left_count;
       if (index < node.count) {
         const x = split_node(this, node, index);
-        rb_insert_left(this, x, child);
+        insert_left(this, x, child);
         return;
       }
 
@@ -99,14 +93,14 @@ export class SliceTree implements Tree {
       this.root.red = false;
       bubble_metadata(this.root);
     } else if (as_left_child) {
-      rb_insert_left(this, p, child);
+      insert_left(this, p, child);
     } else {
-      rb_insert_right(this, p, child);
+      insert_right(this, p, child);
     }
   }
 
   erase(index: number, count: number): void {
-    const first = tree_search(this.root, index);
+    const first = search(this.root, index);
     if (!first) {
       return;
     }
@@ -118,15 +112,15 @@ export class SliceTree implements Tree {
       x = split_node(this, first.node, first.offset);
     }
 
-    const last = tree_search(this.root, index + count);
+    const last = search(this.root, index + count);
     if (last && last.offset !== 0) {
       split_node(this, last.node, last.offset);
     }
 
     while ((x !== NIL) && (i < count)) {
       i += x.count;
-      const next = tree_successor(x);
-      rb_delete_node(this, x);
+      const next = successor(x);
+      delete_node(this, x);
       x = next;
     }
   }
