@@ -24,11 +24,18 @@ jobs:
       - run: deno fmt --check
       - run: deno lint
 
-      - run: deno test --coverage
-      - run: deno coverage --lcov > cov.lcov
+      - run: deno test --coverage=tmp/cov/ --junit-path=tmp/junit.xml
+      - run: deno coverage --lcov tmp/cov/ > tmp/cov.lcov
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: tmp/junit.xml
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: cov.lcov
+          files: tmp/cov.lcov
