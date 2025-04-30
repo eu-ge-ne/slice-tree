@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, Node, Tree } from "./node.ts";
+import { bubble_metadata, NIL, Node, root, Tree } from "./node.ts";
 import { maximum, minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
@@ -24,8 +24,8 @@ export function insert_after(tree: Tree, node: Node, child: Node): void {
 
 export function insert_left(tree: Tree, parent: Node, child: Node): void {
   if (parent === NIL) {
-    tree.root = child;
-    child.p = tree.root;
+    tree[root] = child;
+    child.p = tree[root];
   } else {
     parent.left = child;
     child.p = parent;
@@ -37,8 +37,8 @@ export function insert_left(tree: Tree, parent: Node, child: Node): void {
 
 export function insert_right(tree: Tree, parent: Node, child: Node): void {
   if (parent === NIL) {
-    tree.root = child;
-    child.p = tree.root;
+    tree[root] = child;
+    child.p = tree[root];
   } else {
     parent.right = child;
     child.p = parent;
@@ -85,5 +85,5 @@ function insert_fixup(tree: Tree, z: Node): void {
     }
   }
 
-  tree.root.red = false;
+  tree[root].red = false;
 }
