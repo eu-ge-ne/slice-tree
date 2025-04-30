@@ -235,6 +235,36 @@ Deno.test("erase removes lines", () => {
   assertEquals(tree.line(0).toArray().join(""), "Lorem ipsum");
 });
 
+Deno.test("erase splitting nodes produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  tree.write(
+    0,
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+
+  tree.erase(13, 13);
+  tree.erase(26, 13);
+  tree.erase(39, 13);
+  tree.erase(52, 13);
+  tree.erase(11, 11);
+  tree.erase(22, 11);
+  tree.erase(33, 11);
+  tree.erase(44, 11);
+  tree.erase(9, 9);
+  tree.erase(18, 9);
+  tree.erase(7, 7);
+  tree.erase(5, 5);
+  tree.erase(3, 3);
+  tree.erase(1, 1);
+  tree.erase(0, 2);
+
+  assertEquals(tree.count, 0);
+  assertEquals(tree.read(0).toArray().join(""), "");
+
+  assert_tree(tree);
+});
+
 Deno.test("erase all leaves empty string", () => {
   const tree = new SliceTree();
 
