@@ -7,26 +7,27 @@ import {
   NIL,
   Node,
   node_text,
+  root,
   split_node,
   Tree,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
 
 export class SliceTree implements Tree {
-  root = NIL;
+  [root] = NIL;
 
-  private buffers: Buffer[] = [];
+  #buffers: Buffer[] = [];
 
   get count(): number {
-    return this.root.total_count;
+    return this[root].total_count;
   }
 
   get line_count(): number {
-    return this.root.total_count === 0 ? 0 : 1 + this.root.total_line_count;
+    return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
   }
 
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
-    const first = search(this.root, start);
+    const first = search(this[root], start);
     if (!first) {
       return "";
     }
@@ -47,23 +48,23 @@ export class SliceTree implements Tree {
   }
 
   *line(index: number): Generator<string> {
-    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
+    const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
     if (typeof start === "undefined") {
       yield "";
       return;
     }
 
-    const end = search_line_position(this.root, index);
+    const end = search_line_position(this[root], index);
 
     yield* this.read(start, end);
   }
 
   write(index: number, text: string): void {
     const buffer = create_buffer(text);
-    this.buffers.push(buffer);
+    this.#buffers.push(buffer);
     const child = create_node(buffer, 0, text.length);
 
-    let node = this.root;
+    let node = this[root];
     let p: Node = NIL;
     let as_left_child = true;
 
@@ -89,9 +90,9 @@ export class SliceTree implements Tree {
     }
 
     if (p === NIL) {
-      this.root = child;
-      this.root.red = false;
-      bubble_metadata(this.root);
+      this[root] = child;
+      this[root].red = false;
+      bubble_metadata(this[root]);
     } else if (as_left_child) {
       insert_left(this, p, child);
     } else {
@@ -100,7 +101,7 @@ export class SliceTree implements Tree {
   }
 
   erase(index: number, count: number): void {
-    const first = search(this.root, index);
+    const first = search(this[root], index);
     if (!first) {
       return;
     }
@@ -112,7 +113,7 @@ export class SliceTree implements Tree {
       x = split_node(this, first.node, first.offset);
     }
 
-    const last = search(this.root, index + count);
+    const last = search(this[root], index + count);
     if (last && last.offset !== 0) {
       split_node(this, last.node, last.offset);
     }
