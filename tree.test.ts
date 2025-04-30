@@ -1,6 +1,7 @@
 import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 
 import { SliceTree } from "./tree.ts";
+import { assert_tree } from "./validation.ts";
 
 Deno.test("create", () => {
   new SliceTree();
@@ -43,11 +44,27 @@ Deno.test("erase", () => {
   tree.erase(0, 1);
 });
 
-Deno.test("empty", () => {
+Deno.test("empty tree is a valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  assert_tree(tree);
+});
+
+Deno.test("empty tree contains 0 characters", () => {
   const tree = new SliceTree();
 
   assertEquals(tree.count, 0);
+});
+
+Deno.test("empty tree contains 0 lines", () => {
+  const tree = new SliceTree();
+
   assertEquals(tree.line_count, 0);
+});
+
+Deno.test("empty tree contains ''", () => {
+  const tree = new SliceTree();
+
   assertEquals(tree.read(0).toArray().join(""), "");
 });
 
@@ -73,6 +90,37 @@ Deno.test("write adds new lines", () => {
   assertEquals(tree.read(0).toArray().join(""), "Lorem ipsum\ndolor sit amet");
   assertEquals(tree.line(0).toArray().join(""), "Lorem ipsum\n");
   assertEquals(tree.line(1).toArray().join(""), "dolor sit amet");
+});
+
+Deno.test("degenerate write produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem");
+  tree.write(tree.count, " ipsum");
+  tree.write(tree.count, " dolor");
+  tree.write(tree.count, " sit");
+  tree.write(tree.count, " amet,");
+  tree.write(tree.count, " consectetur");
+  tree.write(tree.count, " adipiscing");
+  tree.write(tree.count, " elit,");
+  tree.write(tree.count, " sed");
+  tree.write(tree.count, " do");
+  tree.write(tree.count, " eiusmod");
+  tree.write(tree.count, " tempor");
+  tree.write(tree.count, " incididunt");
+  tree.write(tree.count, " ut");
+  tree.write(tree.count, " labore");
+  tree.write(tree.count, " et");
+  tree.write(tree.count, " dolore");
+  tree.write(tree.count, " magna");
+  tree.write(tree.count, " aliqua.");
+
+  assertEquals(
+    tree.read(0).toArray().join(""),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+
+  assert_tree(tree);
 });
 
 Deno.test("erase removes characters", () => {
