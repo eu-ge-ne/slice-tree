@@ -123,6 +123,37 @@ Deno.test("degenerate write produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
+Deno.test("degenerate reverse write produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, " aliqua.");
+  tree.write(0, " magna");
+  tree.write(0, " dolore");
+  tree.write(0, " et");
+  tree.write(0, " labore");
+  tree.write(0, " ut");
+  tree.write(0, " incididunt");
+  tree.write(0, " tempor");
+  tree.write(0, " eiusmod");
+  tree.write(0, " do");
+  tree.write(0, " sed");
+  tree.write(0, " elit,");
+  tree.write(0, " adipiscing");
+  tree.write(0, " consectetur");
+  tree.write(0, " amet,");
+  tree.write(0, " sit");
+  tree.write(0, " dolor");
+  tree.write(0, " ipsum");
+  tree.write(0, "Lorem");
+
+  assertEquals(
+    tree.read(0).toArray().join(""),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+
+  assert_tree(tree);
+});
+
 Deno.test("erase removes characters", () => {
   const tree = new SliceTree();
 
