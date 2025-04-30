@@ -124,6 +124,29 @@ Deno.test("random write produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
+Deno.test("write splitting nodes produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem aliqua.");
+  tree.write(5, " ipsum magna");
+  tree.write(11, " dolor dolore");
+  tree.write(17, " sit et");
+  tree.write(21, " amet, labore");
+  tree.write(27, " consectetur ut");
+  tree.write(39, " adipiscing incididunt");
+  tree.write(50, " elit, tempor");
+  tree.write(56, " sed eiusmod");
+  tree.write(60, " do");
+
+  assertEquals(tree.count, 123);
+  assertEquals(
+    tree.read(0).toArray().join(""),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+
+  assert_tree(tree);
+});
+
 Deno.test("degenerate write produces valid red-black tree", () => {
   const tree = new SliceTree();
 
