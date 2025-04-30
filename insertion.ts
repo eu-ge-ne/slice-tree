@@ -2,50 +2,36 @@ import { bubble_metadata, NIL, Node, root, Tree } from "./node.ts";
 import { maximum, minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
-export function insert_before(tree: Tree, parent: Node, child: Node): void {
-  if (parent.left === NIL) {
-    insert_left(tree, parent, child);
+export function insert_before(tree: Tree, p: Node, z: Node): void {
+  if (p.left === NIL) {
+    insert_left(tree, p, z);
   } else {
-    const x = maximum(parent.left);
-
-    insert_right(tree, x, child);
+    insert_right(tree, maximum(p.left), z);
   }
 }
 
-export function insert_after(tree: Tree, node: Node, child: Node): void {
-  if (node.right === NIL) {
-    insert_right(tree, node, child);
+export function insert_after(tree: Tree, p: Node, z: Node): void {
+  if (p.right === NIL) {
+    insert_right(tree, p, z);
   } else {
-    const x = minimum(node.right);
-
-    insert_left(tree, x, child);
+    insert_left(tree, minimum(p.right), z);
   }
 }
 
-export function insert_left(tree: Tree, parent: Node, child: Node): void {
-  if (parent === NIL) {
-    tree[root] = child;
-    child.p = tree[root];
-  } else {
-    parent.left = child;
-    child.p = parent;
-  }
+export function insert_left(tree: Tree, p: Node, z: Node): void {
+  p.left = z;
+  z.p = p;
 
-  bubble_metadata(child);
-  insert_fixup(tree, child);
+  bubble_metadata(z);
+  insert_fixup(tree, z);
 }
 
-export function insert_right(tree: Tree, parent: Node, child: Node): void {
-  if (parent === NIL) {
-    tree[root] = child;
-    child.p = tree[root];
-  } else {
-    parent.right = child;
-    child.p = parent;
-  }
+export function insert_right(tree: Tree, p: Node, z: Node): void {
+  p.right = z;
+  z.p = p;
 
-  bubble_metadata(child);
-  insert_fixup(tree, child);
+  bubble_metadata(z);
+  insert_fixup(tree, z);
 }
 
 function insert_fixup(tree: Tree, z: Node): void {
