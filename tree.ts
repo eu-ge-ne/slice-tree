@@ -49,14 +49,14 @@ export class SliceTree implements Tree {
 
   *line(index: number): Generator<string> {
     const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
+
     if (typeof start === "undefined") {
       yield "";
-      return;
+    } else {
+      const end = search_line_position(this[root], index);
+
+      yield* this.read(start, end);
     }
-
-    const end = search_line_position(this[root], index);
-
-    yield* this.read(start, end);
   }
 
   write(index: number, text: string): void {
