@@ -29,9 +29,11 @@ export function delete_node(tree: Tree, z: Node): void {
     }
 
     transplant(tree, z, y);
+
     y.left = z.left;
     y.left.p = y;
     y.red = z.red;
+
     bubble_metadata(y);
   }
 
@@ -56,12 +58,14 @@ function delete_fixup(tree: Tree, x: Node): void {
   while (x !== tree[root] && !x.red) {
     if (x === x.p.left) {
       let w = x.p.right;
+
       if (w.red) {
         w.red = false;
         x.p.red = true;
         left_rotate(tree, x.p);
         w = x.p.right;
       }
+
       if (!w.left.red && !w.right.red) {
         w.red = true;
         x = x.p;
@@ -72,6 +76,7 @@ function delete_fixup(tree: Tree, x: Node): void {
           right_rotate(tree, w);
           w = x.p.right;
         }
+
         w.red = x.p.red;
         x.p.red = false;
         w.right.red = false;
@@ -80,12 +85,14 @@ function delete_fixup(tree: Tree, x: Node): void {
       }
     } else {
       let w = x.p.left;
+
       if (w.red) {
         w.red = false;
         x.p.red = true;
         right_rotate(tree, x.p);
         w = x.p.left;
       }
+
       if (!w.right.red && !w.left.red) {
         w.red = true;
         x = x.p;
@@ -96,6 +103,7 @@ function delete_fixup(tree: Tree, x: Node): void {
           left_rotate(tree, w);
           w = x.p.left;
         }
+
         w.red = x.p.red;
         x.p.red = false;
         w.left.red = false;
