@@ -92,6 +92,38 @@ Deno.test("write adds new lines", () => {
   assertEquals(tree.line(1).toArray().join(""), "dolor sit amet");
 });
 
+Deno.test("random write produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem");
+  tree.write(5, " aliqua.");
+  tree.write(5, " do");
+  tree.write(8, " ut");
+  tree.write(5, " consectetur");
+  tree.write(20, " tempor");
+  tree.write(5, " dolor");
+  tree.write(23, " elit,");
+  tree.write(42, " et");
+  tree.write(29, " sed");
+  tree.write(11, " amet,");
+  tree.write(55, " magna");
+  tree.write(29, " adipiscing");
+  tree.write(63, " labore");
+  tree.write(5, " ipsum");
+  tree.write(66, " incididunt");
+  tree.write(59, " eiusmod");
+  tree.write(98, " dolore");
+  tree.write(17, " sit");
+
+  assertEquals(tree.count, 123);
+  assertEquals(
+    tree.read(0).toArray().join(""),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+
+  assert_tree(tree);
+});
+
 Deno.test("degenerate write produces valid red-black tree", () => {
   const tree = new SliceTree();
 
@@ -115,6 +147,7 @@ Deno.test("degenerate write produces valid red-black tree", () => {
   tree.write(tree.count, " magna");
   tree.write(tree.count, " aliqua.");
 
+  assertEquals(tree.count, 123);
   assertEquals(
     tree.read(0).toArray().join(""),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -146,6 +179,7 @@ Deno.test("degenerate reverse write produces valid red-black tree", () => {
   tree.write(0, " ipsum");
   tree.write(0, "Lorem");
 
+  assertEquals(tree.count, 123);
   assertEquals(
     tree.read(0).toArray().join(""),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
