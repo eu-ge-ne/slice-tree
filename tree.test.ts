@@ -9,13 +9,13 @@ Deno.test("create", () => {
 Deno.test("count", () => {
   const tree = new SliceTree();
 
-  assertEquals(typeof tree.count, "number");
+  assertEquals(tree.count, 0);
 });
 
 Deno.test("line_count", () => {
   const tree = new SliceTree();
 
-  assertEquals(typeof tree.line_count, "number");
+  assertEquals(tree.line_count, 0);
 });
 
 Deno.test("read", () => {
@@ -47,7 +47,7 @@ Deno.test("empty", () => {
   const tree = new SliceTree();
 
   assertEquals(tree.count, 0);
-  assertEquals(tree.line_count, 1);
+  assertEquals(tree.line_count, 0);
   assertEquals(tree.read(0).toArray().join(""), "");
 });
 
@@ -106,7 +106,7 @@ Deno.test("erase all leaves empty string", () => {
   tree.erase(0, 26);
 
   assertEquals(tree.count, 0);
-  assertEquals(tree.line_count, 1);
+  assertEquals(tree.line_count, 0);
   assertEquals(tree.read(0).toArray().join(""), "");
   assertEquals(tree.line(0).toArray().join(""), "");
 });

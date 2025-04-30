@@ -22,7 +22,7 @@ export class SliceTree implements Tree {
   }
 
   get line_count(): number {
-    return 1 + this.root.total_line_count;
+    return this.root.total_count === 0 ? 0 : 1 + this.root.total_line_count;
   }
 
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
