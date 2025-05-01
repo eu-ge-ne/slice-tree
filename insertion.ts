@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, Node, root, Tree } from "./node.ts";
+import { bubble_metadata, NIL, type Node, root, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 

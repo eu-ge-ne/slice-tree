@@ -1,4 +1,4 @@
-import { Buffer } from "./buffer.ts";
+import type { Buffer } from "./buffer.ts";
 import { insert_after } from "./insertion.ts";
 
 export const root = Symbol("root");
