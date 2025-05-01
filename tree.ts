@@ -13,7 +13,7 @@ import {
 import { search, search_line_position, successor } from "./querying.ts";
 
 /**
- * Represents string content
+ * Implements a piece table data structure to represent text content.
  */
 export class SliceTree {
   /** @internal */
@@ -22,7 +22,7 @@ export class SliceTree {
   #buffers: Buffer[] = [];
 
   /**
-   * The total number of characters in the string content.
+   * The total number of characters in the text content.
    */
   get count(): number {
     return this[root].total_count;
