@@ -1,14 +1,6 @@
 import { bubble_metadata, NIL, Node, root, Tree } from "./node.ts";
-import { maximum, minimum } from "./querying.ts";
+import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
-
-export function insert_before(tree: Tree, p: Node, z: Node): void {
-  if (p.left === NIL) {
-    insert_left(tree, p, z);
-  } else {
-    insert_right(tree, maximum(p.left), z);
-  }
-}
 
 export function insert_after(tree: Tree, p: Node, z: Node): void {
   if (p.right === NIL) {
