@@ -22,8 +22,8 @@ jobs:
       - run: deno fmt --check
       - run: deno lint
 
-      - run: deno test --coverage=tmp/cov/ --junit-path=tmp/junit.xml
-      - run: deno coverage --lcov tmp/cov/ > tmp/cov.lcov
+      - run: deno test --coverage=tmp/cov/ --coverage-raw-data-only --junit-path=tmp/junit.xml
+      - run: deno coverage --lcov tmp/cov/ > tmp/lcov.info
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
@@ -37,7 +37,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
-          files: tmp/cov.lcov
+          files: tmp/lcov.info
 
   check-publish:
     needs: test
