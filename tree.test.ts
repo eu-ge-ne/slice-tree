@@ -68,7 +68,7 @@ Deno.test("empty tree contains ''", () => {
   assertEquals(tree.read(0).toArray().join(""), "");
 });
 
-Deno.test("write adds characters", () => {
+Deno.test("write adds content", () => {
   const tree = new SliceTree();
 
   tree.write(0, "Lorem ipsum");
@@ -124,7 +124,7 @@ Deno.test("random write produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
-Deno.test("write splitting nodes produces valid red-black tree", () => {
+Deno.test("write causing splitting nodes produces valid red-black tree", () => {
   const tree = new SliceTree();
 
   tree.write(0, "Lorem aliqua.");
@@ -179,7 +179,7 @@ Deno.test("degenerate write produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
-Deno.test("degenerate reverse write produces valid red-black tree", () => {
+Deno.test("reverse degenerate write produces valid red-black tree", () => {
   const tree = new SliceTree();
 
   tree.write(0, " aliqua.");
@@ -211,7 +211,7 @@ Deno.test("degenerate reverse write produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
-Deno.test("erase removes characters", () => {
+Deno.test("erase removes content", () => {
   const tree = new SliceTree();
 
   tree.write(0, "Lorem ipsum");
@@ -367,7 +367,39 @@ Deno.test("erase reversed tail produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
-Deno.test("erase splitting nodes produces valid red-black tree", () => {
+Deno.test("erase middle nodes produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  for (let i = 0; i < 5; i += 1) {
+    tree.write(0, "a");
+    tree.write(Math.floor(tree.count / 2), "b");
+    tree.write(Math.floor(tree.count / 3), "c");
+  }
+
+  while (tree.count > 0) {
+    tree.erase(Math.floor(tree.count / 2), 1);
+  }
+
+  assert_tree(tree);
+});
+
+Deno.test("erase tail nodes produces valid red-black tree", () => {
+  const tree = new SliceTree();
+
+  for (let i = 0; i < 10; i += 1) {
+    tree.write(0, "a");
+    tree.write(Math.floor(tree.count / 3), "c");
+    tree.write(Math.floor(tree.count / 2), "b");
+  }
+
+  while (tree.count > 0) {
+    tree.erase(tree.count - 1, 1);
+  }
+
+  assert_tree(tree);
+});
+
+Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   const tree = new SliceTree();
 
   tree.write(
@@ -397,7 +429,7 @@ Deno.test("erase splitting nodes produces valid red-black tree", () => {
   assert_tree(tree);
 });
 
-Deno.test("erase all leaves empty string", () => {
+Deno.test("erase all leaves empty content", () => {
   const tree = new SliceTree();
 
   tree.write(0, "Lorem ipsum\ndolor sit amet");
@@ -409,7 +441,7 @@ Deno.test("erase all leaves empty string", () => {
   assertEquals(tree.line(0).toArray().join(""), "");
 });
 
-Deno.test("line returns '' for invalid index provided", () => {
+Deno.test("line returns empty content for invalid index provided", () => {
   const tree = new SliceTree();
 
   tree.write(0, "Lorem ipsum\ndolor sit amet");
