@@ -1,6 +1,6 @@
 {
   "name": "@eu-ge-ne/slice-tree",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "exports": "./mod.ts",
   "imports": {
@@ -10,6 +10,11 @@
     "test": "deno test"
   },
   "publish": {
-    "exclude": [".github"]
+    "exclude": [
+      ".github",
+      ".vscode",
+      "codecov.yml",
+      "coverage.sh"
+    ]
   }
 }
