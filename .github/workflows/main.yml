@@ -1,18 +1,15 @@
-name: Deno
+name: Main
 
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
-    types: ["opened", "synchronize", "reopened"]
-
-permissions:
-  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -40,3 +37,21 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
           files: tmp/cov.lcov
+
+  publish:
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - run: deno publish
