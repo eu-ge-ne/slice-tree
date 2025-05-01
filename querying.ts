@@ -57,29 +57,6 @@ export function minimum(x: Node): Node {
   return x;
 }
 
-export function maximum(x: Node): Node {
-  while (x.right !== NIL) {
-    x = x.right;
-  }
-
-  return x;
-}
-
-export function predecessor(x: Node): Node {
-  if (x.left !== NIL) {
-    return maximum(x.left);
-  } else {
-    let y = x.p;
-
-    while (y !== NIL && x === y.left) {
-      x = y;
-      y = y.p;
-    }
-
-    return y;
-  }
-}
-
 export function successor(x: Node): Node {
   if (x.right !== NIL) {
     return minimum(x.right);
