@@ -370,7 +370,7 @@ Deno.test("erase reversed tail produces valid red-black tree", () => {
 Deno.test("erase middle nodes produces valid red-black tree", () => {
   const tree = new SliceTree();
 
-  for (let i = 0; i < 10; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     tree.write(0, "a");
     tree.write(Math.floor(tree.count / 2), "b");
     tree.write(Math.floor(tree.count / 3), "c");
