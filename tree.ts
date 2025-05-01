@@ -29,14 +29,14 @@ export class SliceTree {
   }
 
   /**
-   * The number of lines in the string content.
+   * The number of lines in the text content.
    */
   get line_count(): number {
     return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
   }
 
   /**
-   * Returns a substring from the content between the specified start and end positions, without modifying the original content.
+   * Returns a text from the content between the specified start and end positions, without modifying the original content.
    *
    * @param start
    * @param end
@@ -129,7 +129,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes characters in the range between start and end from the content.
+   * Removes text in the range between start and end from the content.
    *
    * @param index
    * @param count
