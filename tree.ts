@@ -12,20 +12,36 @@ import {
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
 
+/**
+ * Represents string content
+ */
 export class SliceTree {
   /** @internal */
   [root] = NIL;
 
   #buffers: Buffer[] = [];
 
+  /**
+   * The total number of characters in the string content.
+   */
   get count(): number {
     return this[root].total_count;
   }
 
+  /**
+   * The number of lines in the string content.
+   */
   get line_count(): number {
     return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
   }
 
+  /**
+   * Returns a substring from the content between the specified start and end positions, without modifying the original content.
+   *
+   * @param start
+   * @param end
+   * @returns
+   */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
     const first = search(this[root], start);
     if (!first) {
@@ -47,6 +63,11 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Returns the content of the line at the specified index, without modifying the original content.
+   *
+   * @param index
+   */
   *line(index: number): Generator<string> {
     const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
 
@@ -59,6 +80,13 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Inserts text into the content at the specified index.
+   *
+   * @param index
+   * @param text
+   * @returns
+   */
   write(index: number, text: string): void {
     const buffer = create_buffer(text);
     this.#buffers.push(buffer);
@@ -100,6 +128,13 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Removes characters in the range between start and end from the content.
+   *
+   * @param index
+   * @param count
+   * @returns
+   */
   erase(index: number, count: number): void {
     const first = search(this[root], index);
     if (!first) {
