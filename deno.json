@@ -8,5 +8,8 @@
   },
   "tasks": {
     "test": "deno test"
+  },
+  "publish": {
+    "exclude": [".github"]
   }
 }
