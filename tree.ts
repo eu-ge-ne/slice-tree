@@ -9,11 +9,10 @@ import {
   node_text,
   root,
   split_node,
-  type Tree,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
 
-export class SliceTree implements Tree {
+export class SliceTree {
   [root] = NIL;
 
   #buffers: Buffer[] = [];
