@@ -408,3 +408,12 @@ Deno.test("erase all leaves empty string", () => {
   assertEquals(tree.read(0).toArray().join(""), "");
   assertEquals(tree.line(0).toArray().join(""), "");
 });
+
+Deno.test("line returns '' for invalid index provided", () => {
+  const tree = new SliceTree();
+
+  tree.write(0, "Lorem ipsum\ndolor sit amet");
+
+  assertEquals(tree.line(-1).toArray().join(""), "");
+  assertEquals(tree.line(2).toArray().join(""), "");
+});
