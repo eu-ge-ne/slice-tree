@@ -9,23 +9,43 @@ import {
   node_text,
   root,
   split_node,
-  type Tree,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
 
-export class SliceTree implements Tree {
+/**
+ * Implements a piece table data structure to represent text content.
+ */
+export class SliceTree {
+  /** @internal */
   [root] = NIL;
 
   #buffers: Buffer[] = [];
 
+  /**
+   * The total number of characters in the text content.
+   *
+   * @returns The number of characters
+   */
   get count(): number {
     return this[root].total_count;
   }
 
+  /**
+   * The number of lines in the text content.
+   *
+   * @returns The number of lines
+   */
   get line_count(): number {
     return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
   }
 
+  /**
+   * Returns the text from the content between the specified start and end positions, without modifying the original content.
+   *
+   * @param start Start index
+   * @param end Optional end index
+   * @returns An iterator over the text content
+   */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
     const first = search(this[root], start);
     if (!first) {
@@ -47,6 +67,12 @@ export class SliceTree implements Tree {
     }
   }
 
+  /**
+   * Returns the content of the line at the specified index, without modifying the original content.
+   *
+   * @param index Line index
+   * @returns An iterator over the text content
+   */
   *line(index: number): Generator<string> {
     const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
 
@@ -59,6 +85,13 @@ export class SliceTree implements Tree {
     }
   }
 
+  /**
+   * Inserts the text into the content at the specified index.
+   *
+   * @param index Index at witch to insert the text
+   * @param text Text to insert
+   * @returns A void value
+   */
   write(index: number, text: string): void {
     const buffer = create_buffer(text);
     this.#buffers.push(buffer);
@@ -100,6 +133,13 @@ export class SliceTree implements Tree {
     }
   }
 
+  /**
+   * Removes the text in the range between start and end from the content.
+   *
+   * @param index Index at witch to start removing the text
+   * @param count The number of characters to remove
+   * @returns A void value
+   */
   erase(index: number, count: number): void {
     const first = search(this[root], index);
     if (!first) {

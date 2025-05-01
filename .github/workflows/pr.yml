@@ -21,8 +21,9 @@ jobs:
 
       - run: deno fmt --check
       - run: deno lint
+      - run: deno doc --lint ./mod.ts
 
-      - run: deno test --coverage=tmp/cov/ --coverage-raw-data-only --junit-path=tmp/junit.xml
+      - run: deno test --doc --coverage=tmp/cov/ --coverage-raw-data-only --junit-path=tmp/junit.xml
       - run: deno coverage --lcov tmp/cov/ > tmp/lcov.info
 
       - name: Upload test results to Codecov
