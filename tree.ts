@@ -13,6 +13,7 @@ import {
 import { search, search_line_position, successor } from "./querying.ts";
 
 export class SliceTree {
+  /** @internal */
   [root] = NIL;
 
   #buffers: Buffer[] = [];
