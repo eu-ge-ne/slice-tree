@@ -1,4 +1,4 @@
-import { NIL, Node } from "./node.ts";
+import { NIL, type Node } from "./node.ts";
 
 export function search(
   x: Node,

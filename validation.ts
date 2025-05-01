@@ -1,7 +1,7 @@
 import { assert } from "@std/assert";
 
-import { NIL, Node, root } from "./node.ts";
-import { SliceTree } from "./tree.ts";
+import { NIL, type Node, root } from "./node.ts";
+import type { SliceTree } from "./tree.ts";
 
 export function assert_tree(tree: SliceTree): void {
   // 1. Every node is either red or black.

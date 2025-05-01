@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, Node, root, Tree } from "./node.ts";
+import { bubble_metadata, NIL, type Node, root, type Tree } from "./node.ts";
 
 export function left_rotate(tree: Tree, x: Node): void {
   const y = x.right;
