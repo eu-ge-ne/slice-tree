@@ -42,6 +42,8 @@ jobs:
           files: tmp/cov.lcov
 
   check-publish:
+    needs: test
+
     runs-on: ubuntu-latest
 
     permissions:
