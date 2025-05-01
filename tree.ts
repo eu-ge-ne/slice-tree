@@ -23,6 +23,8 @@ export class SliceTree {
 
   /**
    * The total number of characters in the text content.
+   *
+   * @returns The number of characters
    */
   get count(): number {
     return this[root].total_count;
@@ -30,17 +32,19 @@ export class SliceTree {
 
   /**
    * The number of lines in the text content.
+   *
+   * @returns The number of lines
    */
   get line_count(): number {
     return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
   }
 
   /**
-   * Returns a text from the content between the specified start and end positions, without modifying the original content.
+   * Returns the text from the content between the specified start and end positions, without modifying the original content.
    *
-   * @param start
-   * @param end
-   * @returns
+   * @param start Start index
+   * @param end Optional end index
+   * @returns An iterator over the text content
    */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
     const first = search(this[root], start);
@@ -66,7 +70,8 @@ export class SliceTree {
   /**
    * Returns the content of the line at the specified index, without modifying the original content.
    *
-   * @param index
+   * @param index Line index
+   * @returns An iterator over the text content
    */
   *line(index: number): Generator<string> {
     const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
@@ -81,11 +86,11 @@ export class SliceTree {
   }
 
   /**
-   * Inserts text into the content at the specified index.
+   * Inserts the text into the content at the specified index.
    *
-   * @param index
-   * @param text
-   * @returns
+   * @param index Index at witch to insert the text
+   * @param text Text to insert
+   * @returns A void value
    */
   write(index: number, text: string): void {
     const buffer = create_buffer(text);
@@ -129,11 +134,11 @@ export class SliceTree {
   }
 
   /**
-   * Removes text in the range between start and end from the content.
+   * Removes the text in the range between start and end from the content.
    *
-   * @param index
-   * @param count
-   * @returns
+   * @param index Index at witch to start removing the text
+   * @param count The number of characters to remove
+   * @returns A void value
    */
   erase(index: number, count: number): void {
     const first = search(this[root], index);
