@@ -1,26 +1,3 @@
-/**
- * This module contains `SliceTable` class.
- *
- * @example
- * ```ts
- * import { assertEquals } from "jsr:@std/assert";
- * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
- *
- * const text = new SliceTree();
- *
- * text.write(0, "Lorem ipsum");
- * text.write(11, "dolor sit amet");
- * text.write(11, " ");
- *
- * text.erase(0, text.count);
- *
- * assertEquals(text.count, 0);
- * assertEquals(text.line_count, 0);
- * ```
- *
- * @module
- */
-
 import { type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right } from "./insertion.ts";
@@ -36,7 +13,7 @@ import {
 import { search, search_line_position, successor } from "./querying.ts";
 
 /**
- * Implements a piece table data structure to represent text content.
+ * Implements a `piece table` data structure to represent text content.
  *
  * @example Usage
  *
