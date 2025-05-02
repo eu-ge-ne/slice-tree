@@ -89,6 +89,8 @@ text.write(0, "Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
+***
+
 #### `SliceTree.prototype.line_count`
 
 Returns the number of lines in the text content.
