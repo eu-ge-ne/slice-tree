@@ -59,10 +59,12 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 #### `count`
 
 The total number of characters in the text content.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.count)
 
 #### `line_count`
 
 The number of lines in the text content.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line_count)
 
 ### Instance methods
 
@@ -70,19 +72,23 @@ The number of lines in the text content.
 
 Returns the text from the content between the specified start and end positions,
 without modifying the original content.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.read)
 
 #### `line(index)`
 
 Returns the content of the line at the specified index, without modifying the
 original content.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line)
 
 #### `write(index, text)`
 
 Inserts the text into the content at the specified index.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.write)
 
 #### `erase(start, end)`
 
 Removes the text in the range between start and end from the content.
+[JSR Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.erase)
 
 ## License
 
