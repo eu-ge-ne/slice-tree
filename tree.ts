@@ -36,13 +36,6 @@ export class SliceTree {
    * The total number of characters in the text content.
    *
    * @returns The number of characters
-   *
-   * @example Basic usage
-   * ```ts ignore
-   * import { move } from "@std/fs/move";
-   *
-   * await move("./foo", "./bar");
-   * ```
    */
   get count(): number {
     return this[root].total_count;
