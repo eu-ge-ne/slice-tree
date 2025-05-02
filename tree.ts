@@ -45,6 +45,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem ipsum")
    *
    * assertEquals(text.count, 11);
@@ -66,6 +67,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
    *
    * assertEquals(text.line_count, 5);
@@ -89,6 +91,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem ipsum")
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
@@ -128,6 +131,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
    *
    * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
@@ -159,6 +163,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem ipsum")
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
@@ -219,6 +224,7 @@ export class SliceTree {
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
+   *
    * text.write(0, "Lorem ipsum")
    * text.erase(5, 6);
    *
