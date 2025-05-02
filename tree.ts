@@ -24,7 +24,10 @@ import { search, search_line_position, successor } from "./querying.ts";
  * ```
  */
 export class SliceTree {
-  /** @internal */
+  /**
+   * @ignore
+   * @internal
+   */
   [root] = NIL;
 
   #buffers: Buffer[] = [];
