@@ -15,7 +15,7 @@ import { search, search_line_position, successor } from "./querying.ts";
 /**
  * Implements a piece table data structure to represent text content.
  *
- * @example Basic usage
+ * @example Usage
  *
  * ```ts
  * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
