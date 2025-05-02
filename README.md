@@ -11,7 +11,7 @@ A `piece table` data structure implemented using `red-black tree`.
 > 'span') to the whole of the original file is created, which represents the as
 > yet unchanged file. Subsequent inserts and deletes replace a span by
 > combinations of one, two, or three references to sections of either the
-> original document or to a buffer holding inserted text.[1]
+> original document or to a buffer holding inserted text.
 
 &mdash;
 <cite>[Crowley, Charles (10 June 1998). "Data Structures for Text Sequences - 6.4 The piece table method"](https://web.archive.org/web/20180223071931/https://www.cs.unm.edu/~crowley/papers/sds.pdf)</cite>
