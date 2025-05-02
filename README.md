@@ -89,7 +89,7 @@ text.write(0, "Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
-***
+---
 
 #### `SliceTree.prototype.line_count`
 
