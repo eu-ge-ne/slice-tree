@@ -14,6 +14,14 @@ import { search, search_line_position, successor } from "./querying.ts";
 
 /**
  * Implements a piece table data structure to represent text content.
+ *
+ * @example Basic usage
+ *
+ * ```ts
+ * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+ *
+ * const tree = new SliceTree();
+ * ```
  */
 export class SliceTree {
   /** @internal */
@@ -25,6 +33,13 @@ export class SliceTree {
    * The total number of characters in the text content.
    *
    * @returns The number of characters
+   *
+   * @example Basic usage
+   * ```ts ignore
+   * import { move } from "@std/fs/move";
+   *
+   * await move("./foo", "./bar");
+   * ```
    */
   get count(): number {
     return this[root].total_count;
