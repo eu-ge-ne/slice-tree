@@ -13,14 +13,38 @@ import {
 import { search, search_line_position, successor } from "./querying.ts";
 
 /**
+ * This module contains `SliceTable` class.
+ *
+ * @example
+ * ```ts
+ * import { assertEquals } from "jsr:@std/assert";
+ * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+ *
+ * const text = new SliceTree();
+ *
+ * text.write(0, "Lorem ipsum");
+ * text.write(11, "dolor sit amet");
+ * text.write(11, " ");
+ *
+ * text.erase(0, text.count);
+ *
+ * assertEquals(text.count, 0);
+ * assertEquals(text.line_count, 0);
+ * ```
+ *
+ * @module
+ */
+
+/**
  * Implements a piece table data structure to represent text content.
  *
  * @example Usage
  *
  * ```ts
+ * import { assertInstanceOf } from "@std/assert";
  * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
  *
- * const text = new SliceTree();
+ * assertInstanceOf(new SliceTree(), SliceTree);
  * ```
  */
 export class SliceTree {
@@ -40,7 +64,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
@@ -61,7 +85,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
@@ -84,7 +108,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
@@ -123,7 +147,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
@@ -154,7 +178,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
@@ -214,7 +238,7 @@ export class SliceTree {
    * @example Usage
    *
    * ```ts
-   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
    * const text = new SliceTree();
