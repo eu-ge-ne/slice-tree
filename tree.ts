@@ -36,6 +36,19 @@ export class SliceTree {
    * The total number of characters in the text content.
    *
    * @returns The number of characters
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   *
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const tree = new SliceTree();
+   * tree.write(0, "Lorem ipsum")
+   *
+   * assertEquals(tree.count, 11);
+   * ```
    */
   get count(): number {
     return this[root].total_count;
@@ -45,6 +58,19 @@ export class SliceTree {
    * The number of lines in the text content.
    *
    * @returns The number of lines
+   *
+   * @example
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   *
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const tree = new SliceTree();
+   * tree.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   *
+   * assertEquals(tree.line_count, 5);
+   * ```
    */
   get line_count(): number {
     return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
