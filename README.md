@@ -72,7 +72,7 @@ Returns the total number of characters in the text content.
 
 #### Syntax
 
-```ts
+```ts ignore
 SliceTree.prototype.count(): number
 ```
 
@@ -95,7 +95,7 @@ Returns the number of lines in the text content.
 
 #### Syntax
 
-```ts
+```ts ignore
 SliceTree.prototype.line_count(): number
 ```
 
