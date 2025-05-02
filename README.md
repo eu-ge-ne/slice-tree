@@ -66,39 +66,156 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ### Properties
 
-#### `count`
+#### `SliceTree.prototype.count`
 
-The total number of characters in the text content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.count)
+Returns the total number of characters in the text content.
 
-#### `line_count`
+#### Syntax
 
-The number of lines in the text content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line_count)
+```ts ignore
+get count(): number
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.count, 11);
+```
+
+---
+
+#### `SliceTree.prototype.line_count`
+
+Returns the number of lines in the text content.
+
+#### Syntax
+
+```ts ignore
+get line_count(): number
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+
+assertEquals(text.line_count, 5);
+```
 
 ### Methods
 
-#### `read(start, end)`
+#### `SliceTree.prototype.read`
 
-Returns the text from the content between the specified start and end positions,
-without modifying the original content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.read)
+Returns the text between the specified start (inclusive) and end (exclusive)
+positions, without modifying the content.
 
-#### `line(index)`
+#### Syntax
+
+```ts ignore
+*read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+```
+
+---
+
+#### `SliceTree.prototype.line`
 
 Returns the content of the line at the specified index, without modifying the
-original content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line)
+content.
 
-#### `write(index, text)`
+#### Syntax
 
-Inserts the text into the content at the specified index.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.write)
+```ts ignore
+*line(index: number): Generator<string>
+```
 
-#### `erase(start, end)`
+#### Example
 
-Removes the text in the range between start and end from the content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.erase)
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+
+assertEquals(text.line(1).toArray().join(""), "ipsum\n");
+```
+
+---
+
+#### `SliceTree.prototype.write`
+
+Inserts the given text at the specified index in the content.
+
+#### Syntax
+
+```ts ignore
+write(index: number, text: string): void
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+```
+
+---
+
+#### `SliceTree.prototype.erase`
+
+Removes the text in the range from start (inclusive) to end (exclusive).
+
+#### Syntax
+
+```ts ignore
+erase(index: number, count: number): void
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+text.erase(5, 6);
+
+assertEquals(text.read(0).toArray().join(""), "Lorem");
+```
 
 ## License
 

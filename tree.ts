@@ -34,7 +34,7 @@ export class SliceTree {
   #buffers: Buffer[] = [];
 
   /**
-   * The total number of characters in the text content.
+   * Returns the total number of characters in the text content.
    *
    * @returns The number of characters
    *
@@ -46,7 +46,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -56,7 +56,7 @@ export class SliceTree {
   }
 
   /**
-   * The number of lines in the text content.
+   * Returns the number of lines in the text content.
    *
    * @returns The number of lines
    *
@@ -68,7 +68,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
@@ -78,7 +78,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text from the content between the specified start and end positions, without modifying the original content.
+   * Returns the text between the specified start (inclusive) and end (exclusive) positions, without modifying the content.
    *
    * @param start Start index
    * @param end Optional end index
@@ -92,7 +92,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -119,7 +119,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content of the line at the specified index, without modifying the original content.
+   * Returns the content of the line at the specified index, without modifying the content.
    *
    * @param index Line index
    * @returns An iterator over the text content
@@ -132,7 +132,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
    * ```
@@ -150,7 +150,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text into the content at the specified index.
+   * Inserts the given text at the specified index in the content.
    *
    * @param index Index at witch to insert the text
    * @param text Text to insert
@@ -164,7 +164,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -211,7 +211,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the range between start and end from the content.
+   * Removes the text in the range from start (inclusive) to end (exclusive).
    *
    * @param index Index at witch to start removing the text
    * @param count The number of characters to remove
@@ -225,8 +225,8 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
-   * text.erase(5, 6);
+   * text.write(0, "Lorem ipsum");
+   * text.erase(5, 6);;
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
