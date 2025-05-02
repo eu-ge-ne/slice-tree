@@ -73,7 +73,7 @@ Returns the total number of characters in the text content.
 #### Syntax
 
 ```ts ignore
-SliceTree.prototype.count(): number
+get count(): number
 ```
 
 #### Example
@@ -98,7 +98,7 @@ Returns the number of lines in the text content.
 #### Syntax
 
 ```ts ignore
-SliceTree.prototype.line_count(): number
+get line_count(): number
 ```
 
 #### Example
@@ -116,11 +116,31 @@ assertEquals(text.line_count, 5);
 
 ### Methods
 
-#### `read(start, end)`
+#### `SliceTree.prototype.read`
 
-Returns the text from the content between the specified start and end positions,
-without modifying the original content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.read)
+Returns the text between the specified start (inclusive) and end (exclusive)
+positions, without modifying the content.
+
+#### Syntax
+
+```ts ignore
+read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+```
+
+---
 
 #### `line(index)`
 

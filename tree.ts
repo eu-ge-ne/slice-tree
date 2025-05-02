@@ -78,7 +78,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text from the content between the specified start and end positions, without modifying the original content.
+   * Returns the text between the specified start (inclusive) and end (exclusive) positions, without modifying the content.
    *
    * @param start Start index
    * @param end Optional end index
@@ -92,7 +92,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
