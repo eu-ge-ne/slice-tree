@@ -46,7 +46,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -56,7 +56,7 @@ export class SliceTree {
   }
 
   /**
-   * The number of lines in the text content.
+   * Returns the number of lines in the text content.
    *
    * @returns The number of lines
    *
@@ -68,7 +68,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
