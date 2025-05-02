@@ -119,7 +119,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content of the line at the specified index, without modifying the original content.
+   * Returns the content of the line at the specified index, without modifying the content.
    *
    * @param index Line index
    * @returns An iterator over the text content

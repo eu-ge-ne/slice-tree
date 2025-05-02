@@ -124,7 +124,7 @@ positions, without modifying the content.
 #### Syntax
 
 ```ts ignore
-read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
+*read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
 ```
 
 #### Example
@@ -142,11 +142,31 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ---
 
-#### `line(index)`
+#### `SliceTree.prototype.line`
 
 Returns the content of the line at the specified index, without modifying the
-original content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line)
+content.
+
+#### Syntax
+
+```ts ignore
+*line(index: number): Generator<string>
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+
+assertEquals(text.line(1).toArray().join(""), "ipsum\n");
+```
+
+---
 
 #### `write(index, text)`
 
