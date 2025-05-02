@@ -1,17 +1,3 @@
-import { type Buffer, create_buffer } from "./buffer.ts";
-import { delete_node } from "./deletion.ts";
-import { insert_left, insert_right } from "./insertion.ts";
-import {
-  bubble_metadata,
-  create_node,
-  NIL,
-  type Node,
-  node_text,
-  root,
-  split_node,
-} from "./node.ts";
-import { search, search_line_position, successor } from "./querying.ts";
-
 /**
  * This module contains `SliceTable` class.
  *
@@ -34,6 +20,20 @@ import { search, search_line_position, successor } from "./querying.ts";
  *
  * @module
  */
+
+import { type Buffer, create_buffer } from "./buffer.ts";
+import { delete_node } from "./deletion.ts";
+import { insert_left, insert_right } from "./insertion.ts";
+import {
+  bubble_metadata,
+  create_node,
+  NIL,
+  type Node,
+  node_text,
+  root,
+  split_node,
+} from "./node.ts";
+import { search, search_line_position, successor } from "./querying.ts";
 
 /**
  * Implements a piece table data structure to represent text content.
