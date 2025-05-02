@@ -4,7 +4,17 @@
 [![JSR Score](https://jsr.io/badges/@eu-ge-ne/slice-tree/score)](https://jsr.io/@eu-ge-ne/slice-tree)
 [![codecov](https://codecov.io/gh/eu-ge-ne/slice-tree/branch/main/graph/badge.svg?token=9CQ0V249XC)](https://codecov.io/gh/eu-ge-ne/slice-tree)
 
-A piece table data structure implemented using Red-Black trees.
+A `piece table` data structure implemented using `red-black tree`.
+
+> In computing, a piece table is a data structure typically used to represent a
+> text document while it is edited in a text editor. Initially a reference (or
+> 'span') to the whole of the original file is created, which represents the as
+> yet unchanged file. Subsequent inserts and deletes replace a span by
+> combinations of one, two, or three references to sections of either the
+> original document or to a buffer holding inserted text.[1]
+
+&mdash;
+<cite>[Crowley, Charles (10 June 1998). "Data Structures for Text Sequences - 6.4 The piece table method"](https://web.archive.org/web/20180223071931/https://www.cs.unm.edu/~crowley/papers/sds.pdf)</cite>
 
 ## Example
 
@@ -54,7 +64,7 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ## API
 
-### Instance properties
+### Properties
 
 #### `count`
 
@@ -66,7 +76,7 @@ The total number of characters in the text content.
 The number of lines in the text content.
 [Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.line_count)
 
-### Instance methods
+### Methods
 
 #### `read(start, end)`
 
