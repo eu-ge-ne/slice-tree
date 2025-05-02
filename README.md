@@ -193,10 +193,29 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ---
 
-#### `erase(start, end)`
+#### `SliceTree.prototype.erase`
 
-Removes the text in the range between start and end from the content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.erase)
+Removes the text in the range from start (inclusive) to end (exclusive).
+
+#### Syntax
+
+```ts ignore
+erase(index: number, count: number): void
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+text.erase(5, 6);
+
+assertEquals(text.read(0).toArray().join(""), "Lorem");
+```
 
 ## License
 

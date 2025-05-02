@@ -132,7 +132,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
    * ```
@@ -164,7 +164,7 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
+   * text.write(0, "Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -211,7 +211,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the range between start and end from the content.
+   * Removes the text in the range from start (inclusive) to end (exclusive).
    *
    * @param index Index at witch to start removing the text
    * @param count The number of characters to remove
@@ -225,8 +225,8 @@ export class SliceTree {
    *
    * const text = new SliceTree();
    *
-   * text.write(0, "Lorem ipsum")
-   * text.erase(5, 6);
+   * text.write(0, "Lorem ipsum");
+   * text.erase(5, 6);;
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
