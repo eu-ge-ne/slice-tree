@@ -168,10 +168,30 @@ assertEquals(text.line(1).toArray().join(""), "ipsum\n");
 
 ---
 
-#### `write(index, text)`
+#### `SliceTree.prototype.write`
 
-Inserts the text into the content at the specified index.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.write)
+Inserts the given text at the specified index in the content.
+
+#### Syntax
+
+```ts ignore
+write(index: number, text: string): void
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+```
+
+---
 
 #### `erase(start, end)`
 

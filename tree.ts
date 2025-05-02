@@ -150,7 +150,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text into the content at the specified index.
+   * Inserts the given text at the specified index in the content.
    *
    * @param index Index at witch to insert the text
    * @param text Text to insert
