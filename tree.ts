@@ -20,7 +20,7 @@ import { search, search_line_position, successor } from "./querying.ts";
  * ```ts
  * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
  *
- * const tree = new SliceTree();
+ * const text = new SliceTree();
  * ```
  */
 export class SliceTree {
@@ -41,13 +41,12 @@ export class SliceTree {
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert/equals";
-   *
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const tree = new SliceTree();
-   * tree.write(0, "Lorem ipsum")
+   * const text = new SliceTree();
+   * text.write(0, "Lorem ipsum")
    *
-   * assertEquals(tree.count, 11);
+   * assertEquals(text.count, 11);
    * ```
    */
   get count(): number {
@@ -59,17 +58,16 @@ export class SliceTree {
    *
    * @returns The number of lines
    *
-   * @example
+   * @example Usage
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert/equals";
-   *
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const tree = new SliceTree();
-   * tree.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   * const text = new SliceTree();
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
    *
-   * assertEquals(tree.line_count, 5);
+   * assertEquals(text.line_count, 5);
    * ```
    */
   get line_count(): number {
@@ -82,6 +80,18 @@ export class SliceTree {
    * @param start Start index
    * @param end Optional end index
    * @returns An iterator over the text content
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree();
+   * text.write(0, "Lorem ipsum")
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * ```
    */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
     const first = search(this[root], start);
@@ -109,6 +119,18 @@ export class SliceTree {
    *
    * @param index Line index
    * @returns An iterator over the text content
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree();
+   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet")
+   *
+   * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
+   * ```
    */
   *line(index: number): Generator<string> {
     const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
@@ -128,6 +150,18 @@ export class SliceTree {
    * @param index Index at witch to insert the text
    * @param text Text to insert
    * @returns A void value
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree();
+   * text.write(0, "Lorem ipsum")
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * ```
    */
   write(index: number, text: string): void {
     const buffer = create_buffer(text);
@@ -176,6 +210,19 @@ export class SliceTree {
    * @param index Index at witch to start removing the text
    * @param count The number of characters to remove
    * @returns A void value
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert/equals";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree();
+   * text.write(0, "Lorem ipsum")
+   * text.erase(5, 6);
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem");
+   * ```
    */
   erase(index: number, count: number): void {
     const first = search(this[root], index);
