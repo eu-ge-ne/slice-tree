@@ -66,10 +66,26 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ### Properties
 
-#### `count`
+#### `SliceTree.prototype.count`
 
-The total number of characters in the text content.
-[Docs](https://jsr.io/@eu-ge-ne/slice-tree/doc/~/SliceTree.prototype.count)
+Returns the total number of characters in the text content.
+
+#### Syntax
+
+`SliceTree.prototype.count(): number`
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree();
+
+text.write(0, "Lorem ipsum");
+
+assertEquals(text.count, 11);
+```
 
 #### `line_count`
 

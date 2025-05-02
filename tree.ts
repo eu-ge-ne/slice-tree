@@ -34,7 +34,7 @@ export class SliceTree {
   #buffers: Buffer[] = [];
 
   /**
-   * The total number of characters in the text content.
+   * Returns the total number of characters in the text content.
    *
    * @returns The number of characters
    *
