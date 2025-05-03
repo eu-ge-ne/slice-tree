@@ -267,7 +267,6 @@ Deno.test("erase from 2 nodes", () => {
   assertEquals(text.line(0).toArray().join(""), "Lorepsum");
 
   assert_tree(text);
-
 });
 
 /*
