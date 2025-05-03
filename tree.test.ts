@@ -253,6 +253,20 @@ Deno.test("erase all leaves empty content", () => {
   assert_tree(text);
 });
 
+Deno.test("erase from 1 node", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem ipsum");
+  text.erase(4, 3);
+
+  assertEquals(text.count, 8);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Lorepsum");
+  assertEquals(text.line(0).toArray().join(""), "Lorepsum");
+
+  assert_tree(text);
+});
+
 Deno.test("erase from 2 nodes", () => {
   const text = new SliceTree();
 
