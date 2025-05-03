@@ -69,13 +69,14 @@ export function create_node(
   };
 }
 
-export function split_node(tree: Tree, node: Node, i: number): Node {
+export function split_node(tree: Tree, node: Node, index: number): Node {
   const { buffer, start, count } = node;
 
-  node.count = i;
-  node.lines = line_starts(node.buffer, node.start, node.count);
+  node.count = index;
+  node.lines = line_starts(buffer, start, index);
 
-  const next = create_node(buffer, start + i, count - i);
+  const next = create_node(buffer, start + index, count - index);
+
   insert_after(tree, node, next);
 
   return next;
