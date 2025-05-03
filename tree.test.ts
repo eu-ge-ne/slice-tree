@@ -352,8 +352,6 @@ Deno.test("erase from 6 nodes", () => {
   assert_tree(text);
 });
 
-// TODO
-
 Deno.test("erase from 7 nodes", () => {
   const text = new SliceTree();
 
@@ -370,6 +368,147 @@ Deno.test("erase from 7 nodes", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Loredipiscing");
   assertEquals(text.line(0).toArray().join(""), "Loredipiscing");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 8 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 2);
+
+  assertEquals(text.count, 8);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Lorelit,");
+  assertEquals(text.line(0).toArray().join(""), "Lorelit,");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 9 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.write(56, " sed");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 2);
+
+  assertEquals(text.count, 6);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreed");
+  assertEquals(text.line(0).toArray().join(""), "Loreed");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 10 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.write(56, " sed");
+  text.write(60, " do");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 2);
+
+  assertEquals(text.count, 5);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreo");
+  assertEquals(text.line(0).toArray().join(""), "Loreo");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 11 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.write(56, " sed");
+  text.write(60, " do");
+  text.write(63, " eiusmod");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 2);
+
+  assertEquals(text.count, 10);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreiusmod");
+  assertEquals(text.line(0).toArray().join(""), "Loreiusmod");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 12 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.write(56, " sed");
+  text.write(60, " do");
+  text.write(63, " eiusmod");
+  text.write(71, " tempor");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 8 + 2);
+
+  assertEquals(text.count, 9);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreempor");
+  assertEquals(text.line(0).toArray().join(""), "Loreempor");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 13 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
+  text.write(17, " sit");
+  text.write(21, " amet,");
+  text.write(27, " consectetur");
+  text.write(39, " adipiscing");
+  text.write(50, " elit,");
+  text.write(56, " sed");
+  text.write(60, " do");
+  text.write(63, " eiusmod");
+  text.write(71, " tempor");
+  text.write(78, " incididunt");
+  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 8 + 7 + 2);
+
+  assertEquals(text.count, 13);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Lorencididunt");
+  assertEquals(text.line(0).toArray().join(""), "Lorencididunt");
 
   assert_tree(text);
 });
