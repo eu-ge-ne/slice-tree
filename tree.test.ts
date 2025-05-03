@@ -271,6 +271,21 @@ Deno.test("erase from 2 nodes", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem");
+  text.write(5, " ipsum");
+  text.erase(4, 3);
+
+  assertEquals(text.count, 8);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Lorepsum");
+  assertEquals(text.line(0).toArray().join(""), "Lorepsum");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 3 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
   text.write(5, " ");
   text.write(6, "ipsum");
   text.erase(4, 3);
