@@ -221,6 +221,8 @@ Deno.test("erase removes content", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem");
   assertEquals(text.line(0).toArray().join(""), "Lorem");
+
+  assert_tree(text);
 });
 
 Deno.test("erase removes lines", () => {
@@ -233,6 +235,8 @@ Deno.test("erase removes lines", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
+
+  assert_tree(text);
 });
 
 Deno.test("erase all leaves empty content", () => {
@@ -245,6 +249,8 @@ Deno.test("erase all leaves empty content", () => {
   assertEquals(text.line_count, 0);
   assertEquals(text.read(0).toArray().join(""), "");
   assertEquals(text.line(0).toArray().join(""), "");
+
+  assert_tree(text);
 });
 
 /*
