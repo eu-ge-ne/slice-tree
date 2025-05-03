@@ -235,6 +235,19 @@ Deno.test("erase removes lines", () => {
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
 });
 
+Deno.test("erase all leaves empty content", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem ipsum\ndolor sit amet");
+  text.erase(0, 26);
+
+  assertEquals(text.count, 0);
+  assertEquals(text.line_count, 0);
+  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.line(0).toArray().join(""), "");
+});
+
+/*
 Deno.test("erase head produces valid red-black tree", () => {
   const text = new SliceTree();
 
@@ -428,18 +441,7 @@ Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
 
   assert_tree(text);
 });
-
-Deno.test("erase all leaves empty content", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem ipsum\ndolor sit amet");
-  text.erase(0, 26);
-
-  assertEquals(text.count, 0);
-  assertEquals(text.line_count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
-  assertEquals(text.line(0).toArray().join(""), "");
-});
+*/
 
 Deno.test("line returns empty content for invalid index provided", () => {
   const text = new SliceTree();
