@@ -44,9 +44,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 1 time into a SliceTree",
+  "Inserting x1 into a SliceTree",
   {
-    group: "Inserting 1 time",
+    group: "Inserting x1",
     baseline: true,
   },
   (b) => {
@@ -64,9 +64,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 1 time into a string",
+  "Inserting x1 into a string",
   {
-    group: "Inserting 1 time",
+    group: "Inserting x1",
   },
   (b) => {
     const unique = unique_string();
@@ -81,9 +81,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 10 times into a SliceTree",
+  "Inserting x10 into a SliceTree",
   {
-    group: "Inserting 10 times",
+    group: "Inserting x10",
     baseline: true,
   },
   (b) => {
@@ -103,9 +103,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 10 times into a string",
+  "Inserting x10 into a string",
   {
-    group: "Inserting 10 times",
+    group: "Inserting x10",
   },
   (b) => {
     const unique = unique_string();
@@ -122,9 +122,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 100 times into a SliceTree",
+  "Inserting x100 into a SliceTree",
   {
-    group: "Inserting 100 times",
+    group: "Inserting x100",
     baseline: true,
   },
   (b) => {
@@ -144,9 +144,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Inserting 100 times into a string",
+  "Inserting x100 into a string",
   {
-    group: "Inserting 100 times",
+    group: "Inserting x100",
   },
   (b) => {
     const unique = unique_string();
@@ -162,12 +162,10 @@ Deno.bench(
   },
 );
 
-// TODO
-
 Deno.bench(
-  "Removing 1 time from a SliceTree",
+  "Removing x1 from a SliceTree",
   {
-    group: "Removing 1 time",
+    group: "Removing x1",
     baseline: true,
   },
   (b) => {
@@ -185,9 +183,9 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing 1 time from a string",
+  "Removing x1 from a string",
   {
-    group: "Removing 1 time",
+    group: "Removing x1",
   },
   (b) => {
     const unique = unique_string();
@@ -201,23 +199,22 @@ Deno.bench(
   },
 );
 
-/*
 Deno.bench(
-  "Removing 10 chars from a SliceTree",
+  "Removing x10 from a SliceTree",
   {
-    group: "Removing 10 chars",
+    group: "Removing x10",
     baseline: true,
   },
   (b) => {
-    const char = random_string();
+    const unique = unique_string();
     const text = new SliceTree();
-    text.write(0, char);
-    text.write(1, data);
+    text.write(0, unique);
+    text.write(text.count, data);
 
     b.start();
 
     for (let i = 1; i <= 10; i += 1) {
-      text.erase(i * 10, 1);
+      text.erase(i * 100, 1);
     }
 
     b.end();
@@ -225,18 +222,18 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing 10 chars from a string",
+  "Removing x10 from a string",
   {
-    group: "Removing 10 chars",
+    group: "Removing x10",
   },
   (b) => {
-    const char = random_string();
-    let text = char + data;
+    const unique = unique_string();
+    let text = unique + data;
 
     b.start();
 
     for (let i = 1; i <= 10; i += 1) {
-      text = text.substring(0, i * 10) + text.substring((i * 10) + 1);
+      text = text.substring(0, i * 100) + text.substring((i * 100) + 1);
     }
 
     b.end();
@@ -244,21 +241,21 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing 100 chars from a SliceTree",
+  "Removing x100 from a SliceTree",
   {
-    group: "Removing 100 chars",
+    group: "Removing x100",
     baseline: true,
   },
   (b) => {
-    const char = random_string();
+    const unique = unique_string();
     const text = new SliceTree();
-    text.write(0, char);
-    text.write(1, data);
+    text.write(0, unique);
+    text.write(text.count, data);
 
     b.start();
 
     for (let i = 1; i <= 100; i += 1) {
-      text.erase(i * 10, 1);
+      text.erase(i * 100, 1);
     }
 
     b.end();
@@ -266,18 +263,18 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing 100 chars from a string",
+  "Removing x100 from a string",
   {
-    group: "Removing 100 chars",
+    group: "Removing x100",
   },
   (b) => {
-    const char = random_string();
-    let text = char + data;
+    const unique = unique_string();
+    let text = unique + data;
 
     b.start();
 
     for (let i = 1; i <= 100; i += 1) {
-      text = text.substring(0, i * 10) + text.substring((i * 10) + 1);
+      text = text.substring(0, i * 100) + text.substring((i * 100) + 1);
     }
 
     b.end();
@@ -291,15 +288,15 @@ Deno.bench(
     baseline: true,
   },
   (b) => {
-    const char = random_string();
+    const unique = unique_string();
     const text = new SliceTree();
-    text.write(0, char);
-    text.write(1, data);
+    text.write(0, unique);
+    text.write(text.count, data);
 
     b.start();
 
     for (let i = 0; i < 10; i += 1) {
-      text.write(1, char);
+      text.write(1, unique);
       const _ = text.line(i).toArray().join("");
     }
 
@@ -313,17 +310,16 @@ Deno.bench(
     group: "Accessing a line",
   },
   (b) => {
-    const char = random_string();
-    let text = char + data;
+    const unique = unique_string();
+    let text = unique + data;
 
     b.start();
 
     for (let i = 0; i < 10; i += 1) {
-      text = text.substring(0, 1) + char + text.substring(1);
+      text = text.substring(0, 1) + unique + text.substring(1);
       const _ = read_line(text, i);
     }
 
     b.end();
   },
 );
-*/
