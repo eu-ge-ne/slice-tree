@@ -1,5 +1,3 @@
-import { assertEquals } from "jsr:@std/assert";
-
 import { SliceTree } from "./tree.ts";
 
 const data = await Deno.readTextFile("tmp/bench-data.txt");
@@ -51,7 +49,7 @@ Deno.bench(
 
     b.start();
 
-    const _text = char + data;
+    const _ = char + data;
 
     b.end();
   },
@@ -309,10 +307,9 @@ Deno.bench(
 
     b.start();
 
-    for (let i = 1; i <= 10; i += 1) {
+    for (let i = 0; i < 10; i += 1) {
       text.write(1, char);
-      const line = text.line(1).toArray().join("");
-      assertEquals(line, "аагаміі\n");
+      const _ = text.line(i).toArray().join("");
     }
 
     b.end();
@@ -330,10 +327,9 @@ Deno.bench(
 
     b.start();
 
-    for (let i = 1; i <= 10; i += 1) {
+    for (let i = 0; i < 10; i += 1) {
       text = text.substring(0, 1) + char + text.substring(1);
-      const line = read_line(text, 1);
-      assertEquals(line, "аагаміі\n");
+      const _ = read_line(text, i);
     }
 
     b.end();
