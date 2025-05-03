@@ -85,20 +85,21 @@ export function split_node(tree: Tree, node: Node, index: number): Node {
 export function delete_from_node(
   tree: Tree,
   node: Node,
-  i: number,
-  d: number,
+  index: number,
+  delete_count: number,
 ) {
   const { buffer, start, count } = node;
 
-  node.count = i;
-  node.lines = line_starts(node.buffer, node.start, node.count);
+  node.count = index;
+  node.lines = line_starts(buffer, start, index);
 
-  const next_count = count - i - d;
+  const next_count = count - index - delete_count;
 
   if (next_count === 0) {
     bubble_metadata(node);
   } else {
-    const next = create_node(buffer, start + i + d, next_count);
+    const next = create_node(buffer, start + index + delete_count, next_count);
+
     insert_after(tree, node, next);
   }
 }
