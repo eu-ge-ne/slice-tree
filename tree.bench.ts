@@ -312,7 +312,7 @@ Deno.bench(
     for (let i = 1; i <= 10; i += 1) {
       text.write(1, char);
       const line = text.line(1).toArray().join("");
-      assertEquals(line, "плаксун\n");
+      assertEquals(line, "аагаміі\n");
     }
 
     b.end();
@@ -333,7 +333,7 @@ Deno.bench(
     for (let i = 1; i <= 10; i += 1) {
       text = text.substring(0, 1) + char + text.substring(1);
       const line = read_line(text, 1);
-      assertEquals(line, "плаксун\n");
+      assertEquals(line, "аагаміі\n");
     }
 
     b.end();
