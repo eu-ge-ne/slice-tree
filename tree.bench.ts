@@ -160,11 +160,12 @@ Deno.bench(
   },
 );
 
-// TODO
-
 Deno.bench(
-  "Removing a char from a SliceTree",
-  { group: "Removing", baseline: true },
+  "Removing 1 char from a SliceTree",
+  {
+    group: "Removing 1 char",
+    baseline: true,
+  },
   (b) => {
     const char = random_string();
     const text = new SliceTree();
@@ -180,8 +181,10 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing a char from a string",
-  { group: "Removing" },
+  "Removing 1 char from a string",
+  {
+    group: "Removing 1 char",
+  },
   (b) => {
     const char = random_string();
     let text = char + data;
@@ -189,6 +192,47 @@ Deno.bench(
     b.start();
 
     text = text.substring(0, 1) + text.substring(2);
+
+    b.end();
+  },
+);
+
+Deno.bench(
+  "Removing 10 chars from a SliceTree",
+  {
+    group: "Removing 10 chars",
+    baseline: true,
+  },
+  (b) => {
+    const char = random_string();
+    const text = new SliceTree();
+    text.write(0, char);
+    text.write(1, data);
+
+    b.start();
+
+    for (let i = 1; i <= 10; i += 1) {
+      text.erase(i * 10, 1);
+    }
+
+    b.end();
+  },
+);
+
+Deno.bench(
+  "Removing 10 chars from a string",
+  {
+    group: "Removing 10 chars",
+  },
+  (b) => {
+    const char = random_string();
+    let text = char + data;
+
+    b.start();
+
+    for (let i = 1; i <= 10; i += 1) {
+      text = text.substring(0, i * 10) + text.substring((i * 10) + 1);
+    }
 
     b.end();
   },
