@@ -256,13 +256,13 @@ Deno.test("erase all leaves empty content", () => {
 Deno.test("erase from 1 node", () => {
   const text = new SliceTree();
 
-  text.write(0, "Lorem ipsum");
-  text.erase(4, 3);
+  text.write(0, "Lorem");
+  text.erase(1, 3);
 
-  assertEquals(text.count, 8);
+  assertEquals(text.count, 2);
   assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorepsum");
-  assertEquals(text.line(0).toArray().join(""), "Lorepsum");
+  assertEquals(text.read(0).toArray().join(""), "Lm");
+  assertEquals(text.line(0).toArray().join(""), "Lm");
 
   assert_tree(text);
 });
@@ -282,12 +282,14 @@ Deno.test("erase from 2 nodes", () => {
   assert_tree(text);
 });
 
+// TODO
+
 Deno.test("erase from 3 nodes", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem");
-  text.write(5, " ");
-  text.write(6, "ipsum");
+  text.write(5, " ipsum");
+  text.write(11, " dolor");
   text.erase(4, 3);
 
   assertEquals(text.count, 8);
@@ -341,7 +343,7 @@ Deno.test("erase from 6 nodes", () => {
   text.write(6, "ipsum");
   text.write(11, " ");
   text.write(12, "dolor");
-  text.write(17, " sit")
+  text.write(17, " sit");
   text.erase(4, 15);
 
   assertEquals(text.count, 6);
@@ -360,8 +362,8 @@ Deno.test("erase from 7 nodes", () => {
   text.write(6, "ipsum");
   text.write(11, " ");
   text.write(12, "dolor");
-  text.write(17, " ")
-  text.write(18, "sit")
+  text.write(17, " ");
+  text.write(18, "sit");
   text.erase(4, 15);
 
   assertEquals(text.count, 6);
