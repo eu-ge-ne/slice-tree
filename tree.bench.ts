@@ -237,3 +237,44 @@ Deno.bench(
     b.end();
   },
 );
+
+Deno.bench(
+  "Removing 100 chars from a SliceTree",
+  {
+    group: "Removing 100 chars",
+    baseline: true,
+  },
+  (b) => {
+    const char = random_string();
+    const text = new SliceTree();
+    text.write(0, char);
+    text.write(1, data);
+
+    b.start();
+
+    for (let i = 1; i <= 100; i += 1) {
+      text.erase(i * 10, 1);
+    }
+
+    b.end();
+  },
+);
+
+Deno.bench(
+  "Removing 100 chars from a string",
+  {
+    group: "Removing 100 chars",
+  },
+  (b) => {
+    const char = random_string();
+    let text = char + data;
+
+    b.start();
+
+    for (let i = 1; i <= 100; i += 1) {
+      text = text.substring(0, i * 10) + text.substring((i * 10) + 1);
+    }
+
+    b.end();
+  },
+);
