@@ -315,6 +315,63 @@ Deno.test("erase from 4 nodes", () => {
   assert_tree(text);
 });
 
+Deno.test("erase from 5 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ");
+  text.write(6, "ipsum");
+  text.write(11, " ");
+  text.write(12, "dolor");
+  text.erase(4, 9);
+
+  assertEquals(text.count, 8);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreolor");
+  assertEquals(text.line(0).toArray().join(""), "Loreolor");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 6 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ");
+  text.write(6, "ipsum");
+  text.write(11, " ");
+  text.write(12, "dolor");
+  text.write(17, " sit")
+  text.erase(4, 15);
+
+  assertEquals(text.count, 6);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreit");
+  assertEquals(text.line(0).toArray().join(""), "Loreit");
+
+  assert_tree(text);
+});
+
+Deno.test("erase from 7 nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, " ");
+  text.write(6, "ipsum");
+  text.write(11, " ");
+  text.write(12, "dolor");
+  text.write(17, " ")
+  text.write(18, "sit")
+  text.erase(4, 15);
+
+  assertEquals(text.count, 6);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "Loreit");
+  assertEquals(text.line(0).toArray().join(""), "Loreit");
+
+  assert_tree(text);
+});
+
 /*
 Deno.test("erase head produces valid red-black tree", () => {
   const text = new SliceTree();
