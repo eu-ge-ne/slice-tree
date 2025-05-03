@@ -4,6 +4,7 @@ import { insert_left, insert_right } from "./insertion.ts";
 import {
   bubble_metadata,
   create_node,
+  delete_from_node,
   NIL,
   type Node,
   node_text,
@@ -234,6 +235,11 @@ export class SliceTree {
   erase(index: number, count: number): void {
     const first = search(this[root], index);
     if (!first) {
+      return;
+    }
+
+    if (count <= first.node.count - first.offset) {
+      delete_from_node(this, first.node, first.offset, count);
       return;
     }
 

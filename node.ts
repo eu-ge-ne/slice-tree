@@ -81,6 +81,27 @@ export function split_node(tree: Tree, node: Node, i: number): Node {
   return next;
 }
 
+export function delete_from_node(
+  tree: Tree,
+  node: Node,
+  i: number,
+  d: number,
+) {
+  const { buffer, start, count } = node;
+
+  node.count = i;
+  node.lines = line_starts(node.buffer, node.start, node.count);
+
+  const next_count = count - i - d;
+
+  if (next_count === 0) {
+    bubble_metadata(node);
+  } else {
+    const next = create_node(buffer, start + i + d, next_count);
+    insert_after(tree, node, next);
+  }
+}
+
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
     x.left_count = x.left.total_count;
