@@ -74,7 +74,6 @@ export function split_node(tree: Tree, node: Node, i: number): Node {
 
   node.count = i;
   node.lines = line_starts(node.buffer, node.start, node.count);
-  bubble_metadata(node);
 
   const next = create_node(buffer, start + i, count - i);
   insert_after(tree, node, next);
