@@ -164,18 +164,17 @@ Deno.bench(
 
 // TODO
 
-/*
 Deno.bench(
-  "Removing 1 char from a SliceTree",
+  "Removing 1 time from a SliceTree",
   {
-    group: "Removing 1 char",
+    group: "Removing 1 time",
     baseline: true,
   },
   (b) => {
-    const char = random_string();
+    const unique = unique_string();
     const text = new SliceTree();
-    text.write(0, char);
-    text.write(1, data);
+    text.write(0, unique);
+    text.write(text.count, data);
 
     b.start();
 
@@ -186,13 +185,13 @@ Deno.bench(
 );
 
 Deno.bench(
-  "Removing 1 char from a string",
+  "Removing 1 time from a string",
   {
-    group: "Removing 1 char",
+    group: "Removing 1 time",
   },
   (b) => {
-    const char = random_string();
-    let text = char + data;
+    const unique = unique_string();
+    let text = unique + data;
 
     b.start();
 
@@ -202,6 +201,7 @@ Deno.bench(
   },
 );
 
+/*
 Deno.bench(
   "Removing 10 chars from a SliceTree",
   {
