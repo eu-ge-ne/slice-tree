@@ -5,7 +5,7 @@ const data = await Deno.readTextFile("tmp/bench-data.txt");
 let counter = Number.MAX_SAFE_INTEGER;
 
 function unique_string(): string {
-  return (counter--).toString();
+  return (counter--).toString().padStart(20);
 }
 
 const LINE_BREAKS_RE = /r?\n/gm;
@@ -16,9 +16,9 @@ function read_line(text: string, index: number): string {
   const line_breaks = matches.map((x) => x.index + x[0].length);
 
   if (index === 0) {
-    return text.substring(0, line_breaks[0]);
+    return text.slice(0, line_breaks[0]);
   } else {
-    return text.substring(line_breaks[index - 1], line_breaks[index]);
+    return text.slice(line_breaks[index - 1], line_breaks[index]);
   }
 }
 
@@ -74,7 +74,7 @@ Deno.bench(
 
     b.start();
 
-    text = text.substring(0, 1) + unique + text.substring(1);
+    text = text.slice(0, 1) + unique + text.slice(1);
 
     b.end();
   },
@@ -94,8 +94,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 10; i += 1) {
-      text.write(i * 100, unique);
+      text.write(pos, unique);
+      pos += unique.length + 1;
     }
 
     b.end();
@@ -113,8 +115,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 10; i += 1) {
-      text = text.substring(0, i * 100) + unique + text.substring(i * 100);
+      text = text.slice(0, pos) + unique + text.slice(pos);
+      pos += unique.length + 1;
     }
 
     b.end();
@@ -135,8 +139,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 100; i += 1) {
-      text.write(i * 100, unique);
+      text.write(pos, unique);
+      pos += unique.length + 1;
     }
 
     b.end();
@@ -154,8 +160,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 100; i += 1) {
-      text = text.substring(0, i * 100) + unique + text.substring(i * 100);
+      text = text.slice(0, pos) + unique + text.slice(pos);
+      pos += unique.length + 1;
     }
 
     b.end();
@@ -193,7 +201,7 @@ Deno.bench(
 
     b.start();
 
-    text = text.substring(0, 1) + text.substring(2);
+    text = text.slice(0, 1) + text.slice(2);
 
     b.end();
   },
@@ -233,7 +241,7 @@ Deno.bench(
     b.start();
 
     for (let i = 1; i <= 10; i += 1) {
-      text = text.substring(0, i * 100) + text.substring((i * 100) + 1);
+      text = text.slice(0, i * 100) + text.slice((i * 100) + 1);
     }
 
     b.end();
@@ -274,7 +282,7 @@ Deno.bench(
     b.start();
 
     for (let i = 1; i <= 100; i += 1) {
-      text = text.substring(0, i * 100) + text.substring((i * 100) + 1);
+      text = text.slice(0, i * 100) + text.slice((i * 100) + 1);
     }
 
     b.end();
@@ -316,7 +324,7 @@ Deno.bench(
     b.start();
 
     for (let i = 0; i < 10; i += 1) {
-      text = text.substring(0, 1) + unique + text.substring(1);
+      text = text.slice(0, 1) + unique + text.slice(1);
       const _ = read_line(text, i);
     }
 

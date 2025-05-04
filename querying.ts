@@ -7,46 +7,38 @@ export function search(
   while (x !== NIL) {
     if (i < x.left_count) {
       x = x.left;
-      continue;
     } else {
       i -= x.left_count;
-    }
 
-    if (i < x.count) {
-      return { node: x, offset: i };
-    } else {
-      i -= x.count;
-    }
+      if (i < x.count) {
+        return { node: x, offset: i };
+      } else {
+        i -= x.count;
 
-    x = x.right;
+        x = x.right;
+      }
+    }
   }
-
-  return;
 }
 
 export function search_line_position(x: Node, l: number): number | undefined {
-  let n = 0;
-
-  while (x !== NIL) {
+  for (let n = 0; x !== NIL;) {
     if (l < x.left_line_count) {
       x = x.left;
-      continue;
     } else {
       l -= x.left_line_count;
       n += x.left_count;
-    }
 
-    if (l < x.lines.length) {
-      return n + x.lines[l]!;
-    } else {
-      l -= x.lines.length;
-      n += x.count;
-    }
+      if (l < x.lines.length) {
+        return n + x.lines[l]!;
+      } else {
+        l -= x.lines.length;
+        n += x.count;
 
-    x = x.right;
+        x = x.right;
+      }
+    }
   }
-
-  return;
 }
 
 export function minimum(x: Node): Node {
