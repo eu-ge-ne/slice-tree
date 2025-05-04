@@ -60,10 +60,10 @@ for (let power = 0; power < 3; power += 1) {
 
       b.start();
 
-      let pos = unique.length * 2;
+      let pos = unique.length * 10;
       for (let i = 1; i <= n; i += 1) {
         text.write(pos, unique);
-        pos += unique.length * 2;
+        pos += unique.length * 10;
       }
 
       b.end();
@@ -81,10 +81,10 @@ for (let power = 0; power < 3; power += 1) {
 
       b.start();
 
-      let pos = unique.length * 2;
+      let pos = unique.length * 10;
       for (let i = 1; i <= n; i += 1) {
         text = text.slice(0, pos) + unique + text.slice(pos);
-        pos += unique.length * 2;
+        pos += unique.length * 10;
       }
 
       b.end();
@@ -109,10 +109,10 @@ for (let power = 0; power < 3; power += 1) {
 
       b.start();
 
-      let pos = unique.length * 2;
+      let pos = unique.length * 10;
       for (let i = 1; i <= n; i += 1) {
         text.erase(pos, unique.length);
-        pos += unique.length * 2;
+        pos += unique.length * 10;
       }
 
       b.end();
@@ -130,10 +130,10 @@ for (let power = 0; power < 3; power += 1) {
 
       b.start();
 
-      let pos = unique.length * 2;
+      let pos = unique.length * 10;
       for (let i = 1; i <= 10; i += 1) {
         text = text.slice(0, pos) + text.slice(pos + unique.length);
-        pos += unique.length * 2;
+        pos += unique.length * 10;
       }
 
       b.end();
