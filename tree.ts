@@ -6,7 +6,6 @@ import {
   create_node,
   delete_from_node,
   NIL,
-  node_text,
   split_node,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
@@ -103,17 +102,17 @@ export class SliceTree {
     }
 
     let remaining = end - start;
+    let x = first.node;
+    let offset = first.offset;
 
-    let n = Math.min(first.node.count - first.offset, remaining);
-    remaining -= n;
-    yield node_text(first.node, first.offset, first.offset + n);
-    let node = successor(first.node);
-
-    while ((node !== NIL) && (remaining > 0)) {
-      n = Math.min(node.count, remaining);
+    while ((x !== NIL) && (remaining > 0)) {
+      const n = Math.min(x.count - offset, remaining);
       remaining -= n;
-      yield node_text(node, 0, n);
-      node = successor(node);
+
+      yield x.buffer.text.slice(x.start + offset, x.start + offset + n);
+
+      x = successor(x);
+      offset = 0;
     }
   }
 
