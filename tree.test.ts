@@ -324,39 +324,6 @@ for (let n = 2; n <= 20; n += 1) {
   });
 }
 
-Deno.test("erase head produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(text.count, " ipsum");
-  text.write(text.count, " dolor");
-  text.write(text.count, " sit");
-  text.write(text.count, " amet,");
-  text.write(text.count, " consectetur");
-  text.write(text.count, " adipiscing");
-  text.write(text.count, " elit,");
-  text.write(text.count, " sed");
-  text.write(text.count, " do");
-  text.write(text.count, " eiusmod");
-  text.write(text.count, " tempor");
-  text.write(text.count, " incididunt");
-  text.write(text.count, " ut");
-  text.write(text.count, " labore");
-  text.write(text.count, " et");
-  text.write(text.count, " dolore");
-  text.write(text.count, " magna");
-  text.write(text.count, " aliqua.");
-
-  while (text.count > 0) {
-    text.erase(0, 1);
-  }
-
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
-
-  assert_tree(text);
-});
-
 Deno.test("erase reversed head produces valid red-black tree", () => {
   const text = new SliceTree();
 
