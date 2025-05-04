@@ -6,7 +6,6 @@ import {
   create_node,
   delete_from_node,
   NIL,
-  type Node,
   node_text,
   root,
   split_node,
@@ -175,34 +174,35 @@ export class SliceTree {
     this.#buffers.push(buffer);
     const child = create_node(buffer, 0, text.length);
 
-    let node = this[root];
-    let p: Node = NIL;
+    let p = NIL;
     let as_left_child = true;
 
-    while (node !== NIL) {
-      if (index <= node.left_count) {
-        p = node;
-        node = node.left;
+    for (let x = this[root]; x !== NIL;) {
+      if (index <= x.left_count) {
+        p = x;
+        x = x.left;
         as_left_child = true;
-        continue;
-      }
+      } else {
+        index -= x.left_count;
 
-      index -= node.left_count;
-      if (index < node.count) {
-        const x = split_node(this, node, index);
-        insert_left(this, x, child);
-        return;
-      }
+        if (index < x.count) {
+          p = split_node(this, x, index);
+          x = NIL;
+          as_left_child = true;
+        } else {
+          index -= x.count;
 
-      index -= node.count;
-      p = node;
-      node = node.right;
-      as_left_child = false;
+          p = x;
+          x = x.right;
+          as_left_child = false;
+        }
+      }
     }
 
     if (p === NIL) {
       this[root] = child;
       this[root].red = false;
+
       bubble_metadata(this[root]);
     } else if (as_left_child) {
       insert_left(this, p, child);
