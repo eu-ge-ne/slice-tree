@@ -77,6 +77,8 @@ Deno.test("write adds content", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
+
+  assert_tree(text);
 });
 
 Deno.test("write adds new lines", () => {
@@ -90,6 +92,8 @@ Deno.test("write adds new lines", () => {
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum\ndolor sit amet");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum\n");
   assertEquals(text.line(1).toArray().join(""), "dolor sit amet");
+
+  assert_tree(text);
 });
 
 Deno.test("random write produces valid red-black tree", () => {
@@ -374,4 +378,6 @@ Deno.test("line returns empty content for invalid index provided", () => {
 
   assertEquals(text.line(-1).toArray().join(""), "");
   assertEquals(text.line(2).toArray().join(""), "");
+
+  assert_tree(text);
 });
