@@ -327,10 +327,23 @@ for (let n = 2; n <= 20; n += 1) {
 Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   const text = new SliceTree();
 
-  text.write(
-    0,
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
+  text.write(text.count, "Lorem");
+  text.write(text.count, " ipsum");
+  text.write(text.count, " dolor");
+  text.write(text.count, " sit");
+  text.write(text.count, " amet,");
+  text.write(text.count, " consectetur");
+  text.write(text.count, " adipiscing");
+  text.write(text.count, " elit,");
+  text.write(text.count, " sed");
+  text.write(text.count, " do");
+  text.write(text.count, " eiusmod");
+  text.write(text.count, " tempor");
+  text.write(text.count, " incididunt");
+  text.write(text.count, " ut");
+  text.write(text.count, " labore");
+  text.write(text.count, " et");
+  text.write(text.count, " dolore magna aliqua.");
 
   text.erase(13, 13);
   text.erase(26, 13);
@@ -347,10 +360,9 @@ Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   text.erase(3, 3);
   text.erase(1, 1);
   text.erase(0, 2);
-  text.erase(0, 2);
 
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.count, 2);
+  assertEquals(text.read(0).toArray().join(""), "a.");
 
   assert_tree(text);
 });
