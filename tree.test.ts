@@ -270,7 +270,6 @@ Deno.test("erase from 1 node", () => {
 for (let n = 2; n <= 20; n += 1) {
   Deno.test(`erase from ${n} nodes`, () => {
     const size = 10;
-    const erase_pos = 5;
 
     function str(i: number): string {
       return i.toString().padStart(size, "1234567890");
@@ -282,9 +281,39 @@ for (let n = 2; n <= 20; n += 1) {
       text.write(text.count, str(i));
     }
 
-    text.erase(erase_pos, (n - 1) * size);
+    text.erase(size / 2, (n - 1) * size);
 
-    const expected = str(0).slice(0, erase_pos) + str(n - 1).slice(erase_pos);
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
+
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
+
+    assert_tree(text);
+  });
+}
+
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes (2)`, () => {
+    const size = 10;
+
+    function str(i: number): string {
+      return i.toString().padStart(size);
+    }
+
+    const text = new SliceTree();
+
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
+
+    for (let i = 0; i < (n - 1); i += 1) {
+      const erase_pos = Math.floor((text.count - size) / 2);
+      text.erase(erase_pos, size);
+    }
+
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
 
     assertEquals(text.read(0).toArray().join(""), expected);
     assertEquals(text.line(0).toArray().join(""), expected);

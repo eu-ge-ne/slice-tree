@@ -22,6 +22,7 @@ export function delete_node(tree: Tree, z: Node): void {
 
     if (y !== z.right) {
       transplant(tree, y, y.right);
+      bubble_metadata(y.right.p);
       y.right = z.right;
       y.right.p = y;
     } else {
