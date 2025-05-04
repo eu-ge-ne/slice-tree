@@ -77,6 +77,8 @@ Deno.test("write adds content", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
+
+  assert_tree(text);
 });
 
 Deno.test("write adds new lines", () => {
@@ -90,6 +92,8 @@ Deno.test("write adds new lines", () => {
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum\ndolor sit amet");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum\n");
   assertEquals(text.line(1).toArray().join(""), "dolor sit amet");
+
+  assert_tree(text);
 });
 
 Deno.test("random write produces valid red-black tree", () => {
@@ -221,6 +225,8 @@ Deno.test("erase removes content", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem");
   assertEquals(text.line(0).toArray().join(""), "Lorem");
+
+  assert_tree(text);
 });
 
 Deno.test("erase removes lines", () => {
@@ -233,179 +239,115 @@ Deno.test("erase removes lines", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
   assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
+
+  assert_tree(text);
 });
 
-Deno.test("erase head produces valid red-black tree", () => {
+Deno.test("erase all leaves empty content", () => {
   const text = new SliceTree();
 
-  text.write(0, "Lorem");
-  text.write(text.count, " ipsum");
-  text.write(text.count, " dolor");
-  text.write(text.count, " sit");
-  text.write(text.count, " amet,");
-  text.write(text.count, " consectetur");
-  text.write(text.count, " adipiscing");
-  text.write(text.count, " elit,");
-  text.write(text.count, " sed");
-  text.write(text.count, " do");
-  text.write(text.count, " eiusmod");
-  text.write(text.count, " tempor");
-  text.write(text.count, " incididunt");
-  text.write(text.count, " ut");
-  text.write(text.count, " labore");
-  text.write(text.count, " et");
-  text.write(text.count, " dolore");
-  text.write(text.count, " magna");
-  text.write(text.count, " aliqua.");
-
-  while (text.count > 0) {
-    text.erase(0, 1);
-  }
+  text.write(0, "Lorem ipsum\ndolor sit amet");
+  text.erase(0, 26);
 
   assertEquals(text.count, 0);
+  assertEquals(text.line_count, 0);
   assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.line(0).toArray().join(""), "");
 
   assert_tree(text);
 });
 
-Deno.test("erase reversed head produces valid red-black tree", () => {
+Deno.test("erase from 1 node", () => {
   const text = new SliceTree();
 
-  text.write(0, " aliqua.");
-  text.write(0, " magna");
-  text.write(0, " dolore");
-  text.write(0, " et");
-  text.write(0, " labore");
-  text.write(0, " ut");
-  text.write(0, " incididunt");
-  text.write(0, " tempor");
-  text.write(0, " eiusmod");
-  text.write(0, " do");
-  text.write(0, " sed");
-  text.write(0, " elit,");
-  text.write(0, " adipiscing");
-  text.write(0, " consectetur");
-  text.write(0, " amet,");
-  text.write(0, " sit");
-  text.write(0, " dolor");
-  text.write(0, " ipsum");
-  text.write(0, "Lorem");
+  text.write(0, "ABCD");
+  text.erase(1, 2);
 
-  while (text.count > 0) {
-    text.erase(0, 1);
-  }
-
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.count, 2);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "AD");
+  assertEquals(text.line(0).toArray().join(""), "AD");
 
   assert_tree(text);
 });
 
-Deno.test("erase tail produces valid red-black tree", () => {
-  const text = new SliceTree();
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes (1)`, () => {
+    const size = 10;
 
-  text.write(0, "Lorem");
-  text.write(text.count, " ipsum");
-  text.write(text.count, " dolor");
-  text.write(text.count, " sit");
-  text.write(text.count, " amet,");
-  text.write(text.count, " consectetur");
-  text.write(text.count, " adipiscing");
-  text.write(text.count, " elit,");
-  text.write(text.count, " sed");
-  text.write(text.count, " do");
-  text.write(text.count, " eiusmod");
-  text.write(text.count, " tempor");
-  text.write(text.count, " incididunt");
-  text.write(text.count, " ut");
-  text.write(text.count, " labore");
-  text.write(text.count, " et");
-  text.write(text.count, " dolore");
-  text.write(text.count, " magna");
-  text.write(text.count, " aliqua.");
+    function str(i: number): string {
+      return i.toString().padStart(size, ".....     ");
+    }
 
-  while (text.count > 0) {
-    text.erase(text.count - 1, 1);
-  }
+    const text = new SliceTree();
 
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
 
-  assert_tree(text);
-});
+    text.erase(size / 2, (n - 1) * size);
 
-Deno.test("erase reversed tail produces valid red-black tree", () => {
-  const text = new SliceTree();
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
 
-  text.write(0, " aliqua.");
-  text.write(0, " magna");
-  text.write(0, " dolore");
-  text.write(0, " et");
-  text.write(0, " labore");
-  text.write(0, " ut");
-  text.write(0, " incididunt");
-  text.write(0, " tempor");
-  text.write(0, " eiusmod");
-  text.write(0, " do");
-  text.write(0, " sed");
-  text.write(0, " elit,");
-  text.write(0, " adipiscing");
-  text.write(0, " consectetur");
-  text.write(0, " amet,");
-  text.write(0, " sit");
-  text.write(0, " dolor");
-  text.write(0, " ipsum");
-  text.write(0, "Lorem");
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
 
-  while (text.count > 0) {
-    text.erase(text.count - 1, 1);
-  }
+    assert_tree(text);
+  });
+}
 
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes (2)`, () => {
+    const size = 10;
 
-  assert_tree(text);
-});
+    function str(i: number): string {
+      return i.toString().padStart(size, ".....     ");
+    }
 
-Deno.test("erase middle nodes produces valid red-black tree", () => {
-  const text = new SliceTree();
+    const text = new SliceTree();
 
-  for (let i = 0; i < 5; i += 1) {
-    text.write(0, "a");
-    text.write(Math.floor(text.count / 2), "b");
-    text.write(Math.floor(text.count / 3), "c");
-  }
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
 
-  while (text.count > 0) {
-    text.erase(Math.floor(text.count / 2), 1);
-  }
+    for (let i = 0; i < (n - 1); i += 1) {
+      const erase_pos = Math.floor((text.count - size) / 2);
+      text.erase(erase_pos, size);
+    }
 
-  assert_tree(text);
-});
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
 
-Deno.test("erase tail nodes produces valid red-black tree", () => {
-  const text = new SliceTree();
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
 
-  for (let i = 0; i < 10; i += 1) {
-    text.write(0, "a");
-    text.write(Math.floor(text.count / 3), "c");
-    text.write(Math.floor(text.count / 2), "b");
-  }
-
-  while (text.count > 0) {
-    text.erase(text.count - 1, 1);
-  }
-
-  assert_tree(text);
-});
+    assert_tree(text);
+  });
+}
 
 Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   const text = new SliceTree();
 
-  text.write(
-    0,
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
+  text.write(text.count, "Lorem");
+  text.write(text.count, " ipsum");
+  text.write(text.count, " dolor");
+  text.write(text.count, " sit");
+  text.write(text.count, " amet,");
+  text.write(text.count, " consectetur");
+  text.write(text.count, " adipiscing");
+  text.write(text.count, " elit,");
+  text.write(text.count, " sed");
+  text.write(text.count, " do");
+  text.write(text.count, " eiusmod");
+  text.write(text.count, " tempor");
+  text.write(text.count, " incididunt");
+  text.write(text.count, " ut");
+  text.write(text.count, " labore");
+  text.write(text.count, " et");
+  text.write(text.count, " dolore magna aliqua.");
 
   text.erase(13, 13);
   text.erase(26, 13);
@@ -423,22 +365,10 @@ Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   text.erase(1, 1);
   text.erase(0, 2);
 
-  assertEquals(text.count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.count, 2);
+  assertEquals(text.read(0).toArray().join(""), "a.");
 
   assert_tree(text);
-});
-
-Deno.test("erase all leaves empty content", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem ipsum\ndolor sit amet");
-  text.erase(0, 26);
-
-  assertEquals(text.count, 0);
-  assertEquals(text.line_count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
-  assertEquals(text.line(0).toArray().join(""), "");
 });
 
 Deno.test("line returns empty content for invalid index provided", () => {
@@ -448,4 +378,6 @@ Deno.test("line returns empty content for invalid index provided", () => {
 
   assertEquals(text.line(-1).toArray().join(""), "");
   assertEquals(text.line(2).toArray().join(""), "");
+
+  assert_tree(text);
 });

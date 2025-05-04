@@ -1,6 +1,6 @@
 {
   "name": "@eu-ge-ne/slice-tree",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "exports": "./mod.ts",
   "imports": {
@@ -13,5 +13,13 @@
       "codecov.yml",
       "coverage.sh"
     ]
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "explicit-function-return-type"
+      ]
+    }
   }
 }

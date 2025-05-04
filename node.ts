@@ -69,16 +69,39 @@ export function create_node(
   };
 }
 
-export function split_node(tree: Tree, node: Node, i: number): Node {
+export function split_node(tree: Tree, node: Node, index: number): Node {
   const { buffer, start, count } = node;
 
-  node.count = i;
-  node.lines = line_starts(node.buffer, node.start, node.count);
+  node.count = index;
+  node.lines = line_starts(buffer, start, index);
 
-  const next = create_node(buffer, start + i, count - i);
+  const next = create_node(buffer, start + index, count - index);
+
   insert_after(tree, node, next);
 
   return next;
+}
+
+export function delete_from_node(
+  tree: Tree,
+  node: Node,
+  index: number,
+  delete_count: number,
+): void {
+  const { buffer, start, count } = node;
+
+  node.count = index;
+  node.lines = line_starts(buffer, start, index);
+
+  const next_count = count - index - delete_count;
+
+  if (next_count === 0) {
+    bubble_metadata(node);
+  } else {
+    const next = create_node(buffer, start + index + delete_count, next_count);
+
+    insert_after(tree, node, next);
+  }
 }
 
 export function bubble_metadata(x: Node): void {
