@@ -256,262 +256,44 @@ Deno.test("erase all leaves empty content", () => {
 Deno.test("erase from 1 node", () => {
   const text = new SliceTree();
 
-  text.write(0, "Lorem");
-  text.erase(1, 3);
+  text.write(0, "ABCD");
+  text.erase(1, 2);
 
   assertEquals(text.count, 2);
   assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lm");
-  assertEquals(text.line(0).toArray().join(""), "Lm");
+  assertEquals(text.read(0).toArray().join(""), "AD");
+  assertEquals(text.line(0).toArray().join(""), "AD");
 
   assert_tree(text);
 });
 
-Deno.test("erase from 2 nodes", () => {
-  const text = new SliceTree();
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes`, () => {
+    const size = 10;
+    const erase_pos = 5;
 
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.erase(4, 1 + 2);
+    function str(i: number): string {
+      return i.toString().padStart(size, "1234567890");
+    }
 
-  assertEquals(text.count, 8);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorepsum");
-  assertEquals(text.line(0).toArray().join(""), "Lorepsum");
+    const text = new SliceTree();
 
-  assert_tree(text);
-});
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
 
-Deno.test("erase from 3 nodes", () => {
-  const text = new SliceTree();
+    text.erase(erase_pos, (n - 1) * size);
 
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.erase(4, 1 + 6 + 2);
+    const expected = str(0).slice(0, erase_pos) + str(n - 1).slice(erase_pos);
 
-  assertEquals(text.count, 8);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreolor");
-  assertEquals(text.line(0).toArray().join(""), "Loreolor");
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
 
-  assert_tree(text);
-});
-
-Deno.test("erase from 4 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.erase(4, 1 + 6 + 6 + 2);
-
-  assertEquals(text.count, 6);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreit");
-  assertEquals(text.line(0).toArray().join(""), "Loreit");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 5 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.erase(4, 1 + 6 + 6 + 4 + 2);
-
-  assertEquals(text.count, 8);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loremet,");
-  assertEquals(text.line(0).toArray().join(""), "Loremet,");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 6 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 2);
-
-  assertEquals(text.count, 14);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreonsectetur");
-  assertEquals(text.line(0).toArray().join(""), "Loreonsectetur");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 7 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 2);
-
-  assertEquals(text.count, 13);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loredipiscing");
-  assertEquals(text.line(0).toArray().join(""), "Loredipiscing");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 8 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 2);
-
-  assertEquals(text.count, 8);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorelit,");
-  assertEquals(text.line(0).toArray().join(""), "Lorelit,");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 9 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.write(56, " sed");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 2);
-
-  assertEquals(text.count, 6);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreed");
-  assertEquals(text.line(0).toArray().join(""), "Loreed");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 10 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.write(56, " sed");
-  text.write(60, " do");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 2);
-
-  assertEquals(text.count, 5);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreo");
-  assertEquals(text.line(0).toArray().join(""), "Loreo");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 11 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.write(56, " sed");
-  text.write(60, " do");
-  text.write(63, " eiusmod");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 2);
-
-  assertEquals(text.count, 10);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreiusmod");
-  assertEquals(text.line(0).toArray().join(""), "Loreiusmod");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 12 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.write(56, " sed");
-  text.write(60, " do");
-  text.write(63, " eiusmod");
-  text.write(71, " tempor");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 8 + 2);
-
-  assertEquals(text.count, 9);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Loreempor");
-  assertEquals(text.line(0).toArray().join(""), "Loreempor");
-
-  assert_tree(text);
-});
-
-Deno.test("erase from 13 nodes", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " ipsum");
-  text.write(11, " dolor");
-  text.write(17, " sit");
-  text.write(21, " amet,");
-  text.write(27, " consectetur");
-  text.write(39, " adipiscing");
-  text.write(50, " elit,");
-  text.write(56, " sed");
-  text.write(60, " do");
-  text.write(63, " eiusmod");
-  text.write(71, " tempor");
-  text.write(78, " incididunt");
-  text.erase(4, 1 + 6 + 6 + 4 + 6 + 12 + 11 + 6 + 4 + 3 + 8 + 7 + 2);
-
-  assertEquals(text.count, 13);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorencididunt");
-  assertEquals(text.line(0).toArray().join(""), "Lorencididunt");
-
-  assert_tree(text);
-});
+    assert_tree(text);
+  });
+}
 
 /*
 Deno.test("erase head produces valid red-black tree", () => {

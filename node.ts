@@ -87,7 +87,7 @@ export function delete_from_node(
   node: Node,
   index: number,
   delete_count: number,
-) {
+): void {
   const { buffer, start, count } = node;
 
   node.count = index;
