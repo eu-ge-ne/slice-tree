@@ -268,11 +268,11 @@ Deno.test("erase from 1 node", () => {
 });
 
 for (let n = 2; n <= 20; n += 1) {
-  Deno.test(`erase from ${n} nodes`, () => {
+  Deno.test(`erase from ${n} nodes (1)`, () => {
     const size = 10;
 
     function str(i: number): string {
-      return i.toString().padStart(size, "1234567890");
+      return i.toString().padStart(size, ".....     ");
     }
 
     const text = new SliceTree();
@@ -299,7 +299,7 @@ for (let n = 2; n <= 20; n += 1) {
     const size = 10;
 
     function str(i: number): string {
-      return i.toString().padStart(size);
+      return i.toString().padStart(size, ".....     ");
     }
 
     const text = new SliceTree();
