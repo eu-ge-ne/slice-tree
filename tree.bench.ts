@@ -43,87 +43,54 @@ Deno.bench(
   },
 );
 
-Deno.bench(
-  "Inserting x1 into a SliceTree",
-  {
-    group: "Inserting x1",
-    baseline: true,
-  },
-  (b) => {
-    const unique = unique_string();
-    const text = new SliceTree();
-    text.write(0, unique);
-    text.write(text.count, data);
+for (let power = 0; power < 3; power += 1) {
+  const n = 10 ** power;
 
-    b.start();
+  Deno.bench(
+    `Inserting x${n} into a SliceTree`,
+    {
+      group: `Inserting x${n}`,
+      baseline: true,
+    },
+    (b) => {
+      const unique = unique_string();
+      const text = new SliceTree();
+      text.write(0, unique);
+      text.write(text.count, data);
 
-    text.write(1, unique);
+      b.start();
 
-    b.end();
-  },
-);
+      let pos = 1;
+      for (let i = 1; i <= n; i += 1) {
+        text.write(pos, unique);
+        pos += unique.length * 2;
+      }
 
-Deno.bench(
-  "Inserting x1 into a string",
-  {
-    group: "Inserting x1",
-  },
-  (b) => {
-    const unique = unique_string();
-    let text = unique + data;
+      b.end();
+    },
+  );
 
-    b.start();
+  Deno.bench(
+    `Inserting x${n} into a string`,
+    {
+      group: `Inserting x${n}`,
+    },
+    (b) => {
+      const unique = unique_string();
+      let text = unique + data;
 
-    text = text.slice(0, 1) + unique + text.slice(1);
+      b.start();
 
-    b.end();
-  },
-);
+      let pos = 1;
+      for (let i = 1; i <= n; i += 1) {
+        text = text.slice(0, pos) + unique + text.slice(pos);
+        pos += unique.length * 2;
+      }
 
-Deno.bench(
-  "Inserting x10 into a SliceTree",
-  {
-    group: "Inserting x10",
-    baseline: true,
-  },
-  (b) => {
-    const unique = unique_string();
-    const text = new SliceTree();
-    text.write(0, unique);
-    text.write(text.count, data);
-
-    b.start();
-
-    let pos = 1;
-    for (let i = 1; i <= 10; i += 1) {
-      text.write(pos, unique);
-      pos += unique.length + 1;
-    }
-
-    b.end();
-  },
-);
-
-Deno.bench(
-  "Inserting x10 into a string",
-  {
-    group: "Inserting x10",
-  },
-  (b) => {
-    const unique = unique_string();
-    let text = unique + data;
-
-    b.start();
-
-    let pos = 1;
-    for (let i = 1; i <= 10; i += 1) {
-      text = text.slice(0, pos) + unique + text.slice(pos);
-      pos += unique.length + 1;
-    }
-
-    b.end();
-  },
-);
+      b.end();
+    },
+  );
+}
 
 Deno.bench(
   "Inserting x100 into a SliceTree",
@@ -221,8 +188,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 10; i += 1) {
-      text.erase(i * 100, 1);
+      text.erase(pos, 1);
+      pos += 1;
     }
 
     b.end();
@@ -240,8 +209,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 10; i += 1) {
-      text = text.slice(0, i * 100) + text.slice((i * 100) + 1);
+      text = text.slice(0, pos) + text.slice(pos + 1);
+      pos += 1;
     }
 
     b.end();
@@ -262,8 +233,10 @@ Deno.bench(
 
     b.start();
 
+    let pos = 1;
     for (let i = 1; i <= 100; i += 1) {
-      text.erase(i * 100, 1);
+      text.erase(pos, 1);
+      pos += 1;
     }
 
     b.end();
