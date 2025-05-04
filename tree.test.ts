@@ -324,7 +324,6 @@ for (let n = 2; n <= 20; n += 1) {
   });
 }
 
-/*
 Deno.test("erase head produces valid red-black tree", () => {
   const text = new SliceTree();
 
@@ -512,13 +511,13 @@ Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   text.erase(3, 3);
   text.erase(1, 1);
   text.erase(0, 2);
+  text.erase(0, 2);
 
   assertEquals(text.count, 0);
   assertEquals(text.read(0).toArray().join(""), "");
 
   assert_tree(text);
 });
-*/
 
 Deno.test("line returns empty content for invalid index provided", () => {
   const text = new SliceTree();
