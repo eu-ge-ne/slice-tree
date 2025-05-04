@@ -118,10 +118,6 @@ export function bubble_metadata(x: Node): void {
   }
 }
 
-export function node_text(x: Node, start: number, end: number): string {
-  return x.buffer.text.slice(x.start + start, x.start + end);
-}
-
 function line_starts(buffer: Buffer, start: number, count: number): number[] {
   const end = start + count;
 
