@@ -1,19 +1,18 @@
 import { assert } from "@std/assert";
 
-import { NIL, type Node, root } from "./node.ts";
-import type { SliceTree } from "./tree.ts";
+import { NIL, type Node, type Tree } from "./node.ts";
 
-export function assert_tree(tree: SliceTree): void {
+export function assert_tree(tree: Tree): void {
   // 1. Every node is either red or black.
   // 2. The root is black.
-  assert(!tree[root].red);
+  assert(!tree.root.red);
 
-  assert_node(tree[root]);
+  assert_node(tree.root);
 
   // 5. For each node, all simple paths from the node to descendant leaves
   // contain the same number of black nodes.
   const leaf_parents = new Set<Node>();
-  collect_leaf_parents(tree[root], leaf_parents);
+  collect_leaf_parents(tree.root, leaf_parents);
 
   const heights = Array.from(leaf_parents).map(black_height);
   for (const height of heights) {

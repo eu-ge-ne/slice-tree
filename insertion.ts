@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, type Node, root, type Tree } from "./node.ts";
+import { bubble_metadata, NIL, type Node, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
@@ -63,5 +63,5 @@ function insert_fixup(tree: Tree, z: Node): void {
     }
   }
 
-  tree[root].red = false;
+  tree.root.red = false;
 }

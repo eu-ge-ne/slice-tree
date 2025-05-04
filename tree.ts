@@ -7,7 +7,6 @@ import {
   delete_from_node,
   NIL,
   node_text,
-  root,
   split_node,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
@@ -26,10 +25,10 @@ import { search, search_line_position, successor } from "./querying.ts";
  */
 export class SliceTree {
   /**
-   * @ignore
-   * @internal
+   * @gnore
+   * @nternal
    */
-  [root] = NIL;
+  root = NIL;
 
   #buffers: Buffer[] = [];
 
@@ -52,7 +51,7 @@ export class SliceTree {
    * ```
    */
   get count(): number {
-    return this[root].total_count;
+    return this.root.total_count;
   }
 
   /**
@@ -74,7 +73,7 @@ export class SliceTree {
    * ```
    */
   get line_count(): number {
-    return this[root].total_count === 0 ? 0 : 1 + this[root].total_line_count;
+    return this.root.total_count === 0 ? 0 : 1 + this.root.total_line_count;
   }
 
   /**
@@ -98,7 +97,7 @@ export class SliceTree {
    * ```
    */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
-    const first = search(this[root], start);
+    const first = search(this.root, start);
     if (!first) {
       return "";
     }
@@ -138,12 +137,12 @@ export class SliceTree {
    * ```
    */
   *line(index: number): Generator<string> {
-    const start = index === 0 ? 0 : search_line_position(this[root], index - 1);
+    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
 
     if (typeof start === "undefined") {
       yield "";
     } else {
-      const end = search_line_position(this[root], index);
+      const end = search_line_position(this.root, index);
 
       yield* this.read(start, end);
     }
@@ -177,7 +176,7 @@ export class SliceTree {
     let p = NIL;
     let as_left_child = true;
 
-    for (let x = this[root]; x !== NIL;) {
+    for (let x = this.root; x !== NIL;) {
       if (index <= x.left_count) {
         p = x;
         x = x.left;
@@ -200,10 +199,10 @@ export class SliceTree {
     }
 
     if (p === NIL) {
-      this[root] = child;
-      this[root].red = false;
+      this.root = child;
+      this.root.red = false;
 
-      bubble_metadata(this[root]);
+      bubble_metadata(this.root);
     } else if (as_left_child) {
       insert_left(this, p, child);
     } else {
@@ -233,7 +232,7 @@ export class SliceTree {
    * ```
    */
   erase(index: number, count: number): void {
-    const first = search(this[root], index);
+    const first = search(this.root, index);
     if (!first) {
       return;
     }
@@ -250,7 +249,7 @@ export class SliceTree {
       x = split_node(this, first.node, first.offset);
     }
 
-    const last = search(this[root], index + count);
+    const last = search(this.root, index + count);
     if (last && last.offset !== 0) {
       split_node(this, last.node, last.offset);
     }

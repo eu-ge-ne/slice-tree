@@ -1,10 +1,8 @@
 import type { Buffer } from "./buffer.ts";
 import { insert_after } from "./insertion.ts";
 
-export const root = Symbol("root");
-
 export interface Tree {
-  [root]: Node;
+  root: Node;
 }
 
 export interface Node {
