@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, type Node, root, type Tree } from "./node.ts";
+import { bubble_metadata, NIL, type Node, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
@@ -45,7 +45,7 @@ export function delete_node(tree: Tree, z: Node): void {
 
 function transplant(tree: Tree, u: Node, v: Node): void {
   if (u.p === NIL) {
-    tree[root] = v;
+    tree.root = v;
   } else if (u === u.p.left) {
     u.p.left = v;
   } else {
@@ -56,7 +56,7 @@ function transplant(tree: Tree, u: Node, v: Node): void {
 }
 
 function delete_fixup(tree: Tree, x: Node): void {
-  while (x !== tree[root] && !x.red) {
+  while (x !== tree.root && !x.red) {
     if (x === x.p.left) {
       let w = x.p.right;
 
@@ -82,7 +82,7 @@ function delete_fixup(tree: Tree, x: Node): void {
         x.p.red = false;
         w.right.red = false;
         left_rotate(tree, x.p);
-        x = tree[root];
+        x = tree.root;
       }
     } else {
       let w = x.p.left;
@@ -109,7 +109,7 @@ function delete_fixup(tree: Tree, x: Node): void {
         x.p.red = false;
         w.left.red = false;
         right_rotate(tree, x.p);
-        x = tree[root];
+        x = tree.root;
       }
     }
   }
