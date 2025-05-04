@@ -93,51 +93,6 @@ for (let power = 0; power < 3; power += 1) {
 }
 
 Deno.bench(
-  "Inserting x100 into a SliceTree",
-  {
-    group: "Inserting x100",
-    baseline: true,
-  },
-  (b) => {
-    const unique = unique_string();
-    const text = new SliceTree();
-    text.write(0, unique);
-    text.write(text.count, data);
-
-    b.start();
-
-    let pos = 1;
-    for (let i = 1; i <= 100; i += 1) {
-      text.write(pos, unique);
-      pos += unique.length + 1;
-    }
-
-    b.end();
-  },
-);
-
-Deno.bench(
-  "Inserting x100 into a string",
-  {
-    group: "Inserting x100",
-  },
-  (b) => {
-    const unique = unique_string();
-    let text = unique + data;
-
-    b.start();
-
-    let pos = 1;
-    for (let i = 1; i <= 100; i += 1) {
-      text = text.slice(0, pos) + unique + text.slice(pos);
-      pos += unique.length + 1;
-    }
-
-    b.end();
-  },
-);
-
-Deno.bench(
   "Removing x1 from a SliceTree",
   {
     group: "Removing x1",
