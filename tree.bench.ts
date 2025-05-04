@@ -111,7 +111,7 @@ for (let power = 0; power < 3; power += 1) {
 
       let pos = unique.length * 2;
       for (let i = 1; i <= n; i += 1) {
-        text.erase(pos, 1);
+        text.erase(pos, unique.length);
         pos += unique.length * 2;
       }
 
@@ -132,7 +132,7 @@ for (let power = 0; power < 3; power += 1) {
 
       let pos = unique.length * 2;
       for (let i = 1; i <= 10; i += 1) {
-        text = text.slice(0, pos) + text.slice(pos + 1);
+        text = text.slice(0, pos) + text.slice(pos + unique.length);
         pos += unique.length * 2;
       }
 
