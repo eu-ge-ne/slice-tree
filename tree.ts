@@ -216,7 +216,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the range from start (inclusive) to end (exclusive).
+   * Removes the text in the range from index (inclusive) to index + count (exclusive).
    *
    * @param index Index at witch to start removing the text
    * @param count The number of characters to remove
