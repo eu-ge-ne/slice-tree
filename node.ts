@@ -123,7 +123,7 @@ function line_starts(buffer: Buffer, start: number, count: number): number[] {
 
   const lines = buffer.line_breaks.filter((x) =>
     (x.start >= start) && (x.start < end)
-  ).map((x) => x.end);
+  ).map((x) => x.end - start);
 
   return lines;
 }
