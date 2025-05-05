@@ -13,21 +13,18 @@ export function buffer_text(
   pool: Pool,
   text: string,
 ): [Buffer, number, number] {
-  /*
   let buffer = pool.buffers.at(-1);
 
-  const start = buffer?.text.length ?? 0;
-  const count = text.length;
-
-  if (buffer) {
+  if (buffer && buffer.text.length < 10) {
+    const start = buffer.text.length;
     add_to_buffer(buffer, text);
+
+    return [buffer, start, text.length];
   } else {
     buffer = create_buffer(pool, text);
-  }
-  */
-  const buffer = create_buffer(pool, text);
 
-  return [buffer, 0, text.length];
+    return [buffer, 0, text.length];
+  }
 }
 
 function create_buffer(pool: Pool, text: string): Buffer {
