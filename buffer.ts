@@ -15,7 +15,7 @@ export function buffer_text(
 ): [Buffer, number, number] {
   let buffer = pool.buffers.at(-1);
 
-  if (buffer && buffer.text.length < 10) {
+  if (buffer && buffer.text.length < 100) {
     const start = buffer.text.length;
     add_to_buffer(buffer, text);
 
@@ -48,7 +48,7 @@ function add_to_buffer(buffer: Buffer, text: string): void {
 
     buffer.text += text;
 
-    buffer.line_breaks.push(...breaks.map((x) => ({
+    buffer.line_breaks = buffer.line_breaks.concat(breaks.map((x) => ({
       start: start + x.start,
       end: start + x.end,
     })));
