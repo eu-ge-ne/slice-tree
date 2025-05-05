@@ -6,7 +6,7 @@ interface Pool {
 
 export interface Buffer {
   text: string;
-  line_breaks: readonly { start: number; end: number }[];
+  line_breaks: { start: number; end: number }[];
 }
 
 export function buffer_text(
@@ -39,8 +39,20 @@ function create_buffer(pool: Pool, text: string): Buffer {
 }
 
 function add_to_buffer(buffer: Buffer, text: string): void {
-  buffer.text += text;
-  buffer.line_breaks = line_breaks(buffer.text);
+  const breaks = line_breaks(text);
+
+  if (breaks.length === 0) {
+    buffer.text += text;
+  } else {
+    const start = buffer.text.length;
+
+    buffer.text += text;
+
+    buffer.line_breaks.push(...breaks.map((x) => ({
+      start: start + x.start,
+      end: start + x.end,
+    })));
+  }
 }
 
 function line_breaks(text: string): { start: number; end: number }[] {
