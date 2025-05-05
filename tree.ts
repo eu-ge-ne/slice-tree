@@ -106,8 +106,14 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      const n = Math.min(x.count - offset, remaining);
-      remaining -= n;
+      let n = x.count - offset;
+
+      if (n > remaining) {
+        n = remaining;
+        remaining = 0;
+      } else {
+        remaining -= n;
+      }
 
       yield x.buffer.text.slice(x.start + offset, x.start + offset + n);
 
