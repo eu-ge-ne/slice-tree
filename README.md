@@ -195,7 +195,8 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 #### `SliceTree.prototype.erase`
 
-Removes the text in the range from start (inclusive) to end (exclusive).
+Removes the text in the range from index (inclusive) to index + count
+(exclusive).
 
 #### Syntax
 
