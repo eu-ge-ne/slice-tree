@@ -3,7 +3,7 @@ import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 import { SliceTree } from "./tree.ts";
 import { assert_tree } from "./validation.ts";
 
-Deno.test("create", () => {
+Deno.test("Creating", () => {
   new SliceTree();
 });
 
@@ -44,25 +44,25 @@ Deno.test("erase", () => {
   text.erase(0, 1);
 });
 
-Deno.test("empty tree is a valid red-black tree", () => {
+Deno.test("Empty tree is a valid red-black tree", () => {
   const text = new SliceTree();
 
   assert_tree(text);
 });
 
-Deno.test("empty tree contains 0 characters", () => {
+Deno.test("Empty tree contains 0 characters", () => {
   const text = new SliceTree();
 
   assertEquals(text.count, 0);
 });
 
-Deno.test("empty tree contains 0 lines", () => {
+Deno.test("Empty tree contains 0 lines", () => {
   const text = new SliceTree();
 
   assertEquals(text.line_count, 0);
 });
 
-Deno.test("empty tree contains ''", () => {
+Deno.test("Empty tree contains ''", () => {
   const text = new SliceTree();
 
   assertEquals(text.read(0).toArray().join(""), "");
@@ -96,7 +96,7 @@ Deno.test("write adds new lines", () => {
   assert_tree(text);
 });
 
-Deno.test("random write produces valid red-black tree", () => {
+Deno.test("Random write produces valid red-black tree", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem");
@@ -151,7 +151,7 @@ Deno.test("write causing splitting nodes produces valid red-black tree", () => {
   assert_tree(text);
 });
 
-Deno.test("degenerate write produces valid red-black tree", () => {
+Deno.test("Sequential write produces valid red-black tree", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem");
@@ -183,7 +183,7 @@ Deno.test("degenerate write produces valid red-black tree", () => {
   assert_tree(text);
 });
 
-Deno.test("reverse degenerate write produces valid red-black tree", () => {
+Deno.test("Reverse sequential write produces valid red-black tree", () => {
   const text = new SliceTree();
 
   text.write(0, " aliqua.");
@@ -211,6 +211,34 @@ Deno.test("reverse degenerate write produces valid red-black tree", () => {
     text.read(0).toArray().join(""),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
+
+  assert_tree(text);
+});
+
+Deno.test("Squential write produces expect number of lines", () => {
+  const text = new SliceTree();
+
+  for (let i = 0; i < 10; i += 1) {
+    text.write(text.count, `${i}\n`);
+  }
+
+  assertEquals(text.count, 20);
+  assertEquals(text.line_count, 11);
+  assertEquals(
+    text.read(0).toArray().join(""),
+    "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n",
+  );
+  assertEquals(text.line(0).toArray().join(""), "0\n");
+  assertEquals(text.line(1).toArray().join(""), "1\n");
+  assertEquals(text.line(2).toArray().join(""), "2\n");
+  assertEquals(text.line(3).toArray().join(""), "3\n");
+  assertEquals(text.line(4).toArray().join(""), "4\n");
+  assertEquals(text.line(5).toArray().join(""), "5\n");
+  assertEquals(text.line(6).toArray().join(""), "6\n");
+  assertEquals(text.line(7).toArray().join(""), "7\n");
+  assertEquals(text.line(8).toArray().join(""), "8\n");
+  assertEquals(text.line(9).toArray().join(""), "9\n");
+  assertEquals(text.line(10).toArray().join(""), "");
 
   assert_tree(text);
 });
