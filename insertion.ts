@@ -2,6 +2,13 @@ import { bubble_metadata, NIL, type Node, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
+export const enum InsertionCase {
+  Root,
+  Left,
+  Right,
+  Split,
+}
+
 export function insert_after(tree: Tree, p: Node, z: Node): void {
   if (p.right === NIL) {
     insert_right(tree, p, z);

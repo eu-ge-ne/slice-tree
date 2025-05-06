@@ -1,6 +1,6 @@
-import { type Buffer, create_buffer } from "./buffer.ts";
+import { add_to_buffer, type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
-import { insert_left, insert_right } from "./insertion.ts";
+import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
   bubble_metadata,
   create_node,
@@ -9,7 +9,7 @@ import {
   split_node,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
-import { create_slice } from "./slice.ts";
+import { create_slice, resize_slice, slice_resizable } from "./slice.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -183,55 +183,69 @@ export class SliceTree {
    */
   write(index: number, text: string): void {
     let p = NIL;
-    let insert_case: 0 | 1 | 2 | 3 = 0;
+    let insert_case = InsertionCase.Root;
 
     for (let x = this.root; x !== NIL;) {
       if (index <= x.left_count) {
         p = x;
         x = x.left;
-        insert_case = 1;
+        insert_case = InsertionCase.Left;
       } else {
         index -= x.left_count;
 
         if (index < x.slice.count) {
           p = x;
           x = NIL;
-          insert_case = 3;
+          insert_case = InsertionCase.Split;
         } else {
           index -= x.slice.count;
 
           p = x;
           x = x.right;
-          insert_case = 2;
+          insert_case = InsertionCase.Right;
         }
       }
     }
 
-    const buffer = create_buffer(this, text);
-    const slice = create_slice(buffer, 0, text.length);
-    const child = create_node(slice);
+    if (
+      insert_case === InsertionCase.Right &&
+      slice_resizable(p.slice)
+    ) {
+      add_to_buffer(p.slice.buffer, text);
+      resize_slice(p.slice, text.length);
 
-    switch (insert_case) {
-      case 0:
-        this.root = child;
-        this.root.red = false;
+      bubble_metadata(p);
+    } else {
+      const buffer = create_buffer(this, text);
+      const slice = create_slice(buffer, 0, text.length);
+      const child = create_node(slice);
 
-        bubble_metadata(this.root);
-        break;
+      switch (insert_case) {
+        case InsertionCase.Root: {
+          this.root = child;
+          this.root.red = false;
 
-      case 1:
-        insert_left(this, p, child);
-        break;
+          bubble_metadata(this.root);
+          break;
+        }
 
-      case 2:
-        insert_right(this, p, child);
-        break;
+        case InsertionCase.Left: {
+          insert_left(this, p, child);
+          break;
+        }
 
-      case 3:
-        p = split_node(this, p, index);
+        case InsertionCase.Right: {
+          insert_right(this, p, child);
+          break;
+        }
 
-        insert_left(this, p, child);
-        break;
+        case InsertionCase.Split: {
+          const y = split_node(this, p, index);
+
+          insert_left(this, y, child);
+          break;
+        }
+      }
     }
   }
 

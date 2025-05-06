@@ -20,6 +20,16 @@ export function create_slice(
   };
 }
 
+export function slice_resizable(x: Slice): boolean {
+  return x.buffer.text.length < 10 &&
+    x.start + x.count === x.buffer.text.length;
+}
+
+export function resize_slice(x: Slice, add_count: number): void {
+  x.count += add_count;
+  x.lines = line_starts(x.buffer, x.start, x.count);
+}
+
 export function split_slice(
   x: Slice,
   index: number,
