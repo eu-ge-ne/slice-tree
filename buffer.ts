@@ -5,38 +5,19 @@ interface Pool {
 }
 
 export interface Buffer {
-  text: string;
-  line_breaks: { start: number; end: number }[];
+  readonly text: string;
+  readonly line_breaks: readonly { start: number; end: number }[];
 }
 
-export function buffer_text(
-  pool: Pool,
-  text: string,
-): [Buffer, number, number] {
-  let buffer = pool.buffers.at(-1);
+export function create_buffer(pool: Pool, text: string): Buffer {
+  const buffer = {
+    text,
+    line_breaks: line_breaks(0, text),
+  };
 
-  if (buffer && buffer.text.length < 100) {
-    const start = buffer.text.length;
+  pool.buffers.push(buffer);
 
-    buffer.text += text;
-
-    const breaks = line_breaks(start, text);
-
-    if (breaks.length > 0) {
-      buffer.line_breaks = buffer.line_breaks.concat(breaks);
-    }
-
-    return [buffer, start, text.length];
-  } else {
-    buffer = {
-      text,
-      line_breaks: line_breaks(0, text),
-    };
-
-    pool.buffers.push(buffer);
-
-    return [buffer, 0, text.length];
-  }
+  return buffer;
 }
 
 function line_breaks(
@@ -48,3 +29,30 @@ function line_breaks(
     end: start + x.index + x[0].length,
   }));
 }
+
+/*
+let buffer = pool.buffers.at(-1);
+
+if (buffer && buffer.text.length < 100) {
+  const start = buffer.text.length;
+
+  buffer.text += text;
+
+  const breaks = line_breaks(start, text);
+
+  if (breaks.length > 0) {
+    buffer.line_breaks = buffer.line_breaks.concat(breaks);
+  }
+
+  return [buffer, start, text.length];
+} else {
+  buffer = {
+    text,
+    line_breaks: line_breaks(0, text),
+  };
+
+  pool.buffers.push(buffer);
+
+  return [buffer, 0, text.length];
+}
+*/
