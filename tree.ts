@@ -1,4 +1,4 @@
-import { type Buffer, create_buffer } from "./buffer.ts";
+import { type Buffer, buffer_text } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right } from "./insertion.ts";
 import {
@@ -29,7 +29,11 @@ export class SliceTree {
    */
   root = NIL;
 
-  #buffers: Buffer[] = [];
+  /**
+   * @ignore
+   * @internal
+   */
+  buffers: Buffer[] = [];
 
   /**
    * Returns the total number of characters in the text content.
@@ -174,9 +178,7 @@ export class SliceTree {
    * ```
    */
   write(index: number, text: string): void {
-    const buffer = create_buffer(text);
-    this.#buffers.push(buffer);
-    const child = create_node(buffer, 0, text.length);
+    const child = create_node(...buffer_text(this, text));
 
     let p = NIL;
     let as_left_child = true;
