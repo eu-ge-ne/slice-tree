@@ -1,5 +1,5 @@
-import type { Buffer } from "./buffer.ts";
 import { insert_after } from "./insertion.ts";
+import { type Slice, split_slice } from "./slice.ts";
 
 export interface Tree {
   root: Node;
@@ -18,10 +18,7 @@ export interface Node {
   total_count: number;
   total_line_count: number;
 
-  buffer: Buffer;
-  start: number;
-  count: number;
-  lines: readonly number[];
+  slice: Slice;
 }
 
 const nil = {
@@ -40,13 +37,7 @@ nil.p = NIL;
 nil.left = NIL;
 nil.right = NIL;
 
-export function create_node(
-  buffer: Buffer,
-  start: number,
-  count: number,
-): Node {
-  const lines = line_starts(buffer, start, count);
-
+export function create_node(slice: Slice): Node {
   return {
     red: true,
     p: NIL,
@@ -60,45 +51,33 @@ export function create_node(
     total_count: 0,
     total_line_count: 0,
 
-    buffer,
-    start,
-    count,
-    lines,
+    slice,
   };
 }
 
-export function split_node(tree: Tree, node: Node, index: number): Node {
-  const { buffer, start, count } = node;
+export function split_node(tree: Tree, x: Node, index: number): Node {
+  const slice = split_slice(x.slice, index, 0);
+  const node = create_node(slice);
 
-  node.count = index;
-  node.lines = line_starts(buffer, start, index);
+  insert_after(tree, x, node);
 
-  const next = create_node(buffer, start + index, count - index);
-
-  insert_after(tree, node, next);
-
-  return next;
+  return node;
 }
 
 export function delete_from_node(
   tree: Tree,
-  node: Node,
+  x: Node,
   index: number,
   delete_count: number,
 ): void {
-  const { buffer, start, count } = node;
+  const slice = split_slice(x.slice, index, delete_count);
 
-  node.count = index;
-  node.lines = line_starts(buffer, start, index);
-
-  const next_count = count - index - delete_count;
-
-  if (next_count === 0) {
-    bubble_metadata(node);
+  if (slice.count === 0) {
+    bubble_metadata(x);
   } else {
-    const next = create_node(buffer, start + index + delete_count, next_count);
+    const node = create_node(slice);
 
-    insert_after(tree, node, next);
+    insert_after(tree, x, node);
   }
 }
 
@@ -110,20 +89,10 @@ export function bubble_metadata(x: Node): void {
     x.right_count = x.right.total_count;
     x.right_line_count = x.right.total_line_count;
 
-    x.total_count = x.left_count + x.count + x.right_count;
-    x.total_line_count = x.left_line_count + x.lines.length +
+    x.total_count = x.left_count + x.slice.count + x.right_count;
+    x.total_line_count = x.left_line_count + x.slice.lines.length +
       x.right_line_count;
 
     x = x.p;
   }
-}
-
-function line_starts(buffer: Buffer, start: number, count: number): number[] {
-  const end = start + count;
-
-  const lines = buffer.line_breaks.filter((x) =>
-    (x.start >= start) && (x.start < end)
-  ).map((x) => x.end - start);
-
-  return lines;
 }

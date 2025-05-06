@@ -1,4 +1,4 @@
-import { type Buffer, buffer_text } from "./buffer.ts";
+import { type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right } from "./insertion.ts";
 import {
@@ -9,6 +9,7 @@ import {
   split_node,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
+import { create_slice } from "./slice.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -110,7 +111,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.count - offset;
+      let n = x.slice.count - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -119,7 +120,10 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield x.buffer.text.slice(x.start + offset, x.start + offset + n);
+      yield x.slice.buffer.text.slice(
+        x.slice.start + offset,
+        x.slice.start + offset + n,
+      );
 
       x = successor(x);
       offset = 0;
@@ -178,8 +182,6 @@ export class SliceTree {
    * ```
    */
   write(index: number, text: string): void {
-    const child = create_node(...buffer_text(this, text));
-
     let p = NIL;
     let as_left_child = true;
 
@@ -191,12 +193,12 @@ export class SliceTree {
       } else {
         index -= x.left_count;
 
-        if (index < x.count) {
+        if (index < x.slice.count) {
           p = split_node(this, x, index);
           x = NIL;
           as_left_child = true;
         } else {
-          index -= x.count;
+          index -= x.slice.count;
 
           p = x;
           x = x.right;
@@ -204,6 +206,10 @@ export class SliceTree {
         }
       }
     }
+
+    const buffer = create_buffer(this, text);
+    const slice = create_slice(buffer, 0, text.length);
+    const child = create_node(slice);
 
     if (p === NIL) {
       this.root = child;
@@ -244,7 +250,7 @@ export class SliceTree {
       return;
     }
 
-    if (count <= first.node.count - first.offset) {
+    if (count <= first.node.slice.count - first.offset) {
       delete_from_node(this, first.node, first.offset, count);
       return;
     }
@@ -262,7 +268,7 @@ export class SliceTree {
     }
 
     while ((x !== NIL) && (i < count)) {
-      i += x.count;
+      i += x.slice.count;
       const next = successor(x);
       delete_node(this, x);
       x = next;
