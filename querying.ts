@@ -10,10 +10,10 @@ export function search(
     } else {
       i -= x.left_count;
 
-      if (i < x.count) {
+      if (i < x.slice.count) {
         return { node: x, offset: i };
       } else {
-        i -= x.count;
+        i -= x.slice.count;
 
         x = x.right;
       }
@@ -29,11 +29,11 @@ export function search_line_position(x: Node, l: number): number | undefined {
       l -= x.left_line_count;
       n += x.left_count;
 
-      if (l < x.lines.length) {
-        return n + x.lines[l]!;
+      if (l < x.slice.lines.length) {
+        return n + x.slice.lines[l]!; // TODO: absolute vs relative
       } else {
-        l -= x.lines.length;
-        n += x.count;
+        l -= x.slice.lines.length;
+        n += x.slice.count;
 
         x = x.right;
       }
