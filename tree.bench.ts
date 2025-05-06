@@ -47,9 +47,58 @@ for (let power = 0; power < 3; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
-    `Inserting x${n} into a SliceTree`,
+    `Inserting sequential x${n} into a SliceTree`,
     {
-      group: `Inserting x${n}`,
+      group: `Inserting sequential x${n}`,
+      baseline: true,
+    },
+    (b) => {
+      const unique = unique_string();
+      const text = new SliceTree();
+      text.write(0, unique);
+      text.write(text.count, data);
+
+      b.start();
+
+      let pos = unique.length * 10;
+      for (let i = 1; i <= n; i += 1) {
+        text.write(pos, unique);
+        pos += 2;
+      }
+
+      b.end();
+    },
+  );
+
+  Deno.bench(
+    `Inserting sequential x${n} into a string`,
+    {
+      group: `Inserting sequential x${n}`,
+    },
+    (b) => {
+      const unique = unique_string();
+      let text = unique + data;
+
+      b.start();
+
+      let pos = unique.length * 10;
+      for (let i = 1; i <= n; i += 1) {
+        text = text.slice(0, pos) + unique + text.slice(pos);
+        pos += 2;
+      }
+
+      b.end();
+    },
+  );
+}
+
+for (let power = 0; power < 3; power += 1) {
+  const n = 10 ** power;
+
+  Deno.bench(
+    `Inserting overlapping x${n} into a SliceTree`,
+    {
+      group: `Inserting overlapping x${n}`,
       baseline: true,
     },
     (b) => {
@@ -71,9 +120,9 @@ for (let power = 0; power < 3; power += 1) {
   );
 
   Deno.bench(
-    `Inserting x${n} into a string`,
+    `Inserting overlapping x${n} into a string`,
     {
-      group: `Inserting x${n}`,
+      group: `Inserting overlapping x${n}`,
     },
     (b) => {
       const unique = unique_string();
