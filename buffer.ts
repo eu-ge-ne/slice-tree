@@ -21,13 +21,10 @@ export function create_buffer(pool: Pool, text: string): Buffer {
 }
 
 export function add_to_buffer(buffer: Buffer, text: string): void {
-  const start = buffer.text.length;
+  const new_line_breaks = line_breaks(buffer.text.length, text);
 
   buffer.text += text;
-
-  buffer.line_breaks = buffer.line_breaks.concat(
-    line_breaks(start, buffer.text),
-  );
+  buffer.line_breaks = buffer.line_breaks.concat(new_line_breaks);
 }
 
 function line_breaks(
