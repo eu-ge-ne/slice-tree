@@ -4,7 +4,7 @@ export interface Slice {
   readonly buffer: Buffer;
   readonly start: number;
   count: number;
-  lines: readonly number[]; // TODO: absolute vs relative
+  lines: readonly number[];
 }
 
 export function create_slice(

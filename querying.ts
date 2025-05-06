@@ -22,18 +22,18 @@ export function search(
 }
 
 export function search_line_position(x: Node, l: number): number | undefined {
-  for (let n = 0; x !== NIL;) {
+  for (let i = 0; x !== NIL;) {
     if (l < x.left_line_count) {
       x = x.left;
     } else {
       l -= x.left_line_count;
-      n += x.left_count;
+      i += x.left_count;
 
       if (l < x.slice.lines.length) {
-        return n + x.slice.lines[l]!; // TODO: absolute vs relative
+        return i + x.slice.lines[l]!;
       } else {
         l -= x.slice.lines.length;
-        n += x.slice.count;
+        i += x.slice.count;
 
         x = x.right;
       }
