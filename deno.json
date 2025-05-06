@@ -2,7 +2,7 @@
   "name": "@eu-ge-ne/slice-tree",
   "version": "0.0.25",
   "license": "MIT",
-  "exports": "./mod.ts",
+  "exports": "./src/mod.ts",
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.13"
   },
@@ -10,8 +10,7 @@
     "exclude": [
       ".github",
       ".vscode",
-      "codecov.yml",
-      "coverage.sh"
+      "codecov.yml"
     ]
   },
   "lint": {
