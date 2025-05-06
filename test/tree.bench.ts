@@ -1,4 +1,4 @@
-import { SliceTree } from "./tree.ts";
+import { SliceTree } from "../src/tree.ts";
 
 const data = await Deno.readTextFile("tmp/bench-data.txt");
 
