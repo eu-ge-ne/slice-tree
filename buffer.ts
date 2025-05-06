@@ -5,8 +5,8 @@ interface Pool {
 }
 
 export interface Buffer {
-  readonly text: string;
-  readonly line_breaks: readonly { start: number; end: number }[];
+  text: string;
+  line_breaks: readonly { start: number; end: number }[];
 }
 
 export function create_buffer(pool: Pool, text: string): Buffer {
@@ -18,6 +18,16 @@ export function create_buffer(pool: Pool, text: string): Buffer {
   pool.buffers.push(buffer);
 
   return buffer;
+}
+
+export function add_to_buffer(buffer: Buffer, text: string): void {
+  const start = buffer.text.length;
+
+  buffer.text += text;
+
+  buffer.line_breaks = buffer.line_breaks.concat(
+    line_breaks(start, buffer.text),
+  );
 }
 
 function line_breaks(
