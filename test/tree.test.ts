@@ -1,6 +1,6 @@
 import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 
-import { SliceTree } from "./tree.ts";
+import { SliceTree } from "../src/tree.ts";
 import { assert_tree } from "./validation.ts";
 
 Deno.test("Creating", () => {
