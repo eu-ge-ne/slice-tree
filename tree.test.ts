@@ -331,42 +331,21 @@ for (let n = 2; n <= 20; n += 1) {
 Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
   const text = new SliceTree();
 
-  text.write(text.count, "Lorem");
-  text.write(text.count, " ipsum");
-  text.write(text.count, " dolor");
-  text.write(text.count, " sit");
-  text.write(text.count, " amet,");
-  text.write(text.count, " consectetur");
-  text.write(text.count, " adipiscing");
-  text.write(text.count, " elit,");
-  text.write(text.count, " sed");
-  text.write(text.count, " do");
-  text.write(text.count, " eiusmod");
-  text.write(text.count, " tempor");
-  text.write(text.count, " incididunt");
-  text.write(text.count, " ut");
-  text.write(text.count, " labore");
-  text.write(text.count, " et");
-  text.write(text.count, " dolore magna aliqua.");
+  text.write(
+    0,
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
 
-  text.erase(13, 13);
-  text.erase(26, 13);
-  text.erase(39, 13);
-  text.erase(52, 13);
-  text.erase(11, 11);
-  text.erase(22, 11);
-  text.erase(33, 11);
-  text.erase(44, 11);
-  text.erase(9, 9);
-  text.erase(18, 9);
-  text.erase(7, 7);
-  text.erase(5, 5);
-  text.erase(3, 3);
-  text.erase(1, 1);
-  text.erase(0, 2);
+  for (let n = 2; text.count > 0;) {
+    const s = Math.floor(text.count / n);
+    for (let i = n - 1; i >= 1; i -= 1) {
+      text.erase(s * i, 2);
+    }
+    n += 1;
+  }
 
-  assertEquals(text.count, 2);
-  assertEquals(text.read(0).toArray().join(""), "a.");
+  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.count, 0);
 
   assert_tree(text);
 });
