@@ -183,26 +183,26 @@ export class SliceTree {
    */
   write(index: number, text: string): void {
     let p = NIL;
-    let as_left_child = true;
+    let insert_case: 0 | 1 | 2 | 3 = 0;
 
     for (let x = this.root; x !== NIL;) {
       if (index <= x.left_count) {
         p = x;
         x = x.left;
-        as_left_child = true;
+        insert_case = 1;
       } else {
         index -= x.left_count;
 
         if (index < x.slice.count) {
-          p = split_node(this, x, index);
+          p = x;
           x = NIL;
-          as_left_child = true;
+          insert_case = 3;
         } else {
           index -= x.slice.count;
 
           p = x;
           x = x.right;
-          as_left_child = false;
+          insert_case = 2;
         }
       }
     }
@@ -211,15 +211,27 @@ export class SliceTree {
     const slice = create_slice(buffer, 0, text.length);
     const child = create_node(slice);
 
-    if (p === NIL) {
-      this.root = child;
-      this.root.red = false;
+    switch (insert_case) {
+      case 0:
+        this.root = child;
+        this.root.red = false;
 
-      bubble_metadata(this.root);
-    } else if (as_left_child) {
-      insert_left(this, p, child);
-    } else {
-      insert_right(this, p, child);
+        bubble_metadata(this.root);
+        break;
+
+      case 1:
+        insert_left(this, p, child);
+        break;
+
+      case 2:
+        insert_right(this, p, child);
+        break;
+
+      case 3:
+        p = split_node(this, p, index);
+
+        insert_left(this, p, child);
+        break;
     }
   }
 
