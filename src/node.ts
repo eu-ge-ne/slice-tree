@@ -64,23 +64,6 @@ export function split_node(tree: Tree, x: Node, index: number): Node {
   return node;
 }
 
-export function delete_from_node(
-  tree: Tree,
-  x: Node,
-  index: number,
-  delete_count: number,
-): void {
-  const slice = split_slice(x.slice, index, delete_count);
-
-  if (slice.count === 0) {
-    bubble_metadata(x);
-  } else {
-    const node = create_node(slice);
-
-    insert_after(tree, x, node);
-  }
-}
-
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
     x.left_count = x.left.total_count;
