@@ -105,8 +105,20 @@ export class SliceTree {
    * ```
    */
   *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
+    if (start < 0) {
+      start = Math.max(start + this.count, 0);
+    }
+
     const first = search(this.root, start);
     if (!first) {
+      return "";
+    }
+
+    if (end < 0) {
+      end = Math.max(end + this.count, 0);
+    }
+
+    if (end <= start) {
       return "";
     }
 
