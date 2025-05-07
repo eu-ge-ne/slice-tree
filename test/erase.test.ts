@@ -116,3 +116,76 @@ Deno.test("Erase causing splitting nodes", () => {
   assertEquals(text.count, 0);
   assert_tree(text);
 });
+
+/*
+Deno.test("erase from 1 node", () => {
+  const text = new SliceTree();
+
+  text.write(0, "ABCD");
+  text.erase(1, 2);
+
+  assertEquals(text.count, 2);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "AD");
+  assertEquals(text.line(0).toArray().join(""), "AD");
+
+  assert_tree(text);
+});
+
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes (1)`, () => {
+    const size = 10;
+
+    function str(i: number): string {
+      return i.toString().padStart(size, ".....     ");
+    }
+
+    const text = new SliceTree();
+
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
+
+    text.erase(size / 2, (n - 1) * size);
+
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
+
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
+
+    assert_tree(text);
+  });
+}
+
+for (let n = 2; n <= 20; n += 1) {
+  Deno.test(`erase from ${n} nodes (2)`, () => {
+    const size = 10;
+
+    function str(i: number): string {
+      return i.toString().padStart(size, ".....     ");
+    }
+
+    const text = new SliceTree();
+
+    for (let i = 0; i < n; i += 1) {
+      text.write(text.count, str(i));
+    }
+
+    for (let i = 0; i < (n - 1); i += 1) {
+      const erase_pos = Math.floor((text.count - size) / 2);
+      text.erase(erase_pos, size);
+    }
+
+    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
+
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.line(0).toArray().join(""), expected);
+    assertEquals(text.count, 10);
+    assertEquals(text.line_count, 1);
+
+    assert_tree(text);
+  });
+}
+*/
