@@ -155,23 +155,122 @@ Deno.test("Write to the beginning of a text", () => {
   assert_tree(text);
 
   text.write(0, " dolore");
-  text.write(0, " et");
-  text.write(0, " labore");
-  text.write(0, " ut");
-  text.write(0, " incididunt");
-  text.write(0, " tempor");
-  text.write(0, " eiusmod");
-  text.write(0, " do");
-  text.write(0, " sed");
-  text.write(0, " elit,");
-  text.write(0, " adipiscing");
-  text.write(0, " consectetur");
-  text.write(0, " amet,");
-  text.write(0, " sit");
-  text.write(0, " dolor");
-  text.write(0, " ipsum");
-  text.write(0, "Lorem");
+  assert_generator(text.read(0), " dolore magna aliqua.");
+  assertEquals(text.count, 21);
+  assert_tree(text);
 
+  text.write(0, " et");
+  assert_generator(text.read(0), " et dolore magna aliqua.");
+  assertEquals(text.count, 24);
+  assert_tree(text);
+
+  text.write(0, " labore");
+  assert_generator(text.read(0), " labore et dolore magna aliqua.");
+  assertEquals(text.count, 31);
+  assert_tree(text);
+
+  text.write(0, " ut");
+  assert_generator(text.read(0), " ut labore et dolore magna aliqua.");
+  assertEquals(text.count, 34);
+  assert_tree(text);
+
+  text.write(0, " incididunt");
+  assert_generator(
+    text.read(0),
+    " incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 45);
+  assert_tree(text);
+
+  text.write(0, " tempor");
+  assert_generator(
+    text.read(0),
+    " tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 52);
+  assert_tree(text);
+
+  text.write(0, " eiusmod");
+  assert_generator(
+    text.read(0),
+    " eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 60);
+  assert_tree(text);
+
+  text.write(0, " do");
+  assert_generator(
+    text.read(0),
+    " do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 63);
+  assert_tree(text);
+
+  text.write(0, " sed");
+  assert_generator(
+    text.read(0),
+    " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 67);
+  assert_tree(text);
+
+  text.write(0, " elit,");
+  assert_generator(
+    text.read(0),
+    " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 73);
+  assert_tree(text);
+
+  text.write(0, " adipiscing");
+  assert_generator(
+    text.read(0),
+    " adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 84);
+  assert_tree(text);
+
+  text.write(0, " consectetur");
+  assert_generator(
+    text.read(0),
+    " consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 96);
+  assert_tree(text);
+
+  text.write(0, " amet,");
+  assert_generator(
+    text.read(0),
+    " amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 102);
+  assert_tree(text);
+
+  text.write(0, " sit");
+  assert_generator(
+    text.read(0),
+    " sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 106);
+  assert_tree(text);
+
+  text.write(0, " dolor");
+  assert_generator(
+    text.read(0),
+    " dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 112);
+  assert_tree(text);
+
+  text.write(0, " ipsum");
+  assert_generator(
+    text.read(0),
+    " ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 118);
+  assert_tree(text);
+
+  text.write(0, "Lorem");
   assert_generator(
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
