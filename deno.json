@@ -14,10 +14,15 @@
       "codecov.yml"
     ]
   },
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true
+  },
   "lint": {
     "rules": {
       "tags": ["recommended"],
       "include": [
+        "eqeqeq",
+        "explicit-module-boundary-types",
         "explicit-function-return-type"
       ]
     }
