@@ -104,10 +104,18 @@ Deno.test("Erase causing splitting nodes", () => {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
 
+  let expected =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
+      assertEquals(text.read(0).toArray().join(""), expected);
+      assertEquals(text.count, expected.length);
+      assert_tree(text);
+
       text.erase(s * i, 2);
+      expected = expected.slice(0, s * i) + expected.slice(s * i + 2);
     }
     n += 1;
   }
