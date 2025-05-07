@@ -278,3 +278,78 @@ Deno.test("Write to the beginning of a text", () => {
   assertEquals(text.count, 123);
   assert_tree(text);
 });
+
+Deno.test("Write splitting nodes", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem aliqua.");
+  assert_generator(text.read(0), "Lorem aliqua.");
+  assertEquals(text.count, 13);
+  assert_tree(text);
+
+  text.write(5, " ipsum magna");
+  assert_generator(text.read(0), "Lorem ipsum magna aliqua.");
+  assertEquals(text.count, 25);
+  assert_tree(text);
+
+  text.write(11, " dolor dolore");
+  assert_generator(text.read(0), "Lorem ipsum dolor dolore magna aliqua.");
+  assertEquals(text.count, 38);
+  assert_tree(text);
+
+  text.write(17, " sit et");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 45);
+  assert_tree(text);
+
+  text.write(21, " amet, labore");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 58);
+  assert_tree(text);
+
+  text.write(27, " consectetur ut");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, consectetur ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 73);
+  assert_tree(text);
+
+  text.write(39, " adipiscing incididunt");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 95);
+  assert_tree(text);
+
+  text.write(50, " elit, tempor");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 108);
+  assert_tree(text);
+
+  text.write(56, " sed eiusmod");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 120);
+  assert_tree(text);
+
+  text.write(60, " do");
+  assert_generator(
+    text.read(0),
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  );
+  assertEquals(text.count, 123);
+  assert_tree(text);
+});

@@ -43,61 +43,6 @@ Deno.test("write adds new lines", () => {
   assert_tree(text);
 });
 
-Deno.test("Random write produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(5, " aliqua.");
-  text.write(5, " do");
-  text.write(8, " ut");
-  text.write(5, " consectetur");
-  text.write(20, " tempor");
-  text.write(5, " dolor");
-  text.write(23, " elit,");
-  text.write(42, " et");
-  text.write(29, " sed");
-  text.write(11, " amet,");
-  text.write(55, " magna");
-  text.write(29, " adipiscing");
-  text.write(63, " labore");
-  text.write(5, " ipsum");
-  text.write(66, " incididunt");
-  text.write(59, " eiusmod");
-  text.write(98, " dolore");
-  text.write(17, " sit");
-
-  assertEquals(text.count, 123);
-  assertEquals(
-    text.read(0).toArray().join(""),
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  assert_tree(text);
-});
-
-Deno.test("write causing splitting nodes produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem aliqua.");
-  text.write(5, " ipsum magna");
-  text.write(11, " dolor dolore");
-  text.write(17, " sit et");
-  text.write(21, " amet, labore");
-  text.write(27, " consectetur ut");
-  text.write(39, " adipiscing incididunt");
-  text.write(50, " elit, tempor");
-  text.write(56, " sed eiusmod");
-  text.write(60, " do");
-
-  assertEquals(text.count, 123);
-  assertEquals(
-    text.read(0).toArray().join(""),
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  assert_tree(text);
-});
-
 Deno.test("Squential write produces expect number of lines", () => {
   const text = new SliceTree();
 
