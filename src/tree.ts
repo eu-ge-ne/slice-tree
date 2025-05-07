@@ -277,22 +277,15 @@ export class SliceTree {
       return;
     }
 
-    if (first.offset + count <= first.node.slice.count) {
-      if (first.offset + count === first.node.slice.count) {
-        resize_slice(first.node.slice, -count);
+    if (first.offset + count === first.node.slice.count) {
+      resize_slice(first.node.slice, -count);
 
-        bubble_metadata(first.node);
-      } else {
-        const slice = split_slice(first.node.slice, first.offset, count);
+      bubble_metadata(first.node);
+    } else if (first.offset + count <= first.node.slice.count) {
+      const slice = split_slice(first.node.slice, first.offset, count);
+      const node = create_node(slice);
 
-        if (slice.count === 0) {
-          bubble_metadata(first.node);
-        } else {
-          const node = create_node(slice);
-
-          insert_after(this, first.node, node);
-        }
-      }
+      insert_after(this, first.node, node);
     } else {
       let x = first.node;
       let i = 0;
