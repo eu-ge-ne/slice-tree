@@ -6,7 +6,7 @@ import { assert_tree } from "./validation.ts";
 const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-function slice_tree_sequential(): SliceTree {
+function slice_tree(): SliceTree {
   const text = new SliceTree();
 
   text.write(text.count, "Lorem");
@@ -59,8 +59,8 @@ function slice_tree_reversed(): SliceTree {
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the head of sequential slice tree`, () => {
-    const text = slice_tree_sequential();
+  Deno.test(`Erase ${n} chars from the head of a slice tree`, () => {
+    const text = slice_tree();
 
     let expected = EXPECTED;
 
@@ -101,8 +101,8 @@ for (let n = 1; n <= 10; n += 1) {
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the tail of sequential slice tree`, () => {
-    const text = slice_tree_sequential();
+  Deno.test(`Erase ${n} chars from the tail of a slice tree`, () => {
+    const text = slice_tree();
 
     let expected = EXPECTED;
 
@@ -143,8 +143,8 @@ for (let n = 1; n <= 10; n += 1) {
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the middle of sequential slice tree`, () => {
-    const text = slice_tree_sequential();
+  Deno.test(`Erase ${n} chars from the middle of a slice tree`, () => {
+    const text = slice_tree();
 
     let expected = EXPECTED;
 
