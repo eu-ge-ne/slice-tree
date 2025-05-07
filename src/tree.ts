@@ -272,6 +272,10 @@ export class SliceTree {
    * ```
    */
   erase(index: number, count: number): void {
+    if (index < 0) {
+      index = Math.max(index + this.count, 0);
+    }
+
     const first = search(this.root, index);
     if (!first) {
       return;

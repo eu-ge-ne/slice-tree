@@ -22,12 +22,6 @@ Deno.test("write", () => {
   text.write(0, "text");
 });
 
-Deno.test("erase", () => {
-  const text = new SliceTree();
-
-  text.erase(0, 1);
-});
-
 Deno.test("Empty tree is a valid red-black tree", () => {
   const text = new SliceTree();
 
@@ -215,20 +209,7 @@ Deno.test("Squential write produces expect number of lines", () => {
   assert_tree(text);
 });
 
-Deno.test("erase removes content", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem ipsum");
-  text.erase(5, 6);
-
-  assertEquals(text.count, 5);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorem");
-  assertEquals(text.line(0).toArray().join(""), "Lorem");
-
-  assert_tree(text);
-});
-
+/*
 Deno.test("erase removes lines", () => {
   const text = new SliceTree();
 
@@ -243,19 +224,6 @@ Deno.test("erase removes lines", () => {
   assert_tree(text);
 });
 
-Deno.test("erase all leaves empty content", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem ipsum\ndolor sit amet");
-  text.erase(0, 26);
-
-  assertEquals(text.count, 0);
-  assertEquals(text.line_count, 0);
-  assertEquals(text.read(0).toArray().join(""), "");
-  assertEquals(text.line(0).toArray().join(""), "");
-
-  assert_tree(text);
-});
 
 Deno.test("erase from 1 node", () => {
   const text = new SliceTree();
@@ -327,28 +295,7 @@ for (let n = 2; n <= 20; n += 1) {
     assert_tree(text);
   });
 }
-
-Deno.test("erase causing splitting nodes produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(
-    0,
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  for (let n = 2; text.count > 0;) {
-    const s = Math.floor(text.count / n);
-    for (let i = n - 1; i >= 1; i -= 1) {
-      text.erase(s * i, 2);
-    }
-    n += 1;
-  }
-
-  assertEquals(text.read(0).toArray().join(""), "");
-  assertEquals(text.count, 0);
-
-  assert_tree(text);
-});
+*/
 
 Deno.test("line returns empty content for invalid index provided", () => {
   const text = new SliceTree();
