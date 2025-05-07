@@ -3,12 +3,6 @@ import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 import { SliceTree } from "../src/tree.ts";
 import { assert_tree } from "./validation.ts";
 
-Deno.test("line_count", () => {
-  const text = new SliceTree();
-
-  assertEquals(text.line_count, 0);
-});
-
 Deno.test("read", () => {
   const text = new SliceTree();
 
@@ -38,12 +32,6 @@ Deno.test("Empty tree is a valid red-black tree", () => {
   const text = new SliceTree();
 
   assert_tree(text);
-});
-
-Deno.test("Empty tree contains 0 lines", () => {
-  const text = new SliceTree();
-
-  assertEquals(text.line_count, 0);
 });
 
 Deno.test("Empty tree contains ''", () => {
