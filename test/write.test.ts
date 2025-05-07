@@ -353,3 +353,22 @@ Deno.test("Write splitting nodes", () => {
   assertEquals(text.count, 123);
   assert_tree(text);
 });
+
+Deno.test("Write at the negative index", () => {
+  const text = new SliceTree();
+
+  text.write(0, "ipsum");
+  assert_generator(text.read(0), "ipsum");
+  assertEquals(text.count, 5);
+  assert_tree(text);
+
+  text.write(-5, " ");
+  assert_generator(text.read(0), " ipsum");
+  assertEquals(text.count, 6);
+  assert_tree(text);
+
+  text.write(-6, "Lorem");
+  assert_generator(text.read(0), "Lorem ipsum");
+  assertEquals(text.count, 11);
+  assert_tree(text);
+});
