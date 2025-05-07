@@ -11,7 +11,7 @@ import { search, search_line_position, successor } from "./querying.ts";
 import {
   create_slice,
   resize_slice,
-  slice_resizable,
+  slice_growable,
   split_slice,
 } from "./slice.ts";
 
@@ -211,10 +211,7 @@ export class SliceTree {
       }
     }
 
-    if (
-      insert_case === InsertionCase.Right &&
-      slice_resizable(p.slice)
-    ) {
+    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
       add_to_buffer(p.slice.buffer, text);
       resize_slice(p.slice, text.length);
 
@@ -280,15 +277,21 @@ export class SliceTree {
       return;
     }
 
-    if (count <= first.node.slice.count - first.offset) {
-      const slice = split_slice(first.node.slice, first.offset, count);
+    if (first.offset + count <= first.node.slice.count) {
+      if (first.offset + count === first.node.slice.count) {
+        resize_slice(first.node.slice, -count);
 
-      if (slice.count === 0) {
         bubble_metadata(first.node);
       } else {
-        const node = create_node(slice);
+        const slice = split_slice(first.node.slice, first.offset, count);
 
-        insert_after(this, first.node, node);
+        if (slice.count === 0) {
+          bubble_metadata(first.node);
+        } else {
+          const node = create_node(slice);
+
+          insert_after(this, first.node, node);
+        }
       }
     } else {
       let x = first.node;

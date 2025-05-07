@@ -20,7 +20,7 @@ export function create_slice(
   };
 }
 
-export function slice_resizable(x: Slice): boolean {
+export function slice_growable(x: Slice): boolean {
   return x.buffer.text.length < 10 &&
     x.start + x.count === x.buffer.text.length;
 }
