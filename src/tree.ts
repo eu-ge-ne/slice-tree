@@ -1,15 +1,19 @@
 import { add_to_buffer, type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
-import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
-  bubble_metadata,
-  create_node,
-  delete_from_node,
-  NIL,
-  split_node,
-} from "./node.ts";
+  insert_after,
+  insert_left,
+  insert_right,
+  InsertionCase,
+} from "./insertion.ts";
+import { bubble_metadata, create_node, NIL, split_node } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
-import { create_slice, resize_slice, slice_resizable } from "./slice.ts";
+import {
+  create_slice,
+  resize_slice,
+  slice_growable,
+  split_slice,
+} from "./slice.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -207,10 +211,7 @@ export class SliceTree {
       }
     }
 
-    if (
-      insert_case === InsertionCase.Right &&
-      slice_resizable(p.slice)
-    ) {
+    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
       add_to_buffer(p.slice.buffer, text);
       resize_slice(p.slice, text.length);
 
@@ -276,28 +277,34 @@ export class SliceTree {
       return;
     }
 
-    if (count <= first.node.slice.count - first.offset) {
-      delete_from_node(this, first.node, first.offset, count);
-      return;
-    }
+    if (first.offset + count === first.node.slice.count) {
+      resize_slice(first.node.slice, -count);
 
-    let x = first.node;
-    let i = 0;
+      bubble_metadata(first.node);
+    } else if (first.offset + count <= first.node.slice.count) {
+      const slice = split_slice(first.node.slice, first.offset, count);
+      const node = create_node(slice);
 
-    if (first.offset !== 0) {
-      x = split_node(this, first.node, first.offset);
-    }
+      insert_after(this, first.node, node);
+    } else {
+      let x = first.node;
+      let i = 0;
 
-    const last = search(this.root, index + count);
-    if (last && last.offset !== 0) {
-      split_node(this, last.node, last.offset);
-    }
+      if (first.offset !== 0) {
+        x = split_node(this, first.node, first.offset);
+      }
 
-    while ((x !== NIL) && (i < count)) {
-      i += x.slice.count;
-      const next = successor(x);
-      delete_node(this, x);
-      x = next;
+      const last = search(this.root, index + count);
+      if (last && last.offset !== 0) {
+        split_node(this, last.node, last.offset);
+      }
+
+      while ((x !== NIL) && (i < count)) {
+        i += x.slice.count;
+        const next = successor(x);
+        delete_node(this, x);
+        x = next;
+      }
     }
   }
 }
