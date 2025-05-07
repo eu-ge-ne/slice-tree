@@ -166,6 +166,10 @@ export class SliceTree {
    * ```
    */
   *line(index: number): Generator<string> {
+    if (index < 0) {
+      index = Math.max(index + this.line_count, 0);
+    }
+
     const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
 
     if (typeof start === "undefined") {
