@@ -1,6 +1,13 @@
-import { assert } from "@std/assert";
+import { assert, assertEquals } from "jsr:@std/assert";
 
 import { NIL, type Node, type Tree } from "../src/node.ts";
+
+export function assert_generator<T>(
+  actual: Generator<T>,
+  expected: string,
+): void {
+  assertEquals(actual.toArray().join(""), expected);
+}
 
 export function assert_tree(tree: Tree): void {
   // 1. Every node is either red or black.

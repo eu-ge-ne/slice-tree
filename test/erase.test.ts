@@ -1,7 +1,7 @@
 import { assertEquals } from "jsr:@std/assert";
 
 import { SliceTree } from "../src/tree.ts";
-import { assert_tree } from "./validation.ts";
+import { assert_generator, assert_tree } from "./assert.ts";
 
 const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -62,7 +62,7 @@ function test_erase_head(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assertEquals(text.read(0).toArray().join(""), expected);
+    assert_generator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -70,7 +70,7 @@ function test_erase_head(text: SliceTree, n: number): void {
     expected = expected.slice(n);
   }
 
-  assertEquals(text.read(0).toArray().join(""), "");
+  assert_generator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -79,7 +79,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assertEquals(text.read(0).toArray().join(""), expected);
+    assert_generator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -87,7 +87,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
     expected = expected.slice(0, -n);
   }
 
-  assertEquals(text.read(0).toArray().join(""), "");
+  assert_generator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -96,7 +96,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assertEquals(text.read(0).toArray().join(""), expected);
+    assert_generator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -105,43 +105,43 @@ function test_erase_middle(text: SliceTree, n: number): void {
     expected = expected.slice(0, pos) + expected.slice(pos + n);
   }
 
-  assertEquals(text.read(0).toArray().join(""), "");
+  assert_generator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the head of a slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the beginning of a text`, () => {
     test_erase_head(slice_tree(), n);
   });
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the head of reversed slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the beginning of a text reversed`, () => {
     test_erase_head(slice_tree_reversed(), n);
   });
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the tail of a slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the end of a text`, () => {
     test_erase_tail(slice_tree(), n);
   });
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the tail of reversed slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the end of a text reversed`, () => {
     test_erase_tail(slice_tree_reversed(), n);
   });
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the middle of a slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the middle of a text`, () => {
     test_erase_middle(slice_tree(), n);
   });
 }
 
 for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the middle of reversed slice tree`, () => {
+  Deno.test(`Erase ${n} chars from the middle of text reversed`, () => {
     test_erase_middle(slice_tree_reversed(), n);
   });
 }
@@ -155,7 +155,7 @@ Deno.test("Erase causing splitting nodes", () => {
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
-      assertEquals(text.read(0).toArray().join(""), expected);
+      assert_generator(text.read(0), expected);
       assertEquals(text.count, expected.length);
       assert_tree(text);
 
@@ -165,7 +165,7 @@ Deno.test("Erase causing splitting nodes", () => {
     n += 1;
   }
 
-  assertEquals(text.read(0).toArray().join(""), "");
+  assert_generator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 });
