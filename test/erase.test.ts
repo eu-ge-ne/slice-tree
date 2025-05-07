@@ -1,7 +1,7 @@
 import { assertEquals } from "jsr:@std/assert";
 
 import { SliceTree } from "../src/tree.ts";
-import { assert_tree } from "./validation.ts";
+import { assert_tree } from "./assert.ts";
 
 const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";

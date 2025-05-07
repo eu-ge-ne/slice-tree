@@ -186,6 +186,10 @@ export class SliceTree {
    * ```
    */
   write(index: number, text: string): void {
+    if (index < 0) {
+      index = Math.max(index + this.count, 0);
+    }
+
     let p = NIL;
     let insert_case = InsertionCase.Root;
 

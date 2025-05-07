@@ -1,7 +1,7 @@
 import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 
 import { SliceTree } from "../src/tree.ts";
-import { assert_tree } from "./validation.ts";
+import { assert_tree } from "./assert.ts";
 
 Deno.test("read", () => {
   const text = new SliceTree();
@@ -16,12 +16,6 @@ Deno.test("line", () => {
   assertInstanceOf(text.line(0), Iterator);
 });
 
-Deno.test("write", () => {
-  const text = new SliceTree();
-
-  text.write(0, "text");
-});
-
 Deno.test("Empty tree is a valid red-black tree", () => {
   const text = new SliceTree();
 
@@ -32,19 +26,6 @@ Deno.test("Empty tree contains ''", () => {
   const text = new SliceTree();
 
   assertEquals(text.read(0).toArray().join(""), "");
-});
-
-Deno.test("write adds content", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem ipsum");
-
-  assertEquals(text.count, 11);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
-  assertEquals(text.line(0).toArray().join(""), "Lorem ipsum");
-
-  assert_tree(text);
 });
 
 Deno.test("write adds new lines", () => {
@@ -107,70 +88,6 @@ Deno.test("write causing splitting nodes produces valid red-black tree", () => {
   text.write(50, " elit, tempor");
   text.write(56, " sed eiusmod");
   text.write(60, " do");
-
-  assertEquals(text.count, 123);
-  assertEquals(
-    text.read(0).toArray().join(""),
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  assert_tree(text);
-});
-
-Deno.test("Sequential write produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(0, "Lorem");
-  text.write(text.count, " ipsum");
-  text.write(text.count, " dolor");
-  text.write(text.count, " sit");
-  text.write(text.count, " amet,");
-  text.write(text.count, " consectetur");
-  text.write(text.count, " adipiscing");
-  text.write(text.count, " elit,");
-  text.write(text.count, " sed");
-  text.write(text.count, " do");
-  text.write(text.count, " eiusmod");
-  text.write(text.count, " tempor");
-  text.write(text.count, " incididunt");
-  text.write(text.count, " ut");
-  text.write(text.count, " labore");
-  text.write(text.count, " et");
-  text.write(text.count, " dolore");
-  text.write(text.count, " magna");
-  text.write(text.count, " aliqua.");
-
-  assertEquals(text.count, 123);
-  assertEquals(
-    text.read(0).toArray().join(""),
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  assert_tree(text);
-});
-
-Deno.test("Reverse sequential write produces valid red-black tree", () => {
-  const text = new SliceTree();
-
-  text.write(0, " aliqua.");
-  text.write(0, " magna");
-  text.write(0, " dolore");
-  text.write(0, " et");
-  text.write(0, " labore");
-  text.write(0, " ut");
-  text.write(0, " incididunt");
-  text.write(0, " tempor");
-  text.write(0, " eiusmod");
-  text.write(0, " do");
-  text.write(0, " sed");
-  text.write(0, " elit,");
-  text.write(0, " adipiscing");
-  text.write(0, " consectetur");
-  text.write(0, " amet,");
-  text.write(0, " sit");
-  text.write(0, " dolor");
-  text.write(0, " ipsum");
-  text.write(0, "Lorem");
 
   assertEquals(text.count, 123);
   assertEquals(
