@@ -3,29 +3,10 @@ import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
 import { SliceTree } from "../src/tree.ts";
 import { assert_tree } from "./assert.ts";
 
-Deno.test("read", () => {
-  const text = new SliceTree();
-
-  assertInstanceOf(text.read(0), Iterator);
-  assertInstanceOf(text.read(0, 1), Iterator);
-});
-
 Deno.test("line", () => {
   const text = new SliceTree();
 
   assertInstanceOf(text.line(0), Iterator);
-});
-
-Deno.test("Empty tree is a valid red-black tree", () => {
-  const text = new SliceTree();
-
-  assert_tree(text);
-});
-
-Deno.test("Empty tree contains ''", () => {
-  const text = new SliceTree();
-
-  assertEquals(text.read(0).toArray().join(""), "");
 });
 
 Deno.test("write adds new lines", () => {

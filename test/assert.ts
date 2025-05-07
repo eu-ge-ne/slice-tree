@@ -2,7 +2,7 @@ import { assert, assertEquals } from "jsr:@std/assert";
 
 import { NIL, type Node, type Tree } from "../src/node.ts";
 
-export function assert_generator<T>(
+export function assert_iterator<T>(
   actual: Generator<T>,
   expected: string,
 ): void {
