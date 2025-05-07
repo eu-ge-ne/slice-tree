@@ -58,45 +58,30 @@ function slice_tree_reversed(): SliceTree {
   return text;
 }
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the head of a slice tree`, () => {
-    const text = slice_tree();
+function test_erase_head(text: SliceTree, n: number): void {
+  let expected = EXPECTED;
 
-    let expected = EXPECTED;
-
-    while (expected.length > 0) {
-      assertEquals(text.read(0).toArray().join(""), expected);
-      assertEquals(text.count, expected.length);
-      assert_tree(text);
-
-      text.erase(0, n);
-      expected = expected.slice(n);
-    }
-
-    assertEquals(text.read(0).toArray().join(""), "");
-    assertEquals(text.count, 0);
+  while (expected.length > 0) {
+    assertEquals(text.read(0).toArray().join(""), expected);
+    assertEquals(text.count, expected.length);
     assert_tree(text);
-  });
+
+    text.erase(0, n);
+    expected = expected.slice(n);
+  }
+
+  assertEquals(text.read(0).toArray().join(""), "");
+  assertEquals(text.count, 0);
+  assert_tree(text);
 }
 
 for (let n = 1; n <= 10; n += 1) {
+  Deno.test(`Erase ${n} chars from the head of a slice tree`, () => {
+    test_erase_head(slice_tree(), n);
+  });
+
   Deno.test(`Erase ${n} chars from the head of reversed slice tree`, () => {
-    const text = slice_tree_reversed();
-
-    let expected = EXPECTED;
-
-    while (expected.length > 0) {
-      assertEquals(text.read(0).toArray().join(""), expected);
-      assertEquals(text.count, expected.length);
-      assert_tree(text);
-
-      text.erase(0, n);
-      expected = expected.slice(n);
-    }
-
-    assertEquals(text.read(0).toArray().join(""), "");
-    assertEquals(text.count, 0);
-    assert_tree(text);
+    test_erase_head(slice_tree_reversed(), n);
   });
 }
 
