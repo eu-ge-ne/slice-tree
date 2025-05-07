@@ -3,6 +3,9 @@ import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "../src/tree.ts";
 import { assert_tree } from "./validation.ts";
 
+const EXPECTED =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
 function createSliceTree(): SliceTree {
   const text = new SliceTree();
 
@@ -33,8 +36,7 @@ for (let n = 1; n <= 10; n += 1) {
   Deno.test(`Erase ${n} chars from head sequentially`, () => {
     const text = createSliceTree();
 
-    let expected =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    let expected = EXPECTED;
 
     while (expected.length > 0) {
       assertEquals(text.read(0).toArray().join(""), expected);
@@ -55,8 +57,7 @@ for (let n = 1; n <= 10; n += 1) {
   Deno.test(`Erase ${n} chars from tail sequentially`, () => {
     const text = createSliceTree();
 
-    let expected =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    let expected = EXPECTED;
 
     while (expected.length > 0) {
       assertEquals(text.read(0).toArray().join(""), expected);
@@ -77,8 +78,7 @@ for (let n = 1; n <= 10; n += 1) {
   Deno.test(`Erase ${n} chars from middle sequentially`, () => {
     const text = createSliceTree();
 
-    let expected =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    let expected = EXPECTED;
 
     while (expected.length > 0) {
       assertEquals(text.read(0).toArray().join(""), expected);
@@ -98,14 +98,9 @@ for (let n = 1; n <= 10; n += 1) {
 
 Deno.test("Erase causing splitting nodes", () => {
   const text = new SliceTree();
+  text.write(0, EXPECTED);
 
-  text.write(
-    0,
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  );
-
-  let expected =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+  let expected = EXPECTED;
 
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
@@ -124,76 +119,3 @@ Deno.test("Erase causing splitting nodes", () => {
   assertEquals(text.count, 0);
   assert_tree(text);
 });
-
-/*
-Deno.test("erase from 1 node", () => {
-  const text = new SliceTree();
-
-  text.write(0, "ABCD");
-  text.erase(1, 2);
-
-  assertEquals(text.count, 2);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "AD");
-  assertEquals(text.line(0).toArray().join(""), "AD");
-
-  assert_tree(text);
-});
-
-for (let n = 2; n <= 20; n += 1) {
-  Deno.test(`erase from ${n} nodes (1)`, () => {
-    const size = 10;
-
-    function str(i: number): string {
-      return i.toString().padStart(size, ".....     ");
-    }
-
-    const text = new SliceTree();
-
-    for (let i = 0; i < n; i += 1) {
-      text.write(text.count, str(i));
-    }
-
-    text.erase(size / 2, (n - 1) * size);
-
-    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
-
-    assertEquals(text.read(0).toArray().join(""), expected);
-    assertEquals(text.line(0).toArray().join(""), expected);
-    assertEquals(text.count, 10);
-    assertEquals(text.line_count, 1);
-
-    assert_tree(text);
-  });
-}
-
-for (let n = 2; n <= 20; n += 1) {
-  Deno.test(`erase from ${n} nodes (2)`, () => {
-    const size = 10;
-
-    function str(i: number): string {
-      return i.toString().padStart(size, ".....     ");
-    }
-
-    const text = new SliceTree();
-
-    for (let i = 0; i < n; i += 1) {
-      text.write(text.count, str(i));
-    }
-
-    for (let i = 0; i < (n - 1); i += 1) {
-      const erase_pos = Math.floor((text.count - size) / 2);
-      text.erase(erase_pos, size);
-    }
-
-    const expected = str(0).slice(0, size / 2) + str(n - 1).slice(size / 2);
-
-    assertEquals(text.read(0).toArray().join(""), expected);
-    assertEquals(text.line(0).toArray().join(""), expected);
-    assertEquals(text.count, 10);
-    assertEquals(text.line_count, 1);
-
-    assert_tree(text);
-  });
-}
-*/
