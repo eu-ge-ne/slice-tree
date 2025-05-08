@@ -40,6 +40,18 @@ export class SliceTree {
    */
   buffers: Buffer[] = [];
 
+  constructor(text?: string) {
+    if (text && text.length > 0) {
+      const buffer = create_buffer(this, text);
+      const slice = create_slice(buffer, 0, text.length);
+
+      this.root = create_node(slice);
+      this.root.red = false;
+
+      bubble_metadata(this.root);
+    }
+  }
+
   /**
    * Returns the total number of characters in the text content.
    *
