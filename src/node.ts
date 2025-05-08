@@ -10,25 +10,15 @@ export interface Node {
   p: Node;
   left: Node;
   right: Node;
-
-  left_count: number;
-  left_line_count: number;
-  right_count: number;
-  right_line_count: number;
-  total_count: number;
-  total_line_count: number;
-
   slice: Slice;
+  count: number;
+  line_count: number;
 }
 
 const nil = {
   red: false,
-  left_count: 0,
-  left_line_count: 0,
-  right_count: 0,
-  right_line_count: 0,
-  total_count: 0,
-  total_line_count: 0,
+  count: 0,
+  line_count: 0,
 } as Node;
 
 export const NIL: Node = Object.create(nil);
@@ -43,15 +33,9 @@ export function create_node(slice: Slice): Node {
     p: NIL,
     left: NIL,
     right: NIL,
-
-    left_count: 0,
-    left_line_count: 0,
-    right_count: 0,
-    right_line_count: 0,
-    total_count: 0,
-    total_line_count: 0,
-
     slice,
+    count: 0,
+    line_count: 0,
   };
 }
 
@@ -66,15 +50,9 @@ export function split_node(tree: Tree, x: Node, index: number): Node {
 
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
-    x.left_count = x.left.total_count;
-    x.left_line_count = x.left.total_line_count;
-
-    x.right_count = x.right.total_count;
-    x.right_line_count = x.right.total_line_count;
-
-    x.total_count = x.left_count + x.slice.count + x.right_count;
-    x.total_line_count = x.left_line_count + x.slice.lines.length +
-      x.right_line_count;
+    x.count = x.left.count + x.slice.count + x.right.count;
+    x.line_count = x.left.line_count + x.slice.lines.length +
+      x.right.line_count;
 
     x = x.p;
   }
