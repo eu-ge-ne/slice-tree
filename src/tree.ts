@@ -109,7 +109,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text between the specified start (inclusive) and end (exclusive) positions, without modifying the content.
+   * Returns the text between the specified start (inclusive) and end (exclusive) positions.
    *
    * @param start Start index.
    * @param end Optional end index.
@@ -169,7 +169,40 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content of the line at the specified index, without modifying the content.
+   * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
+   *
+   * @param index Line index.
+   * @returns A tuple of [start, end] indexes
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum");
+   *
+   * assertEquals(text.line_range(0), [0, 6]);
+   * ```
+   */
+  line_range(index: number): readonly [number, number | undefined] | undefined {
+    if (index < 0) {
+      index = Math.max(index + this.line_count, 0);
+    }
+
+    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
+
+    if (typeof start === "undefined") {
+      return undefined;
+    } else {
+      const end = search_line_position(this.root, index);
+
+      return [start, end];
+    }
+  }
+
+  /**
+   * Returns the content of the line at the specified index.
    *
    * @param index Line index.
    * @returns An iterator over the text content.
