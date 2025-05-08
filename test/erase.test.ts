@@ -147,8 +147,7 @@ for (let n = 1; n <= 10; n += 1) {
 }
 
 Deno.test("Erase causing splitting nodes", () => {
-  const text = new SliceTree();
-  text.write(0, EXPECTED);
+  const text = new SliceTree(EXPECTED);
 
   let expected = EXPECTED;
 

@@ -44,6 +44,17 @@ export class SliceTree {
    * Creates a `SliceTree` instance with optional initial text.
    *
    * @param text Optional initial text.
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem ipsum");
+   *
+   * assertEquals(text.count, 11);
+   * ```
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
@@ -68,9 +79,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
-   *
-   * text.write(0, "Lorem ipsum");
+   * const text = new SliceTree("Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -90,9 +99,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
-   *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
@@ -114,9 +121,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
-   *
-   * text.write(0, "Lorem ipsum");
+   * const text = new SliceTree("Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -175,9 +180,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
-   *
-   * text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
    * ```
@@ -300,9 +303,8 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
+   * const text = new SliceTree("Lorem ipsum");
    *
-   * text.write(0, "Lorem ipsum");
    * text.erase(5, 6);;
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
