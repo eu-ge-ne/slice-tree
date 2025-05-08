@@ -1,19 +1,15 @@
 import { add_to_buffer, type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
+import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
-  insert_after,
-  insert_left,
-  insert_right,
-  InsertionCase,
-} from "./insertion.ts";
-import { bubble_metadata, create_node, NIL, split_node } from "./node.ts";
+  bubble_metadata,
+  create_node,
+  NIL,
+  node_growable,
+  resize_node,
+  split_node,
+} from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
-import {
-  create_slice,
-  resize_slice,
-  slice_growable,
-  split_slice,
-} from "./slice.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -59,9 +55,8 @@ export class SliceTree {
   constructor(text?: string) {
     if (text && text.length > 0) {
       const buffer = create_buffer(this, text);
-      const slice = create_slice(buffer, 0, text.length);
 
-      this.root = create_node(slice);
+      this.root = create_node(buffer, 0, text.length);
       this.root.red = false;
 
       bubble_metadata(this.root);
@@ -149,7 +144,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.slice.count - offset;
+      let n = x.slice_length - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -158,9 +153,9 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield x.slice.buffer.text.slice(
-        x.slice.start + offset,
-        x.slice.start + offset + n,
+      yield x.buffer.text.slice(
+        x.slice_start + offset,
+        x.slice_start + offset + n,
       );
 
       x = successor(x);
@@ -270,12 +265,12 @@ export class SliceTree {
       } else {
         index -= x.left.count;
 
-        if (index < x.slice.count) {
+        if (index < x.slice_length) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.slice.count;
+          index -= x.slice_length;
 
           p = x;
           x = x.right;
@@ -284,15 +279,14 @@ export class SliceTree {
       }
     }
 
-    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
-      add_to_buffer(p.slice.buffer, text);
-      resize_slice(p.slice, text.length);
+    if (insert_case === InsertionCase.Right && node_growable(p)) {
+      add_to_buffer(p.buffer, text);
+      resize_node(p, text.length);
 
       bubble_metadata(p);
     } else {
       const buffer = create_buffer(this, text);
-      const slice = create_slice(buffer, 0, text.length);
-      const child = create_node(slice);
+      const child = create_node(buffer, 0, text.length);
 
       switch (insert_case) {
         case InsertionCase.Root: {
@@ -314,7 +308,7 @@ export class SliceTree {
         }
 
         case InsertionCase.Split: {
-          const y = split_node(this, p, index);
+          const y = split_node(this, p, index, 0);
 
           insert_left(this, y, child);
           break;
@@ -353,30 +347,27 @@ export class SliceTree {
       return;
     }
 
-    if (first.offset + count === first.node.slice.count) {
-      resize_slice(first.node.slice, -count);
+    if (first.offset + count === first.node.slice_length) {
+      resize_node(first.node, -count);
 
       bubble_metadata(first.node);
-    } else if (first.offset + count <= first.node.slice.count) {
-      const slice = split_slice(first.node.slice, first.offset, count);
-      const node = create_node(slice);
-
-      insert_after(this, first.node, node);
+    } else if (first.offset + count <= first.node.slice_length) {
+      split_node(this, first.node, first.offset, count);
     } else {
       let x = first.node;
       let i = 0;
 
       if (first.offset !== 0) {
-        x = split_node(this, first.node, first.offset);
+        x = split_node(this, first.node, first.offset, 0);
       }
 
       const last = search(this.root, index + count);
       if (last && last.offset !== 0) {
-        split_node(this, last.node, last.offset);
+        split_node(this, last.node, last.offset, 0);
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.slice.count;
+        i += x.slice_length;
         const next = successor(x);
         delete_node(this, x);
         x = next;
