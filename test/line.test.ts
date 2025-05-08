@@ -3,6 +3,41 @@ import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
+Deno.test("Line at valid index", () => {
+  const text = new SliceTree();
+
+  text.write(text.count, "Lorem\naliqua.\n");
+  text.write(6, "ipsum\nmagna\n");
+  text.write(12, "dolor\ndolore\n");
+  text.write(18, "sit\net\n");
+  text.write(22, "amet,\nlabore\n");
+  text.write(28, "consectetur\nut\n");
+  text.write(40, "adipiscing\nincididunt\n");
+  text.write(51, "elit,\ntempor\n");
+  text.write(57, "sed\neiusmod\n");
+  text.write(61, "do\n");
+
+  assert_iterator(text.line(0), "Lorem\n");
+  assert_iterator(text.line(1), "ipsum\n");
+  assert_iterator(text.line(2), "dolor\n");
+  assert_iterator(text.line(3), "sit\n");
+  assert_iterator(text.line(4), "amet,\n");
+  assert_iterator(text.line(5), "consectetur\n");
+  assert_iterator(text.line(6), "adipiscing\n");
+  assert_iterator(text.line(7), "elit,\n");
+  assert_iterator(text.line(8), "sed\n");
+  assert_iterator(text.line(9), "do\n");
+  assert_iterator(text.line(10), "eiusmod\n");
+  assert_iterator(text.line(11), "tempor\n");
+  assert_iterator(text.line(12), "incididunt\n");
+  assert_iterator(text.line(13), "ut\n");
+  assert_iterator(text.line(14), "labore\n");
+  assert_iterator(text.line(15), "et\n");
+  assert_iterator(text.line(16), "dolore\n");
+  assert_iterator(text.line(17), "magna\n");
+  assert_iterator(text.line(18), "aliqua.\n");
+});
+
 Deno.test("Line at index >= line_count", () => {
   const text = new SliceTree();
   text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
