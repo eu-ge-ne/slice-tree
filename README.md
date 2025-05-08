@@ -140,7 +140,7 @@ assertEquals(text.line_count, 5);
 #### `SliceTree.prototype.read`
 
 Returns the text between the specified start (inclusive) and end (exclusive)
-positions, without modifying the content.
+positions.
 
 #### Syntax
 
@@ -161,10 +161,33 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ---
 
+#### `SliceTree.prototype.line_range`
+
+Returns the start index (inclusive) and the end index (exclusive) of the line at
+the specified index.
+
+#### Syntax
+
+```ts ignore
+line_range(index: number): readonly [number, number | undefined] | undefined
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum");
+
+assertEquals(text.line_range(0), [0, 6]);
+```
+
+---
+
 #### `SliceTree.prototype.line`
 
-Returns the content of the line at the specified index, without modifying the
-content.
+Returns the content of the line at the specified index.
 
 #### Syntax
 
