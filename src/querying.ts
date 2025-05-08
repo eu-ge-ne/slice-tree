@@ -5,10 +5,10 @@ export function search(
   i: number,
 ): { node: Node; offset: number } | undefined {
   while (x !== NIL) {
-    if (i < x.left_count) {
+    if (i < x.left.count) {
       x = x.left;
     } else {
-      i -= x.left_count;
+      i -= x.left.count;
 
       if (i < x.slice.count) {
         return { node: x, offset: i };
@@ -23,11 +23,11 @@ export function search(
 
 export function search_line_position(x: Node, l: number): number | undefined {
   for (let i = 0; x !== NIL;) {
-    if (l < x.left_line_count) {
+    if (l < x.left.line_count) {
       x = x.left;
     } else {
-      l -= x.left_line_count;
-      i += x.left_count;
+      l -= x.left.line_count;
+      i += x.left.count;
 
       if (l < x.slice.lines.length) {
         return i + x.slice.lines[l]!;
