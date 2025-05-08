@@ -41,9 +41,26 @@ export class SliceTree {
   buffers: Buffer[] = [];
 
   /**
+   * Creates a `SliceTree` instance with optional initial text.
+   *
+   * @param text Optional initial text.
+   */
+  constructor(text?: string) {
+    if (text && text.length > 0) {
+      const buffer = create_buffer(this, text);
+      const slice = create_slice(buffer, 0, text.length);
+
+      this.root = create_node(slice);
+      this.root.red = false;
+
+      bubble_metadata(this.root);
+    }
+  }
+
+  /**
    * Returns the total number of characters in the text content.
    *
-   * @returns The number of characters
+   * @returns The number of characters.
    *
    * @example Usage
    *
@@ -65,7 +82,7 @@ export class SliceTree {
   /**
    * Returns the number of lines in the text content.
    *
-   * @returns The number of lines
+   * @returns The number of lines.
    *
    * @example Usage
    *
@@ -87,9 +104,9 @@ export class SliceTree {
   /**
    * Returns the text between the specified start (inclusive) and end (exclusive) positions, without modifying the content.
    *
-   * @param start Start index
-   * @param end Optional end index
-   * @returns An iterator over the text content
+   * @param start Start index.
+   * @param end Optional end index.
+   * @returns An iterator over the text content.
    *
    * @example Usage
    *
@@ -149,8 +166,8 @@ export class SliceTree {
   /**
    * Returns the content of the line at the specified index, without modifying the content.
    *
-   * @param index Line index
-   * @returns An iterator over the text content
+   * @param index Line index.
+   * @returns An iterator over the text content.
    *
    * @example Usage
    *
@@ -184,9 +201,9 @@ export class SliceTree {
   /**
    * Inserts the given text at the specified index in the content.
    *
-   * @param index Index at witch to insert the text
-   * @param text Text to insert
-   * @returns A void value
+   * @param index Index at witch to insert the text.
+   * @param text Text to insert.
+   * @returns A void value.
    *
    * @example Usage
    *
@@ -273,9 +290,9 @@ export class SliceTree {
   /**
    * Removes the text in the range from index (inclusive) to index + count (exclusive).
    *
-   * @param index Index at witch to start removing the text
-   * @param count The number of characters to remove
-   * @returns A void value
+   * @param index Index at witch to start removing the text.
+   * @param count The number of characters to remove.
+   * @returns A void value.
    *
    * @example Usage
    *
