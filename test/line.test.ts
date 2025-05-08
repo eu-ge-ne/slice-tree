@@ -36,6 +36,7 @@ Deno.test("Line at valid index", () => {
   assert_iterator(text.line(16), "dolore\n");
   assert_iterator(text.line(17), "magna\n");
   assert_iterator(text.line(18), "aliqua.");
+  assert_tree(text);
 });
 
 Deno.test("Line at index >= line_count", () => {

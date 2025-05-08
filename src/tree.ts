@@ -168,6 +168,22 @@ export class SliceTree {
     }
   }
 
+  line_range(index: number): readonly [number, number | undefined] | undefined {
+    if (index < 0) {
+      index = Math.max(index + this.line_count, 0);
+    }
+
+    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
+
+    if (typeof start === "undefined") {
+      return undefined;
+    } else {
+      const end = search_line_position(this.root, index);
+
+      return [start, end];
+    }
+  }
+
   /**
    * Returns the content of the line at the specified index, without modifying the content.
    *
