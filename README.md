@@ -227,9 +227,8 @@ erase(index: number, count: number): void
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree();
+const text = new SliceTree("Lorem ipsum");
 
-text.write(0, "Lorem ipsum");
 text.erase(5, 6);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
