@@ -154,9 +154,7 @@ positions, without modifying the content.
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree();
-
-text.write(0, "Lorem ipsum");
+const text = new SliceTree("Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
