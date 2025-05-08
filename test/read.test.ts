@@ -9,8 +9,7 @@ Deno.test("Read empty", () => {
 });
 
 Deno.test("Read at start >= count", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem");
+  const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(4), "m");
   assert_iterator(text.read(5), "");
@@ -19,8 +18,7 @@ Deno.test("Read at start >= count", () => {
 });
 
 Deno.test("Read at start < 0", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem");
+  const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0), "Lorem");
   assert_iterator(text.read(-1), "m");
@@ -29,8 +27,7 @@ Deno.test("Read at start < 0", () => {
 });
 
 Deno.test("Read up to end >= count", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem");
+  const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0, 4), "Lore");
   assert_iterator(text.read(0, 5), "Lorem");
@@ -39,8 +36,7 @@ Deno.test("Read up to end >= count", () => {
 });
 
 Deno.test("Read up to end < 0", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem");
+  const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0, -1), "Lore");
   assert_iterator(text.read(0, -2), "Lor");
@@ -48,8 +44,7 @@ Deno.test("Read up to end < 0", () => {
 });
 
 Deno.test("Read with end <= start", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem");
+  const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(2, 3), "r");
   assert_iterator(text.read(2, 2), "");

@@ -6,7 +6,7 @@ import { assert_iterator, assert_tree } from "./assert.ts";
 Deno.test("Line at valid index", () => {
   const text = new SliceTree();
 
-  text.write(text.count, "Lorem\naliqua.");
+  text.write(0, "Lorem\naliqua.");
   text.write(6, "ipsum\nmagna\n");
   text.write(12, "dolor\ndolore\n");
   text.write(18, "sit\net\n");
@@ -39,8 +39,7 @@ Deno.test("Line at valid index", () => {
 });
 
 Deno.test("Line at index >= line_count", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+  const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.line(4), "amet");
   assert_iterator(text.line(5), "");
@@ -49,8 +48,7 @@ Deno.test("Line at index >= line_count", () => {
 });
 
 Deno.test("Line at index < 0", () => {
-  const text = new SliceTree();
-  text.write(0, "Lorem\nipsum\ndolor\nsit\namet");
+  const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.line(0), "Lorem\n");
   assert_iterator(text.line(-1), "amet");
