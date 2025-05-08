@@ -50,7 +50,7 @@ Deno.bench(
     baseline: true,
   },
   () => {
-    new SliceTree().write(0, test_string());
+    const _ = new SliceTree(test_string());
   },
 );
 
@@ -60,7 +60,7 @@ Deno.bench(
     group: "Creating",
   },
   () => {
-    test_string();
+    const _ = test_string();
   },
 );
 

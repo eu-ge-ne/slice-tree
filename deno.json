@@ -19,11 +19,14 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"],
+      "tags": ["recommended", "jsr"],
       "include": [
         "eqeqeq",
         "explicit-module-boundary-types",
-        "explicit-function-return-type"
+        "explicit-function-return-type",
+        "no-console",
+        "no-eval",
+        "no-external-import"
       ]
     }
   }
