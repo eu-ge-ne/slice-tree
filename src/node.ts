@@ -1,5 +1,5 @@
+import type { Buffer } from "./buffer.ts";
 import { insert_after } from "./insertion.ts";
-import { type Slice, split_slice } from "./slice.ts";
 
 export interface Tree {
   root: Node;
@@ -10,7 +10,12 @@ export interface Node {
   p: Node;
   left: Node;
   right: Node;
-  slice: Slice;
+
+  readonly buffer: Buffer;
+  readonly slice_start: number;
+  slice_length: number;
+  slice_lines: readonly number[];
+
   count: number;
   line_count: number;
 }
@@ -27,33 +32,69 @@ nil.p = NIL;
 nil.left = NIL;
 nil.right = NIL;
 
-export function create_node(slice: Slice): Node {
+export function create_node(
+  buffer: Buffer,
+  slice_start: number,
+  slice_length: number,
+): Node {
   return {
     red: true,
     p: NIL,
     left: NIL,
     right: NIL,
-    slice,
+
+    buffer,
+    slice_start,
+    slice_length,
+    slice_lines: line_starts(buffer, slice_start, slice_length),
+
     count: 0,
     line_count: 0,
   };
 }
 
-export function split_node(tree: Tree, x: Node, index: number): Node {
-  const slice = split_slice(x.slice, index, 0);
-  const node = create_node(slice);
+export function split_node(
+  tree: Tree,
+  x: Node,
+  index: number,
+  delete_count: number,
+): Node {
+  const new_start = x.slice_start + index + delete_count;
+  const new_length = x.slice_length - index - delete_count;
+
+  x.slice_length = index;
+  x.slice_lines = line_starts(x.buffer, x.slice_start, index);
+
+  const node = create_node(x.buffer, new_start, new_length);
 
   insert_after(tree, x, node);
 
   return node;
 }
 
+export function node_growable(x: Node): boolean {
+  return (x.buffer.text.length < 100) &&
+    (x.slice_start + x.slice_length === x.buffer.text.length);
+}
+
+export function resize_node(x: Node, add_count: number): void {
+  x.slice_length += add_count;
+  x.slice_lines = line_starts(x.buffer, x.slice_start, x.slice_length);
+}
+
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
-    x.count = x.left.count + x.slice.count + x.right.count;
-    x.line_count = x.left.line_count + x.slice.lines.length +
+    x.count = x.left.count + x.slice_length + x.right.count;
+    x.line_count = x.left.line_count + x.slice_lines.length +
       x.right.line_count;
 
     x = x.p;
   }
+}
+
+function line_starts(buffer: Buffer, start: number, length: number): number[] {
+  const end = start + length;
+
+  return buffer.line_breaks.filter((x) => (x.start >= start) && (x.start < end))
+    .map((x) => x.end - start);
 }
