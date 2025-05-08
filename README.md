@@ -66,6 +66,29 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ## API
 
+### Constructor
+
+#### `SliceTree`
+
+Creates a `SliceTree` instance with optional initial text.
+
+#### Syntax
+
+```ts ignore
+new SliceTree(text?: string)
+```
+
+#### Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem ipsum");
+
+assertEquals(text.count, 11);
+```
+
 ### Properties
 
 #### `SliceTree.prototype.count`

@@ -41,7 +41,7 @@ export class SliceTree {
   buffers: Buffer[] = [];
 
   /**
-   * Creates a new `SliceTree` instance with optional initial text.
+   * Creates a `SliceTree` instance with optional initial text.
    *
    * @param text Optional initial text.
    */
