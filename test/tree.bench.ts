@@ -50,7 +50,7 @@ Deno.bench(
     baseline: true,
   },
   () => {
-    new SliceTree().write(0, test_string());
+    new SliceTree(test_string());
   },
 );
 
