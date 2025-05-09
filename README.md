@@ -11,14 +11,14 @@ A `piece table` data structure implemented using `red-black tree`.
 - [slice-tree](#slice-tree)
   - [Example](#example)
   - [API](#api)
-    - [`SliceTree` constructor](#slicetree-constructor)
-    - [`SliceTree.prototype.count` property](#slicetreeprototypecount-property)
-    - [`SliceTree.prototype.line_count` property](#slicetreeprototypeline_count-property)
-    - [`SliceTree.prototype.read` method](#slicetreeprototyperead-method)
-    - [`SliceTree.prototype.line_range` method](#slicetreeprototypeline_range-method)
-    - [`SliceTree.prototype.line` method](#slicetreeprototypeline-method)
-    - [`SliceTree.prototype.write` method](#slicetreeprototypewrite-method)
-    - [`SliceTree.prototype.erase` method](#slicetreeprototypeerase-method)
+    - [`SliceTree()`](#slicetree)
+    - [`SliceTree.prototype.count`](#slicetreeprototypecount)
+    - [`SliceTree.prototype.line_count`](#slicetreeprototypeline_count)
+    - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
+    - [`SliceTree.prototype.line_range()`](#slicetreeprototypeline_range)
+    - [`SliceTree.prototype.line()`](#slicetreeprototypeline)
+    - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
+    - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -79,7 +79,7 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ## API
 
-### `SliceTree` constructor
+### `SliceTree()`
 
 Creates a `SliceTree` instance with optional initial text.
 
@@ -100,7 +100,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
-### `SliceTree.prototype.count` property
+### `SliceTree.prototype.count`
 
 Returns the total number of characters in the text content.
 
@@ -121,7 +121,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
-### `SliceTree.prototype.line_count` property
+### `SliceTree.prototype.line_count`
 
 Returns the number of lines in the text content.
 
@@ -142,7 +142,7 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line_count, 5);
 ```
 
-### `SliceTree.prototype.read` method
+### `SliceTree.prototype.read()`
 
 Returns the text between the specified start (inclusive) and end (exclusive)
 positions.
@@ -164,7 +164,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
-### `SliceTree.prototype.line_range` method
+### `SliceTree.prototype.line_range()`
 
 Returns the start index (inclusive) and the end index (exclusive) of the line at
 the specified index.
@@ -186,7 +186,7 @@ const text = new SliceTree("Lorem\nipsum");
 assertEquals(text.line_range(0), [0, 6]);
 ```
 
-### `SliceTree.prototype.line` method
+### `SliceTree.prototype.line()`
 
 Returns the content of the line at the specified index.
 
@@ -207,7 +207,7 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line(1).toArray().join(""), "ipsum\n");
 ```
 
-### `SliceTree.prototype.write` method
+### `SliceTree.prototype.write()`
 
 Inserts the given text at the specified index in the content.
 
@@ -230,7 +230,7 @@ text.write(0, "Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
-### `SliceTree.prototype.erase` method
+### `SliceTree.prototype.erase()`
 
 Removes the text in the range from index (inclusive) to index + count
 (exclusive).
