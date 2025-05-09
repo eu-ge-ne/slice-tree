@@ -1,5 +1,18 @@
 # slice-tree
 
+- [slice-tree](#slice-tree)
+  - [Example](#example)
+  - [API](#api)
+    - [`SliceTree` constructor](#slicetree-constructor)
+    - [`SliceTree.prototype.count` property](#slicetreeprototypecount-property)
+    - [`SliceTree.prototype.line_count` property](#slicetreeprototypeline_count-property)
+    - [`SliceTree.prototype.read` method](#slicetreeprototyperead-method)
+    - [`SliceTree.prototype.line_range` method](#slicetreeprototypeline_range-method)
+    - [`SliceTree.prototype.line` method](#slicetreeprototypeline-method)
+    - [`SliceTree.prototype.write` method](#slicetreeprototypewrite-method)
+    - [`SliceTree.prototype.erase` method](#slicetreeprototypeerase-method)
+  - [License](#license)
+
 [![JSR](https://jsr.io/badges/@eu-ge-ne/slice-tree)](https://jsr.io/@eu-ge-ne/slice-tree)
 [![JSR Score](https://jsr.io/badges/@eu-ge-ne/slice-tree/score)](https://jsr.io/@eu-ge-ne/slice-tree)
 [![codecov](https://codecov.io/gh/eu-ge-ne/slice-tree/branch/main/graph/badge.svg?token=9CQ0V249XC)](https://codecov.io/gh/eu-ge-ne/slice-tree)
