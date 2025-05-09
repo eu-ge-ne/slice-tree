@@ -66,19 +66,17 @@ assertEquals(text.line(0).toArray().join(""), "ipsum");
 
 ## API
 
-### Constructor
-
-#### `SliceTree`
+### `SliceTree` constructor
 
 Creates a `SliceTree` instance with optional initial text.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 new SliceTree(text?: string)
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -89,19 +87,17 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
-### Properties
-
-#### `SliceTree.prototype.count`
+### `SliceTree.prototype.count` property
 
 Returns the total number of characters in the text content.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 get count(): number
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -112,19 +108,17 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
----
-
-#### `SliceTree.prototype.line_count`
+### `SliceTree.prototype.line_count` property
 
 Returns the number of lines in the text content.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 get line_count(): number
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -135,20 +129,18 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line_count, 5);
 ```
 
-### Methods
-
-#### `SliceTree.prototype.read`
+### `SliceTree.prototype.read` method
 
 Returns the text between the specified start (inclusive) and end (exclusive)
 positions.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -159,20 +151,18 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
----
-
-#### `SliceTree.prototype.line_range`
+### `SliceTree.prototype.line_range` method
 
 Returns the start index (inclusive) and the end index (exclusive) of the line at
 the specified index.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 line_range(index: number): readonly [number, number | undefined] | undefined
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -183,19 +173,17 @@ const text = new SliceTree("Lorem\nipsum");
 assertEquals(text.line_range(0), [0, 6]);
 ```
 
----
-
-#### `SliceTree.prototype.line`
+### `SliceTree.prototype.line` method
 
 Returns the content of the line at the specified index.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 *line(index: number): Generator<string>
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -206,19 +194,17 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line(1).toArray().join(""), "ipsum\n");
 ```
 
----
-
-#### `SliceTree.prototype.write`
+### `SliceTree.prototype.write` method
 
 Inserts the given text at the specified index in the content.
 
-#### Syntax
+Syntax
 
 ```ts ignore
 write(index: number, text: string): void
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -231,20 +217,18 @@ text.write(0, "Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
----
-
-#### `SliceTree.prototype.erase`
+### `SliceTree.prototype.erase` method
 
 Removes the text in the range from index (inclusive) to index + count
 (exclusive).
 
-#### Syntax
+Syntax
 
 ```ts ignore
 erase(index: number, count: number): void
 ```
 
-#### Example
+Example
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
