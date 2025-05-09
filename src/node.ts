@@ -1,4 +1,4 @@
-import type { Buffer } from "./buffer.ts";
+import { type Buffer, line_starts } from "./buffer.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -90,11 +90,4 @@ export function bubble_metadata(x: Node): void {
 
     x = x.p;
   }
-}
-
-function line_starts(buffer: Buffer, start: number, length: number): number[] {
-  const end = start + length;
-
-  return buffer.line_breaks.filter((x) => (x.start >= start) && (x.start < end))
-    .map((x) => x.end - start);
 }
