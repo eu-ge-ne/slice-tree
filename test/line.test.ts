@@ -71,3 +71,21 @@ Deno.test("Write adds lines", () => {
   assert_iterator(text.line(11), "");
   assert_tree(text);
 });
+
+Deno.test("Erase removes lines", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, "ipsum");
+  text.write(5, "\n");
+  text.write(11, "\n");
+
+  text.erase(0, 6);
+  text.erase(5, 1);
+
+  assertEquals(text.count, 5);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "ipsum");
+  assertEquals(text.line(0).toArray().join(""), "ipsum");
+  assert_tree(text);
+});
