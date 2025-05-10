@@ -18,14 +18,14 @@ export interface Node {
   slice_eols_start: number;
   slice_eols_length: number;
 
-  count: number;
-  line_count: number;
+  length: number;
+  eols_length: number;
 }
 
 const nil = {
   red: false,
-  count: 0,
-  line_count: 0,
+  length: 0,
+  eols_length: 0,
 } as Node;
 
 export const NIL: Node = Object.create(nil);
@@ -57,8 +57,8 @@ export function create_node(
     slice_eols_start,
     slice_eols_length,
 
-    count: 0,
-    line_count: 0,
+    length: 0,
+    eols_length: 0,
   };
 }
 
@@ -100,8 +100,9 @@ export function resize_node(x: Node, length: number): void {
 
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
-    x.count = x.left.count + x.slice_length + x.right.count;
-    x.line_count = x.left.line_count + x.slice_eols_length + x.right.line_count;
+    x.length = x.left.length + x.slice_length + x.right.length;
+    x.eols_length = x.left.eols_length + x.slice_eols_length +
+      x.right.eols_length;
 
     x = x.p;
   }
