@@ -4,9 +4,14 @@ interface Pool {
   readonly buffers: Buffer[];
 }
 
+interface LineBreaks {
+  start: number;
+  end: number;
+}
+
 export interface Buffer {
   text: string;
-  line_breaks: readonly { start: number; end: number }[];
+  line_breaks: readonly LineBreaks[];
 }
 
 export function create_buffer(pool: Pool, text: string): Buffer {
@@ -28,52 +33,51 @@ export function add_to_buffer(buffer: Buffer, text: string): void {
 }
 
 export function line_starts(
-  buffer: Buffer,
+  line_breaks: readonly LineBreaks[],
   start: number,
   length: number,
 ): number[] {
   const end = start + length - 1;
+  const to = line_breaks.length - 1;
 
-  let from = 0;
-  let to = buffer.line_breaks.length - 1;
+  let from0 = 0;
+  let to0 = to;
   let i = 0;
   let v = 0;
 
-  while (from <= to) {
-    i = Math.trunc((from + to) / 2);
-    v = buffer.line_breaks[i]!.start;
+  while (from0 <= to0) {
+    i = Math.trunc((from0 + to0) / 2);
+    v = line_breaks[i]!.start;
 
     if (v < start) {
-      from = i + 1;
+      from0 = i + 1;
     } else if (v > start) {
-      to = i - 1;
+      to0 = i - 1;
     } else {
-      from = i;
+      from0 = i;
       break;
     }
   }
 
-  const i0 = from;
+  let from1 = from0;
 
-  to = buffer.line_breaks.length - 1;
+  to0 = to;
 
-  while (from <= to) {
-    i = Math.trunc((from + to) / 2);
-    v = buffer.line_breaks[i]!.start;
+  while (from1 <= to0) {
+    i = Math.trunc((from1 + to0) / 2);
+    v = line_breaks[i]!.start;
 
     if (v < end) {
-      from = i + 1;
+      from1 = i + 1;
     } else if (v > end) {
-      to = i - 1;
+      to0 = i - 1;
     } else {
-      to = i;
+      to0 = i;
       break;
     }
   }
 
-  const i1 = to + 1;
-
-  return buffer.line_breaks.slice(i0, i1).map((x) => x.end - start);
+  return line_breaks.slice(from0, to0 + 1).map((x) => x.end - start);
 }
 
 function line_breaks(

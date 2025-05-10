@@ -46,7 +46,7 @@ export function create_node(
     buffer,
     slice_start,
     slice_length,
-    slice_lines: line_starts(buffer, slice_start, slice_length),
+    slice_lines: line_starts(buffer.line_breaks, slice_start, slice_length),
 
     count: 0,
     line_count: 0,
@@ -78,7 +78,7 @@ export function node_growable(x: Node): boolean {
 
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
-  x.slice_lines = line_starts(x.buffer, x.slice_start, length);
+  x.slice_lines = line_starts(x.buffer.line_breaks, x.slice_start, length);
 }
 
 export function bubble_metadata(x: Node): void {
