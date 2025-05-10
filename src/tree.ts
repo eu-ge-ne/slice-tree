@@ -2,7 +2,7 @@ import { add_to_buffer, type Buffer, create_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
-  bubble_metadata,
+  bubble_update,
   create_node,
   NIL,
   node_growable,
@@ -59,7 +59,7 @@ export class SliceTree {
       this.root = create_node(buffer, 0, text.length);
       this.root.red = false;
 
-      bubble_metadata(this.root);
+      bubble_update(this.root);
     }
   }
 
@@ -283,7 +283,7 @@ export class SliceTree {
       add_to_buffer(p.buffer, text);
       resize_node(p, p.slice_length + text.length);
 
-      bubble_metadata(p);
+      bubble_update(p);
     } else {
       const buffer = create_buffer(this, text);
       const child = create_node(buffer, 0, text.length);
@@ -293,7 +293,7 @@ export class SliceTree {
           this.root = child;
           this.root.red = false;
 
-          bubble_metadata(this.root);
+          bubble_update(this.root);
           break;
         }
 
@@ -350,7 +350,7 @@ export class SliceTree {
     if (first.offset + count === first.node.slice_length) {
       resize_node(first.node, first.node.slice_length - count);
 
-      bubble_metadata(first.node);
+      bubble_update(first.node);
     } else if (first.offset + count <= first.node.slice_length) {
       split_node(this, first.node, first.offset, count);
     } else {

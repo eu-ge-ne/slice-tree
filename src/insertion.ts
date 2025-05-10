@@ -1,4 +1,4 @@
-import { bubble_metadata, NIL, type Node, type Tree } from "./node.ts";
+import { bubble_update, NIL, type Node, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
@@ -21,7 +21,7 @@ export function insert_left(tree: Tree, p: Node, z: Node): void {
   p.left = z;
   z.p = p;
 
-  bubble_metadata(z);
+  bubble_update(z);
   insert_fixup(tree, z);
 }
 
@@ -29,7 +29,7 @@ export function insert_right(tree: Tree, p: Node, z: Node): void {
   p.right = z;
   z.p = p;
 
-  bubble_metadata(z);
+  bubble_update(z);
   insert_fixup(tree, z);
 }
 
