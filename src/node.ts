@@ -62,6 +62,19 @@ export function create_node(
   };
 }
 
+export function resize_node(x: Node, length: number): void {
+  x.slice_length = length;
+
+  const [slice_eols_start, slice_eols_length] = slice_eols(
+    x.buffer.eols,
+    x.slice_start,
+    length,
+  );
+
+  x.slice_eols_start = slice_eols_start;
+  x.slice_eols_length = slice_eols_length;
+}
+
 export function split_node(
   tree: Tree,
   x: Node,
@@ -85,20 +98,7 @@ export function node_growable(x: Node): boolean {
     (x.slice_start + x.slice_length === x.buffer.text.length);
 }
 
-export function resize_node(x: Node, length: number): void {
-  x.slice_length = length;
-
-  const [slice_eols_start, slice_eols_length] = slice_eols(
-    x.buffer.eols,
-    x.slice_start,
-    length,
-  );
-
-  x.slice_eols_start = slice_eols_start;
-  x.slice_eols_length = slice_eols_length;
-}
-
-export function bubble_metadata(x: Node): void {
+export function bubble_update(x: Node): void {
   while (x !== NIL) {
     x.length = x.left.length + x.slice_length + x.right.length;
     x.eols_length = x.left.eols_length + x.slice_eols_length +
