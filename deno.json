@@ -1,6 +1,6 @@
 {
   "name": "@eu-ge-ne/slice-tree",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "license": "MIT",
   "exports": "./src/mod.ts",
   "imports": {
