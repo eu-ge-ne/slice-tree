@@ -62,8 +62,7 @@ export function split_node(
   const new_start = x.slice_start + index + delete_count;
   const new_length = x.slice_length - index - delete_count;
 
-  x.slice_length = index;
-  x.slice_lines = line_starts(x.buffer, x.slice_start, index);
+  shrink_node(x, index);
 
   const node = create_node(x.buffer, new_start, new_length);
 
@@ -73,13 +72,19 @@ export function split_node(
 }
 
 export function node_growable(x: Node): boolean {
-  return (x.buffer.text.length < 100) &&
+  return (x.buffer.text.length < 1000) &&
     (x.slice_start + x.slice_length === x.buffer.text.length);
 }
 
-export function resize_node(x: Node, add_count: number): void {
-  x.slice_length += add_count;
+export function grow_node(x: Node, count: number): void {
+  x.slice_length += count;
   x.slice_lines = line_starts(x.buffer, x.slice_start, x.slice_length);
+}
+
+export function shrink_node(x: Node, length: number): void {
+  x.slice_length = length;
+  // TODO: optimise
+  x.slice_lines = line_starts(x.buffer, x.slice_start, length);
 }
 
 export function bubble_metadata(x: Node): void {

@@ -4,9 +4,10 @@ import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
   bubble_metadata,
   create_node,
+  grow_node,
   NIL,
   node_growable,
-  resize_node,
+  shrink_node,
   split_node,
 } from "./node.ts";
 import { search, search_line_position, successor } from "./querying.ts";
@@ -281,7 +282,7 @@ export class SliceTree {
 
     if (insert_case === InsertionCase.Right && node_growable(p)) {
       add_to_buffer(p.buffer, text);
-      resize_node(p, text.length);
+      grow_node(p, text.length);
 
       bubble_metadata(p);
     } else {
@@ -348,7 +349,7 @@ export class SliceTree {
     }
 
     if (first.offset + count === first.node.slice_length) {
-      resize_node(first.node, -count);
+      shrink_node(first.node, first.node.slice_length - count);
 
       bubble_metadata(first.node);
     } else if (first.offset + count <= first.node.slice_length) {
