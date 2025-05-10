@@ -29,10 +29,10 @@ export function search_eol(x: Node, j: number): number | undefined {
       j -= x.left.line_count;
       i += x.left.count;
 
-      if (j < x.eols_length) {
-        return i + x.buffer.eols[x.eols_start + j]!.end - x.slice_start;
+      if (j < x.slice_eols_length) {
+        return i + x.buffer.eols[x.slice_eols_start + j]!.end - x.slice_start;
       } else {
-        j -= x.eols_length;
+        j -= x.slice_eols_length;
         i += x.slice_length;
 
         x = x.right;

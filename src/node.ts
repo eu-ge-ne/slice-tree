@@ -15,8 +15,8 @@ export interface Node {
   readonly buffer: Buffer;
   readonly slice_start: number;
   slice_length: number;
-  eols_start: number;
-  eols_length: number;
+  slice_eols_start: number;
+  slice_eols_length: number;
 
   count: number;
   line_count: number;
@@ -39,7 +39,7 @@ export function create_node(
   slice_start: number,
   slice_length: number,
 ): Node {
-  const [eols_start, eols_length] = slice_eols(
+  const [slice_eols_start, slice_eols_length] = slice_eols(
     buffer.eols,
     slice_start,
     slice_length,
@@ -54,8 +54,8 @@ export function create_node(
     buffer,
     slice_start,
     slice_length,
-    eols_start,
-    eols_length,
+    slice_eols_start,
+    slice_eols_length,
 
     count: 0,
     line_count: 0,
@@ -88,20 +88,20 @@ export function node_growable(x: Node): boolean {
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
 
-  const [eols_start, eols_length] = slice_eols(
+  const [slice_eols_start, slice_eols_length] = slice_eols(
     x.buffer.eols,
     x.slice_start,
     length,
   );
 
-  x.eols_start = eols_start;
-  x.eols_length = eols_length;
+  x.slice_eols_start = slice_eols_start;
+  x.slice_eols_length = slice_eols_length;
 }
 
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
     x.count = x.left.count + x.slice_length + x.right.count;
-    x.line_count = x.left.line_count + x.eols_length + x.right.line_count;
+    x.line_count = x.left.line_count + x.slice_eols_length + x.right.line_count;
 
     x = x.p;
   }
