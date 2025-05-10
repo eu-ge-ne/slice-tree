@@ -281,7 +281,7 @@ export class SliceTree {
 
     if (insert_case === InsertionCase.Right && node_growable(p)) {
       add_to_buffer(p.buffer, text);
-      resize_node(p, text.length);
+      resize_node(p, p.slice_length + text.length);
 
       bubble_metadata(p);
     } else {
@@ -348,7 +348,7 @@ export class SliceTree {
     }
 
     if (first.offset + count === first.node.slice_length) {
-      resize_node(first.node, -count);
+      resize_node(first.node, first.node.slice_length - count);
 
       bubble_metadata(first.node);
     } else if (first.offset + count <= first.node.slice_length) {
