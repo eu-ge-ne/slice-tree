@@ -72,7 +72,7 @@ export function split_node(
 }
 
 export function node_growable(x: Node): boolean {
-  return (x.buffer.text.length < 1000) &&
+  return (x.buffer.text.length < 100) &&
     (x.slice_start + x.slice_length === x.buffer.text.length);
 }
 
