@@ -1,4 +1,5 @@
-import { type Buffer, line_starts } from "./buffer.ts";
+import type { Buffer } from "./buffer.ts";
+import { slice_eols } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -14,7 +15,8 @@ export interface Node {
   readonly buffer: Buffer;
   readonly slice_start: number;
   slice_length: number;
-  slice_lines: readonly number[];
+  eols_start: number;
+  eols_length: number;
 
   count: number;
   line_count: number;
@@ -46,7 +48,7 @@ export function create_node(
     buffer,
     slice_start,
     slice_length,
-    slice_lines: line_starts(buffer.line_breaks, slice_start, slice_length),
+    ...slice_eols(buffer.eols, slice_start, slice_length),
 
     count: 0,
     line_count: 0,
@@ -78,14 +80,19 @@ export function node_growable(x: Node): boolean {
 
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
-  x.slice_lines = line_starts(x.buffer.line_breaks, x.slice_start, length);
+  const { eols_start, eols_length } = slice_eols(
+    x.buffer.eols,
+    x.slice_start,
+    length,
+  );
+  x.eols_start = eols_start;
+  x.eols_length = eols_length;
 }
 
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
     x.count = x.left.count + x.slice_length + x.right.count;
-    x.line_count = x.left.line_count + x.slice_lines.length +
-      x.right.line_count;
+    x.line_count = x.left.line_count + x.eols_length + x.right.line_count;
 
     x = x.p;
   }

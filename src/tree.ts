@@ -9,7 +9,7 @@ import {
   resize_node,
   split_node,
 } from "./node.ts";
-import { search, search_line_position, successor } from "./querying.ts";
+import { search, search_line, successor } from "./querying.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -185,12 +185,12 @@ export class SliceTree {
       index = Math.max(index + this.line_count, 0);
     }
 
-    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
+    const start = index === 0 ? 0 : search_line(this.root, index - 1);
 
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_line_position(this.root, index);
+      const end = search_line(this.root, index);
 
       return [start, end];
     }
@@ -218,12 +218,12 @@ export class SliceTree {
       index = Math.max(index + this.line_count, 0);
     }
 
-    const start = index === 0 ? 0 : search_line_position(this.root, index - 1);
+    const start = index === 0 ? 0 : search_line(this.root, index - 1);
 
     if (typeof start === "undefined") {
       yield "";
     } else {
-      const end = search_line_position(this.root, index);
+      const end = search_line(this.root, index);
 
       yield* this.read(start, end);
     }

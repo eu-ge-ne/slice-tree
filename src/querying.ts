@@ -21,7 +21,7 @@ export function search(
   }
 }
 
-export function search_line_position(x: Node, l: number): number | undefined {
+export function search_line(x: Node, l: number): number | undefined {
   for (let i = 0; x !== NIL;) {
     if (l < x.left.line_count) {
       x = x.left;
@@ -29,10 +29,10 @@ export function search_line_position(x: Node, l: number): number | undefined {
       l -= x.left.line_count;
       i += x.left.count;
 
-      if (l < x.slice_lines.length) {
-        return i + x.slice_lines[l]!;
+      if (l < x.eols_length) {
+        return i + x.buffer.eols[x.eols_start + l]!.end - x.slice_start;
       } else {
-        l -= x.slice_lines.length;
+        l -= x.eols_length;
         i += x.slice_length;
 
         x = x.right;
