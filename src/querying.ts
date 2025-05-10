@@ -21,18 +21,18 @@ export function search(
   }
 }
 
-export function search_line(x: Node, l: number): number | undefined {
+export function search_eol(x: Node, j: number): number | undefined {
   for (let i = 0; x !== NIL;) {
-    if (l < x.left.line_count) {
+    if (j < x.left.line_count) {
       x = x.left;
     } else {
-      l -= x.left.line_count;
+      j -= x.left.line_count;
       i += x.left.count;
 
-      if (l < x.eols_length) {
-        return i + x.buffer.eols[x.eols_start + l]!.end - x.slice_start;
+      if (j < x.eols_length) {
+        return i + x.buffer.eols[x.eols_start + j]!.end - x.slice_start;
       } else {
-        l -= x.eols_length;
+        j -= x.eols_length;
         i += x.slice_length;
 
         x = x.right;
