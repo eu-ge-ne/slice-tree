@@ -1,4 +1,5 @@
-import { type Buffer, line_starts } from "./buffer.ts";
+import type { Buffer } from "./buffer.ts";
+import { slice_eols } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -14,16 +15,17 @@ export interface Node {
   readonly buffer: Buffer;
   readonly slice_start: number;
   slice_length: number;
-  slice_lines: readonly number[];
+  slice_eols_start: number;
+  slice_eols_length: number;
 
-  count: number;
-  line_count: number;
+  length: number;
+  eols_length: number;
 }
 
 const nil = {
   red: false,
-  count: 0,
-  line_count: 0,
+  length: 0,
+  eols_length: 0,
 } as Node;
 
 export const NIL: Node = Object.create(nil);
@@ -37,6 +39,12 @@ export function create_node(
   slice_start: number,
   slice_length: number,
 ): Node {
+  const [slice_eols_start, slice_eols_length] = slice_eols(
+    buffer.eols,
+    slice_start,
+    slice_length,
+  );
+
   return {
     red: true,
     p: NIL,
@@ -46,10 +54,11 @@ export function create_node(
     buffer,
     slice_start,
     slice_length,
-    slice_lines: line_starts(buffer.line_breaks, slice_start, slice_length),
+    slice_eols_start,
+    slice_eols_length,
 
-    count: 0,
-    line_count: 0,
+    length: 0,
+    eols_length: 0,
   };
 }
 
@@ -78,14 +87,22 @@ export function node_growable(x: Node): boolean {
 
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
-  x.slice_lines = line_starts(x.buffer.line_breaks, x.slice_start, length);
+
+  const [slice_eols_start, slice_eols_length] = slice_eols(
+    x.buffer.eols,
+    x.slice_start,
+    length,
+  );
+
+  x.slice_eols_start = slice_eols_start;
+  x.slice_eols_length = slice_eols_length;
 }
 
 export function bubble_metadata(x: Node): void {
   while (x !== NIL) {
-    x.count = x.left.count + x.slice_length + x.right.count;
-    x.line_count = x.left.line_count + x.slice_lines.length +
-      x.right.line_count;
+    x.length = x.left.length + x.slice_length + x.right.length;
+    x.eols_length = x.left.eols_length + x.slice_eols_length +
+      x.right.eols_length;
 
     x = x.p;
   }
