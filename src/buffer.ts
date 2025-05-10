@@ -40,44 +40,44 @@ export function line_starts(
   const end = start + length - 1;
   const to = line_breaks.length - 1;
 
-  let from0 = 0;
-  let to0 = to;
+  let a = 0;
+  let c = to;
   let i = 0;
   let v = 0;
 
-  while (from0 <= to0) {
-    i = Math.trunc((from0 + to0) / 2);
+  while (a <= c) {
+    i = Math.trunc((a + c) / 2);
     v = line_breaks[i]!.start;
 
     if (v < start) {
-      from0 = i + 1;
+      a = i + 1;
     } else if (v > start) {
-      to0 = i - 1;
+      c = i - 1;
     } else {
-      from0 = i;
+      a = i;
       break;
     }
   }
 
-  let from1 = from0;
+  let b = a;
 
-  to0 = to;
+  c = to;
 
-  while (from1 <= to0) {
-    i = Math.trunc((from1 + to0) / 2);
+  while (b <= c) {
+    i = Math.trunc((b + c) / 2);
     v = line_breaks[i]!.start;
 
     if (v < end) {
-      from1 = i + 1;
+      b = i + 1;
     } else if (v > end) {
-      to0 = i - 1;
+      c = i - 1;
     } else {
-      to0 = i;
+      c = i;
       break;
     }
   }
 
-  return line_breaks.slice(from0, to0 + 1).map((x) => x.end - start);
+  return line_breaks.slice(a, c + 1).map((x) => x.end - start);
 }
 
 function line_breaks(
