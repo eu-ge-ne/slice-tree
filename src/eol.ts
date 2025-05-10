@@ -1,8 +1,8 @@
 const LINE_BREAKS_RE = /r?\n/gm;
 
 export interface EOL {
-  start: number;
-  end: number;
+  readonly start: number;
+  readonly end: number;
 }
 
 export function create_eols(text: string, start = 0): EOL[] {
@@ -16,10 +16,7 @@ export function slice_eols(
   eols: readonly EOL[],
   start: number,
   length: number,
-): {
-  readonly eols_start: number;
-  readonly eols_length: number;
-} {
+): readonly [number, number] {
   const end = start + length - 1;
   const to = eols.length - 1;
 
@@ -60,9 +57,5 @@ export function slice_eols(
     }
   }
 
-  //return line_breaks.slice(a, c + 1).map((x) => x.end - start);
-  return {
-    eols_start: a,
-    eols_length: c + 1 - a,
-  };
+  return [a, c + 1 - a];
 }

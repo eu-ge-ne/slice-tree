@@ -39,6 +39,12 @@ export function create_node(
   slice_start: number,
   slice_length: number,
 ): Node {
+  const [eols_start, eols_length] = slice_eols(
+    buffer.eols,
+    slice_start,
+    slice_length,
+  );
+
   return {
     red: true,
     p: NIL,
@@ -48,7 +54,8 @@ export function create_node(
     buffer,
     slice_start,
     slice_length,
-    ...slice_eols(buffer.eols, slice_start, slice_length),
+    eols_start,
+    eols_length,
 
     count: 0,
     line_count: 0,
@@ -80,11 +87,13 @@ export function node_growable(x: Node): boolean {
 
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
-  const { eols_start, eols_length } = slice_eols(
+
+  const [eols_start, eols_length] = slice_eols(
     x.buffer.eols,
     x.slice_start,
     length,
   );
+
   x.eols_start = eols_start;
   x.eols_length = eols_length;
 }
