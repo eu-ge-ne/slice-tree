@@ -9,7 +9,11 @@ A `piece table` data structure implemented using `red-black tree`.
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=eu-ge-ne_slice-tree&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=eu-ge-ne_slice-tree)
 
 - [slice-tree](#slice-tree)
-  - [Example](#example)
+  - [Installation](#installation)
+    - [Deno](#deno)
+    - [Node.js](#nodejs)
+    - [Bun](#bun)
+  - [Examples](#examples)
   - [API](#api)
     - [`SliceTree()`](#slicetree)
     - [`SliceTree.prototype.count`](#slicetreeprototypecount)
@@ -31,7 +35,34 @@ A `piece table` data structure implemented using `red-black tree`.
 &mdash;
 <cite>[Crowley, Charles (10 June 1998). "Data Structures for Text Sequences - 6.4 The piece table method"](https://web.archive.org/web/20180223071931/https://www.cs.unm.edu/~crowley/papers/sds.pdf)</cite>
 
-## Example
+## Installation
+
+### Deno
+
+```bash
+deno add jsr:@eu-ge-ne/slice-tree
+```
+
+### Node.js
+
+```bash
+# pnpm
+pnpm i jsr:@eu-ge-ne/slice-tree
+
+# yarn
+yarn add jsr:@eu-ge-ne/slice-tree
+
+# npm
+npx jsr add @eu-ge-ne/slice-tree
+```
+
+### Bun
+
+```bash
+bunx jsr add @eu-ge-ne/slice-tree
+```
+
+## Examples
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
