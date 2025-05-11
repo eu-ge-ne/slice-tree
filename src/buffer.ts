@@ -6,7 +6,7 @@ interface Pool {
 
 export interface Buffer {
   text: string;
-  eols: EOL[];
+  readonly eols: EOL[];
 }
 
 export function create_buffer(pool: Pool, text: string): Buffer {
