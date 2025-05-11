@@ -56,7 +56,7 @@ export class SliceTree {
     if (text && text.length > 0) {
       const buffer = create_buffer(this, text);
 
-      this.root = create_node(buffer, 0, text.length);
+      this.root = create_node(buffer, 0, text.length, 0, buffer.eols.length);
       this.root.red = false;
 
       bubble_update(this.root);
@@ -286,7 +286,7 @@ export class SliceTree {
       bubble_update(p);
     } else {
       const buffer = create_buffer(this, text);
-      const child = create_node(buffer, 0, text.length);
+      const child = create_node(buffer, 0, text.length, 0, buffer.eols.length);
 
       switch (insert_case) {
         case InsertionCase.Root: {
