@@ -20,7 +20,7 @@ export function create_buffer(pool: Pool, text: string): Buffer {
   return buffer;
 }
 
-export function add_to_buffer(buffer: Buffer, text: string): void {
+export function grow_buffer(buffer: Buffer, text: string): void {
   for (const eol of create_eols(text, buffer.text.length)) {
     buffer.eols.push(eol);
   }
