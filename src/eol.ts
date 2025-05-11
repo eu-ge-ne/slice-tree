@@ -12,36 +12,40 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
   }));
 }
 
-export function slice_eols(
-  eols: readonly EOL[],
-  start: number,
-  length: number,
-): readonly [number, number] {
-  const end = start + length - 1;
-  const to = eols.length - 1;
-
+export function eols_slice_start(eols: readonly EOL[], start: number): number {
   let a = 0;
-  let c = to;
+  let b = eols.length - 1;
   let i = 0;
   let v = 0;
 
-  while (a <= c) {
-    i = Math.trunc((a + c) / 2);
+  while (a <= b) {
+    i = Math.trunc((a + b) / 2);
     v = eols[i]!.start;
 
     if (v < start) {
       a = i + 1;
     } else if (v > start) {
-      c = i - 1;
+      b = i - 1;
     } else {
-      a = i;
-      break;
+      return i;
     }
   }
 
-  let b = a;
+  return a;
+}
 
-  c = to;
+export function eols_slice_length(
+  eols: readonly EOL[],
+  start: number,
+  length: number,
+  a: number,
+): number {
+  const end = start + length - 1;
+
+  let b = a;
+  let c = eols.length - 1;
+  let i = 0;
+  let v = 0;
 
   while (b <= c) {
     i = Math.trunc((b + c) / 2);
@@ -57,5 +61,5 @@ export function slice_eols(
     }
   }
 
-  return [a, c + 1 - a];
+  return c + 1 - a;
 }
