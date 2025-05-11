@@ -1,4 +1,4 @@
-import { add_to_buffer, type Buffer, create_buffer } from "./buffer.ts";
+import { type Buffer, create_buffer, grow_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
@@ -280,7 +280,7 @@ export class SliceTree {
     }
 
     if (insert_case === InsertionCase.Right && node_growable(p)) {
-      add_to_buffer(p.buffer, text);
+      grow_buffer(p.buffer, text);
       resize_node(p, p.slice_length + text.length);
 
       bubble_update(p);
