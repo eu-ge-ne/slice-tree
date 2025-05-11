@@ -37,13 +37,15 @@ export function eols_slice_start(
   return a;
 }
 
-export function eols_index_lte(
+export function eols_slice_length(
   eols: readonly EOL[],
-  x: number,
-  a: number,
+  slice_start: number,
+  slice_length: number,
+  slice_eols_start: number,
 ): number {
-  x -= 1;
+  const slice_end = slice_start + slice_length - 1;
 
+  let a = slice_eols_start;
   let b = eols.length - 1;
   let i = 0;
   let v = 0;
@@ -52,9 +54,9 @@ export function eols_index_lte(
     i = Math.trunc((a + b) / 2);
     v = eols[i]!.start;
 
-    if (v < x) {
+    if (v < slice_end) {
       a = i + 1;
-    } else if (v > x) {
+    } else if (v > slice_end) {
       b = i - 1;
     } else {
       b = i;
@@ -62,5 +64,5 @@ export function eols_index_lte(
     }
   }
 
-  return b + 1;
+  return b + 1 - slice_eols_start;
 }
