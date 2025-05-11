@@ -34,32 +34,30 @@ export function eols_index_gte(eols: readonly EOL[], x: number): number {
   return a;
 }
 
-export function eols_slice_length(
+export function eols_index_lte(
   eols: readonly EOL[],
-  start: number,
-  length: number,
+  x: number,
   a: number,
 ): number {
-  const end = start + length - 1;
+  x -= 1;
 
-  let b = a;
-  let c = eols.length - 1;
+  let b = eols.length - 1;
   let i = 0;
   let v = 0;
 
-  while (b <= c) {
-    i = Math.trunc((b + c) / 2);
+  while (a <= b) {
+    i = Math.trunc((a + b) / 2);
     v = eols[i]!.start;
 
-    if (v < end) {
-      b = i + 1;
-    } else if (v > end) {
-      c = i - 1;
+    if (v < x) {
+      a = i + 1;
+    } else if (v > x) {
+      b = i - 1;
     } else {
-      c = i;
+      b = i;
       break;
     }
   }
 
-  return c + 1 - a;
+  return b + 1;
 }
