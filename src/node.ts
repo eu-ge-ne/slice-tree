@@ -63,8 +63,7 @@ export function resize_node(x: Node, length: number): void {
 
   x.slice_eols_length = eols_slice_length(
     x.buffer.eols,
-    x.slice_start,
-    length,
+    x.slice_start + length,
     x.slice_eols_start,
   );
 }
@@ -83,8 +82,7 @@ export function split_node(
   const slice_eols_start = x.slice_eols_start + x.slice_eols_length;
   const slice_eols_length = eols_slice_length(
     x.buffer.eols,
-    slice_start,
-    slice_length,
+    slice_start + slice_length,
     slice_eols_start,
   );
 

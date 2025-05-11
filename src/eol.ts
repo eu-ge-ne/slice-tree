@@ -14,13 +14,12 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
 
 export function eols_slice_length(
   eols: readonly EOL[],
-  slice_start: number,
-  slice_length: number,
-  slice_eols_start: number,
+  slice_end: number,
+  start: number,
 ): number {
-  const slice_end = slice_start + slice_length - 1;
+  slice_end -= 1;
 
-  let a = slice_eols_start;
+  let a = start;
   let b = eols.length - 1;
   let i = 0;
   let v = 0;
@@ -39,5 +38,5 @@ export function eols_slice_length(
     }
   }
 
-  return b + 1 - slice_eols_start;
+  return b + 1 - start;
 }
