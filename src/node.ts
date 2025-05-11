@@ -1,5 +1,5 @@
 import type { Buffer } from "./buffer.ts";
-import { eols_slice_length, eols_slice_start } from "./eol.ts";
+import { eols_index_gte, eols_slice_length } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -77,7 +77,7 @@ export function split_node(
 ): Node {
   const slice_start = x.slice_start + index + delete_count;
   const slice_length = x.slice_length - index - delete_count;
-  const slice_eols_start = eols_slice_start(x.buffer.eols, slice_start);
+  const slice_eols_start = eols_index_gte(x.buffer.eols, slice_start);
   const slice_eols_length = eols_slice_length(
     x.buffer.eols,
     slice_start,

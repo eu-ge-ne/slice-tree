@@ -12,7 +12,7 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
   }));
 }
 
-export function eols_slice_start(eols: readonly EOL[], start: number): number {
+export function eols_index_gte(eols: readonly EOL[], x: number): number {
   let a = 0;
   let b = eols.length - 1;
   let i = 0;
@@ -22,9 +22,9 @@ export function eols_slice_start(eols: readonly EOL[], start: number): number {
     i = Math.trunc((a + b) / 2);
     v = eols[i]!.start;
 
-    if (v < start) {
+    if (v < x) {
       a = i + 1;
-    } else if (v > start) {
+    } else if (v > x) {
       b = i - 1;
     } else {
       return i;
