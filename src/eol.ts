@@ -5,8 +5,8 @@ export interface EOL {
   readonly end: number;
 }
 
-export function create_eols(text: string, start = 0): EOL[] {
-  return Array.from(text.matchAll(LINE_BREAKS_RE)).map((x) => ({
+export function create_eols(text: string, start = 0): IteratorObject<EOL> {
+  return text.matchAll(LINE_BREAKS_RE).map((x) => ({
     start: start + x.index,
     end: start + x.index + x[0].length,
   }));
