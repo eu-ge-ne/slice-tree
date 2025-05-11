@@ -21,11 +21,9 @@ export function create_buffer(pool: Pool, text: string): Buffer {
 }
 
 export function add_to_buffer(buffer: Buffer, text: string): void {
-  const eols = create_eols(text, buffer.text.length);
-
-  buffer.text += text;
-
-  for (const eol of eols) {
+  for (const eol of create_eols(text, buffer.text.length)) {
     buffer.eols.push(eol);
   }
+
+  buffer.text += text;
 }
