@@ -52,8 +52,6 @@ export class SliceTree {
 
       this.root = create_node(buffer, 0, text.length, 0, buffer.eols.length);
       this.root.red = false;
-
-      bubble_update(this.root);
     }
   }
 
@@ -286,8 +284,6 @@ export class SliceTree {
         case InsertionCase.Root: {
           this.root = child;
           this.root.red = false;
-
-          bubble_update(this.root);
           break;
         }
 

@@ -53,8 +53,8 @@ export function create_node(
     slice_eols_start,
     slice_eols_length,
 
-    length: 0,
-    eols_length: 0,
+    length: slice_length,
+    eols_length: slice_eols_length,
   };
 }
 
