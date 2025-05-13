@@ -25,6 +25,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
   - [Benchmarks](#benchmarks)
     - [Creation](#creation)
+    - [Appendment](#appendment)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -299,6 +300,79 @@ Creating a string              84.4 ns    11,850,000 ( 83.2 ns … 111.2 ns)  84
 summary
   Creating a SliceTree
      2.42x slower than Creating a string
+```
+
+### Appendment
+
+Appending into a SliceTree is 4x slower than appending into a string.
+
+```bash
+❯ deno bench -A bench/appendment.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.1 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/appendment.bench.ts
+
+benchmark                                 time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+----------------------------------------- ----------------------------- --------------------- --------------------------
+
+group Appendment x1
+Appending 1 chars into a SliceTree               221.7 ns     4,510,000 (218.3 ns … 253.3 ns) 222.6 ns 230.3 ns 249.1 ns
+Warning: start() and end() calls in "Appending 1 chars into a SliceTree" are ignored because it averages less
+than 10µs per iteration. Remove them for better results.
+Appending 1 chars into a string                   94.1 ns    10,630,000 ( 93.1 ns … 115.5 ns)  94.0 ns  98.5 ns  99.5 ns
+Warning: start() and end() calls in "Appending 1 chars into a string" are ignored because it averages less
+than 10µs per iteration. Remove them for better results.
+
+summary
+  Appending 1 chars into a SliceTree
+     2.36x slower than Appending 1 chars into a string
+
+group Appendment x10
+Appending 10 chars into a SliceTree                2.4 µs       423,500 (  2.3 µs …   2.4 µs)   2.4 µs   2.4 µs   2.4 µs
+Warning: start() and end() calls in "Appending 10 chars into a SliceTree" are ignored because it averages less
+than 10µs per iteration. Remove them for better results.
+Appending 10 chars into a string                 912.5 ns     1,096,000 (900.7 ns … 943.5 ns) 918.3 ns 943.5 ns 943.5 ns
+Warning: start() and end() calls in "Appending 10 chars into a string" are ignored because it averages less
+than 10µs per iteration. Remove them for better results.
+
+summary
+  Appending 10 chars into a SliceTree
+     2.59x slower than Appending 10 chars into a string
+
+group Appendment x100
+Appending 100 chars into a SliceTree              26.6 µs        37,540 ( 25.3 µs …  66.8 µs)  26.3 µs  54.5 µs  57.3 µs
+Appending 100 chars into a string                  8.7 µs       114,800 (  8.7 µs …   8.8 µs)   8.7 µs   8.8 µs   8.8 µs
+Warning: start() and end() calls in "Appending 100 chars into a string" are ignored because it averages less
+than 10µs per iteration. Remove them for better results.
+
+summary
+  Appending 100 chars into a SliceTree
+     3.06x slower than Appending 100 chars into a string
+
+group Appendment x1000
+Appending 1000 chars into a SliceTree            291.1 µs         3,435 (280.6 µs … 575.8 µs) 289.0 µs 357.3 µs 368.9 µs
+Appending 1000 chars into a string                86.3 µs        11,580 ( 84.1 µs … 145.2 µs)  86.2 µs 119.7 µs 124.3 µs
+
+summary
+  Appending 1000 chars into a SliceTree
+     3.37x slower than Appending 1000 chars into a string
+
+group Appendment x10000
+Appending 10000 chars into a SliceTree             3.3 ms         299.5 (  3.2 ms …   4.7 ms)   3.4 ms   3.9 ms   4.7 ms
+Appending 10000 chars into a string              844.2 µs         1,185 (832.9 µs … 990.1 µs) 843.0 µs 945.4 µs 956.5 µs
+
+summary
+  Appending 10000 chars into a SliceTree
+     3.96x slower than Appending 10000 chars into a string
+
+group Appendment x100000
+Appending 100000 chars into a SliceTree           38.5 ms          26.0 ( 36.7 ms …  42.2 ms)  39.2 ms  42.2 ms  42.2 ms
+Appending 100000 chars into a string               8.6 ms         116.1 (  8.3 ms …  10.3 ms)   8.4 ms  10.3 ms  10.3 ms
+
+summary
+  Appending 100000 chars into a SliceTree
+     4.47x slower than Appending 100000 chars into a string
 ```
 
 ## License
