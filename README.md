@@ -23,6 +23,8 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.line()`](#slicetreeprototypeline)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
+  - [Benchmarks](#benchmarks)
+    - [Creating](#creating)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -284,6 +286,18 @@ text.erase(5, 6);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
+
+## Benchmarks
+
+### Creating
+
+Creating a SliceTree is 2.5x-3.x slower than creating a string.
+
+```bash
+deno bench -A bench/creating.bench.ts
+```
+
+![Creating a SliceTree](/etc/creating-bench-ts.png)
 
 ## License
 
