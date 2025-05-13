@@ -1,4 +1,4 @@
-import { type Buffer, create_buffer, grow_buffer } from "./buffer.ts";
+import { create_buffer, grow_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
@@ -31,12 +31,6 @@ export class SliceTree {
   root = NIL;
 
   /**
-   * @ignore
-   * @internal
-   */
-  buffers: Buffer[] = [];
-
-  /**
    * Creates a `SliceTree` instance with optional initial text.
    *
    * @param text Optional initial text.
@@ -54,7 +48,7 @@ export class SliceTree {
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
-      const buffer = create_buffer(this, text);
+      const buffer = create_buffer(text);
 
       this.root = create_node(buffer, 0, text.length, 0, buffer.eols.length);
       this.root.red = false;
@@ -285,7 +279,7 @@ export class SliceTree {
 
       bubble_update(p);
     } else {
-      const buffer = create_buffer(this, text);
+      const buffer = create_buffer(text);
       const child = create_node(buffer, 0, text.length, 0, buffer.eols.length);
 
       switch (insert_case) {
