@@ -24,7 +24,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
   - [Benchmarks](#benchmarks)
-    - [Creating](#creating)
+    - [Creation](#creation)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -278,15 +278,28 @@ assertEquals(text.read(0).toArray().join(""), "Lorem");
 
 ## Benchmarks
 
-### Creating
+### Creation
 
-Creating a SliceTree is 2.5x-3.x slower than creating a string.
+Creating a SliceTree is 2.5x slower than creating a string.
 
 ```bash
-deno bench -A bench/creating.bench.ts
-```
+❯ deno bench -A bench/creation.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.1 (aarch64-apple-darwin)
 
-![Creating a SliceTree](etc/creating-bench-ts.png)
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/creation.bench.ts
+
+benchmark              time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+---------------------- ----------------------------- --------------------- --------------------------
+
+group Creation
+Creating a SliceTree          204.1 ns     4,899,000 (200.6 ns … 211.9 ns) 205.3 ns 209.6 ns 211.7 ns
+Creating a string              84.4 ns    11,850,000 ( 83.2 ns … 111.2 ns)  84.2 ns  90.2 ns  97.9 ns
+
+summary
+  Creating a SliceTree
+     2.42x slower than Creating a string
+```
 
 ## License
 
