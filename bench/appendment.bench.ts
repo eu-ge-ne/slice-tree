@@ -1,6 +1,6 @@
 import { SliceTree } from "../src/tree.ts";
 
-for (let power = 0; power < 6; power += 1) {
+for (let power = 3; power < 6; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
