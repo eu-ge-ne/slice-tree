@@ -122,17 +122,6 @@ Syntax
 new SliceTree(text?: string)
 ```
 
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = new SliceTree("Lorem ipsum");
-
-assertEquals(text.count, 11);
-```
-
 ### `SliceTree.prototype.count`
 
 Returns the total number of characters in the text content.
@@ -297,7 +286,7 @@ Creating a SliceTree is 2.5x-3.x slower than creating a string.
 deno bench -A bench/creating.bench.ts
 ```
 
-![Creating a SliceTree](/etc/creating-bench-ts.png)
+![Creating a SliceTree](etc/creating-bench-ts.png)
 
 ## License
 
