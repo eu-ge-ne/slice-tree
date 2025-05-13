@@ -43,26 +43,6 @@ function read_line(text: string, index: number): string {
     return text.slice(line_breaks[index - 1], line_breaks[index]);
   }
 }
-Deno.bench(
-  "Creating a SliceTree",
-  {
-    group: "Creating",
-    baseline: true,
-  },
-  () => {
-    const _ = new SliceTree(test_string());
-  },
-);
-
-Deno.bench(
-  "Creating a string",
-  {
-    group: "Creating",
-  },
-  () => {
-    const _ = test_string();
-  },
-);
 
 for (let power = 0; power < 3; power += 1) {
   const n = 10 ** power;
