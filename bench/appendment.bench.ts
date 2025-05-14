@@ -14,7 +14,7 @@ for (let power = 3; power < 6; power += 1) {
 
       b.start();
 
-      for (let i = 1; i <= n; i += 1) {
+      for (let i = 0; i < n; i += 1) {
         text.write(text.count, crypto.randomUUID());
       }
 
@@ -32,7 +32,7 @@ for (let power = 3; power < 6; power += 1) {
 
       b.start();
 
-      for (let i = 1; i <= n; i += 1) {
+      for (let i = 0; i < n; i += 1) {
         text += crypto.randomUUID();
       }
 
