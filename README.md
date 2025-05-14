@@ -27,6 +27,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Creation](#creation)
     - [Appendment](#appendment)
     - [Sequential insertion](#sequential-insertion)
+    - [Interleaved insertion](#interleaved-insertion)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -345,7 +346,7 @@ summary
 ### Sequential insertion
 
 Inserting sequentially into a SliceTree is >10x faster than inserting into a
-string
+string.
 
 ```bash
 ❯ deno bench -A bench/insertion-seq.bench.ts
@@ -381,6 +382,46 @@ Inserting 10000 chars sequentially into a string             278.4 ms           
 summary
   Inserting 10000 chars sequentially into a SliceTree
     76.13x faster than Inserting 10000 chars sequentially into a string
+```
+
+### Interleaved insertion
+
+Inserting interleaved into a SliceTree is >10x faster than inserting into a
+string.
+
+```bash
+❯ deno bench -A bench/insertion-intr.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.1 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/insertion-intr.bench.ts
+
+benchmark                                            time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+---------------------------------------------------- ----------------------------- --------------------- --------------------------
+
+group Insertion interleaved x100
+Inserting 100 chars interleaved into a SliceTree             45.1 µs        22,190 ( 43.3 µs … 330.7 µs)  44.4 µs  80.4 µs  81.1 µs
+Inserting 100 chars interleaved into a string                19.3 µs        51,700 ( 17.9 µs …  66.0 µs)  18.7 µs  49.0 µs  49.2 µs
+
+summary
+  Inserting 100 chars interleaved into a SliceTree
+     2.33x slower than Inserting 100 chars interleaved into a string
+
+group Insertion interleaved x1000
+Inserting 1000 chars interleaved into a SliceTree           568.6 µs         1,759 (548.8 µs …   1.1 ms) 564.5 µs 694.9 µs 713.3 µs
+Inserting 1000 chars interleaved into a string              739.9 µs         1,352 (680.2 µs …   1.6 ms) 784.2 µs 891.3 µs   1.2 ms
+
+summary
+  Inserting 1000 chars interleaved into a SliceTree
+     1.30x faster than Inserting 1000 chars interleaved into a string
+
+group Insertion interleaved x10000
+Inserting 10000 chars interleaved into a SliceTree            7.0 ms         143.6 (  6.8 ms …  10.5 ms)   7.0 ms  10.5 ms  10.5 ms
+Inserting 10000 chars interleaved into a string             299.0 ms           3.3 (292.4 ms … 314.2 ms) 300.3 ms 314.2 ms 314.2 ms
+
+summary
+  Inserting 10000 chars interleaved into a SliceTree
+    42.94x faster than Inserting 10000 chars interleaved into a string
 ```
 
 ## License
