@@ -48,51 +48,6 @@ for (let power = 0; power < 3; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
-    `Inserting sparsed x${n} into a SliceTree`,
-    {
-      group: `Inserting sparsed x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = createSliceTree();
-
-      b.start();
-
-      let pos = TEST_STRING_SIZE * 10;
-      for (let i = 1; i <= n; i += 1) {
-        text.write(pos, test_string());
-        pos += TEST_STRING_SIZE * 10;
-      }
-
-      b.end();
-    },
-  );
-
-  Deno.bench(
-    `Inserting sparsed x${n} into a string`,
-    {
-      group: `Inserting sparsed x${n}`,
-    },
-    (b) => {
-      let text = createString();
-
-      b.start();
-
-      let pos = TEST_STRING_SIZE * 10;
-      for (let i = 1; i <= n; i += 1) {
-        text = text.slice(0, pos) + test_string() + text.slice(pos);
-        pos += TEST_STRING_SIZE * 10;
-      }
-
-      b.end();
-    },
-  );
-}
-
-for (let power = 0; power < 3; power += 1) {
-  const n = 10 ** power;
-
-  Deno.bench(
     `Removing sequential x${n} from a SliceTree`,
     {
       group: `Removing sequential x${n}`,
