@@ -427,7 +427,7 @@ summary
 
 ### Sequential removal
 
-Removing sequentially from a SliceTree is >10x slower than removing from a
+Removing sequentially from a SliceTree is 50x slower than removing from a
 string.
 
 ```bash
