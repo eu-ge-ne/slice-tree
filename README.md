@@ -28,6 +28,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Appendment](#appendment)
     - [Sequential insertion](#sequential-insertion)
     - [Interleaved insertion](#interleaved-insertion)
+    - [Sequential removal](#sequential-removal)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -422,6 +423,46 @@ Inserting 10000 chars interleaved into a string             299.0 ms           3
 summary
   Inserting 10000 chars interleaved into a SliceTree
     42.94x faster than Inserting 10000 chars interleaved into a string
+```
+
+### Sequential removal
+
+Removing sequentially from a SliceTree is >10x slower than removing from a
+string.
+
+```bash
+❯ deno bench bench/removal-seq.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.3 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/removal-seq.bench.ts
+
+benchmark                                              time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+------------------------------------------------------ ----------------------------- --------------------- --------------------------
+
+group Removal sequential x10000
+Removing 10000 chars sequentially from a SliceTree              1.6 ms         638.6 (  1.5 ms …   1.9 ms)   1.6 ms   1.8 ms   1.8 ms
+Removing 10000 chars sequentially from a string                39.5 µs        25,310 ( 37.6 µs … 133.5 µs)  38.2 µs  75.4 µs  80.9 µs
+
+summary
+  Removing 10000 chars sequentially from a SliceTree
+    39.63x slower than Removing 10000 chars sequentially from a string
+
+group Removal sequential x100000
+Removing 100000 chars sequentially from a SliceTree            20.2 ms          49.5 ( 19.6 ms …  21.2 ms)  20.4 ms  21.2 ms  21.2 ms
+Removing 100000 chars sequentially from a string              387.0 µs         2,584 (369.7 µs … 661.5 µs) 398.6 µs 474.0 µs 647.3 µs
+
+summary
+  Removing 100000 chars sequentially from a SliceTree
+    52.20x slower than Removing 100000 chars sequentially from a string
+
+group Removal sequential x1000000
+Removing 1000000 chars sequentially from a SliceTree          278.8 ms           3.6 (257.0 ms … 303.5 ms) 290.0 ms 303.5 ms 303.5 ms
+Removing 1000000 chars sequentially from a string               3.9 ms         257.1 (  3.8 ms …   4.8 ms)   3.9 ms   4.8 ms   4.8 ms
+
+summary
+  Removing 1000000 chars sequentially from a SliceTree
+    71.68x slower than Removing 1000000 chars sequentially from a string
 ```
 
 ## License
