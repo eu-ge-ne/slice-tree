@@ -6,7 +6,7 @@ for (let power = 3; power < 6; power += 1) {
   Deno.bench(
     `Appending ${n} chars into a SliceTree`,
     {
-      group: `Appendment x${n}`,
+      group: `Append x${n}`,
       baseline: true,
     },
     (b) => {
@@ -25,7 +25,7 @@ for (let power = 3; power < 6; power += 1) {
   Deno.bench(
     `Appending ${n} chars into a string`,
     {
-      group: `Appendment x${n}`,
+      group: `Append x${n}`,
     },
     (b) => {
       let text = "";
