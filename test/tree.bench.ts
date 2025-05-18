@@ -48,51 +48,6 @@ for (let power = 0; power < 3; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
-    `Removing sequential x${n} from a SliceTree`,
-    {
-      group: `Removing sequential x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = createSliceTree();
-
-      b.start();
-
-      let pos = Math.floor(text.count / 2);
-      for (let i = 1; i <= n; i += 1) {
-        text.erase(pos, 1);
-        pos -= 1;
-      }
-
-      b.end();
-    },
-  );
-
-  Deno.bench(
-    `Removing sequential x${n} from a string`,
-    {
-      group: `Removing sequential x${n}`,
-    },
-    (b) => {
-      let text = createString();
-
-      b.start();
-
-      let pos = Math.floor(text.length / 2);
-      for (let i = 1; i <= n; i += 1) {
-        text = text.slice(0, pos) + text.slice(pos + 1);
-        pos -= 1;
-      }
-
-      b.end();
-    },
-  );
-}
-
-for (let power = 0; power < 3; power += 1) {
-  const n = 10 ** power;
-
-  Deno.bench(
     `Removing x${n} from a SliceTree`,
     {
       group: `Removing x${n}`,
