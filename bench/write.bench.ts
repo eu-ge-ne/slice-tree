@@ -45,9 +45,9 @@ for (let power = 2; power < 5; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
-    `Inserting ${n} chars sequentially into a SliceTree`,
+    `Writing ${n} chars sequentially into a SliceTree`,
     {
-      group: `Insert sequential x${n}`,
+      group: `Write sequential x${n}`,
       baseline: true,
     },
     (b) => {
@@ -68,9 +68,9 @@ for (let power = 2; power < 5; power += 1) {
   );
 
   Deno.bench(
-    `Inserting ${n} chars sequentially into a string`,
+    `Writing ${n} chars sequentially into a string`,
     {
-      group: `Insert sequential x${n}`,
+      group: `Write sequential x${n}`,
     },
     (b) => {
       let text = crypto.randomUUID() + crypto.randomUUID();
@@ -91,10 +91,11 @@ for (let power = 2; power < 5; power += 1) {
 
 for (let power = 2; power < 5; power += 1) {
   const n = 10 ** power;
+
   Deno.bench(
-    `Inserting ${n} chars interleaved into a SliceTree`,
+    `Writing ${n} chars interleaved into a SliceTree`,
     {
-      group: `Insert interleaved x${n}`,
+      group: `Write interleaved x${n}`,
       baseline: true,
     },
     (b) => {
@@ -114,9 +115,9 @@ for (let power = 2; power < 5; power += 1) {
   );
 
   Deno.bench(
-    `Inserting ${n} chars interleaved into a string`,
+    `Writing ${n} chars interleaved into a string`,
     {
-      group: `Insert interleaved x${n}`,
+      group: `Write interleaved x${n}`,
     },
     (b) => {
       let text = crypto.randomUUID();

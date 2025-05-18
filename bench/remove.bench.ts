@@ -8,7 +8,7 @@ function str(n: number): string {
   return str;
 }
 
-for (let power = 4; power < 7; power += 1) {
+for (let power = 1; power < 7; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
