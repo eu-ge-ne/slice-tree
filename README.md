@@ -24,7 +24,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
   - [Benchmarks](#benchmarks)
-    - [Creation](#creation)
+    - [Create](#create)
     - [Appendment](#appendment)
     - [Sequential insertion](#sequential-insertion)
     - [Interleaved insertion](#interleaved-insertion)
@@ -282,27 +282,26 @@ assertEquals(text.read(0).toArray().join(""), "Lorem");
 
 ## Benchmarks
 
-### Creation
-
-Creating a SliceTree is 2.5x slower than creating a string.
+### Create
 
 ```bash
-❯ deno bench -A bench/creation.bench.ts
+❯ deno bench bench/create.bench.ts
+Check file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/create.bench.ts
     CPU | Apple M4 Pro
-Runtime | Deno 2.3.1 (aarch64-apple-darwin)
+Runtime | Deno 2.3.3 (aarch64-apple-darwin)
 
-file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/creation.bench.ts
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/create.bench.ts
 
 benchmark              time/iter (avg)        iter/s      (min … max)           p75      p99     p995
 ---------------------- ----------------------------- --------------------- --------------------------
 
-group Creation
-Creating a SliceTree          204.1 ns     4,899,000 (200.6 ns … 211.9 ns) 205.3 ns 209.6 ns 211.7 ns
-Creating a string              84.4 ns    11,850,000 ( 83.2 ns … 111.2 ns)  84.2 ns  90.2 ns  97.9 ns
+group Create
+Creating a SliceTree          209.4 ns     4,776,000 (204.4 ns … 231.1 ns) 210.8 ns 218.3 ns 220.1 ns
+Creating a string              88.2 ns    11,330,000 ( 86.6 ns … 102.7 ns)  88.6 ns  95.8 ns  99.6 ns
 
 summary
   Creating a SliceTree
-     2.42x slower than Creating a string
+     2.37x slower than Creating a string
 ```
 
 ### Appendment
