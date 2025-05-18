@@ -305,6 +305,87 @@ summary
 ### Write
 
 ```bash
+❯ deno bench bench/write.bench.ts
+Check file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/write.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.3 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/write.bench.ts
+
+benchmark                                           time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+--------------------------------------------------- ----------------------------- --------------------- --------------------------
+
+group Append x1000
+Appending 1000 chars into a SliceTree                      288.0 µs         3,472 (278.0 µs … 370.5 µs) 286.0 µs 351.5 µs 355.0 µs
+Appending 1000 chars into a string                          89.7 µs        11,150 ( 87.3 µs … 180.9 µs)  89.7 µs 126.6 µs 128.7 µs
+
+summary
+  Appending 1000 chars into a SliceTree
+     3.21x slower than Appending 1000 chars into a string
+
+group Append x10000
+Appending 10000 chars into a SliceTree                       3.2 ms         307.8 (  3.1 ms …   4.0 ms)   3.3 ms   4.0 ms   4.0 ms
+Appending 10000 chars into a string                        887.4 µs         1,127 (874.4 µs …   1.1 ms) 885.3 µs 969.5 µs   1.0 ms
+
+summary
+  Appending 10000 chars into a SliceTree
+     3.66x slower than Appending 10000 chars into a string
+
+group Append x100000
+Appending 100000 chars into a SliceTree                     37.1 ms          26.9 ( 35.6 ms …  42.8 ms)  37.2 ms  42.8 ms  42.8 ms
+Appending 100000 chars into a string                         9.1 ms         110.3 (  8.8 ms …  10.6 ms)   8.9 ms  10.6 ms  10.6 ms
+
+summary
+  Appending 100000 chars into a SliceTree
+     4.10x slower than Appending 100000 chars into a string
+
+group Write sequential x100
+Writing 100 chars sequentially into a SliceTree             27.4 µs        36,500 ( 26.3 µs … 248.5 µs)  27.4 µs  32.4 µs  34.3 µs
+Writing 100 chars sequentially into a string                19.1 µs        52,310 ( 18.0 µs … 163.2 µs)  19.0 µs  23.4 µs  26.2 µs
+
+summary
+  Writing 100 chars sequentially into a SliceTree
+     1.43x slower than Writing 100 chars sequentially into a string
+
+group Write sequential x1000
+Writing 1000 chars sequentially into a SliceTree           306.5 µs         3,262 (298.0 µs … 563.7 µs) 308.1 µs 362.2 µs 417.5 µs
+Writing 1000 chars sequentially into a string                1.1 ms         885.5 (726.6 µs …   1.6 ms)   1.3 ms   1.5 ms   1.5 ms
+
+summary
+  Writing 1000 chars sequentially into a SliceTree
+     3.68x faster than Writing 1000 chars sequentially into a string
+
+group Write sequential x10000
+Writing 10000 chars sequentially into a SliceTree            3.5 ms         284.8 (  3.4 ms …   4.0 ms)   3.5 ms   3.9 ms   4.0 ms
+Writing 10000 chars sequentially into a string             283.1 ms           3.5 (271.2 ms … 297.1 ms) 285.4 ms 297.1 ms 297.1 ms
+
+summary
+  Writing 10000 chars sequentially into a SliceTree
+    80.63x faster than Writing 10000 chars sequentially into a string
+
+group Write interleaved x100
+Writing 100 chars interleaved into a SliceTree              44.9 µs        22,250 ( 43.6 µs … 829.9 µs)  44.8 µs  50.2 µs  51.7 µs
+Writing 100 chars interleaved into a string                 19.8 µs        50,620 ( 18.2 µs … 150.2 µs)  19.8 µs  24.2 µs  26.7 µs
+
+summary
+  Writing 100 chars interleaved into a SliceTree
+     2.27x slower than Writing 100 chars interleaved into a string
+
+group Write interleaved x1000
+Writing 1000 chars interleaved into a SliceTree            565.1 µs         1,769 (553.8 µs … 869.4 µs) 565.3 µs 692.3 µs 708.3 µs
+Writing 1000 chars interleaved into a string                 1.4 ms         719.0 (821.7 µs …   1.9 ms)   1.6 ms   1.8 ms   1.9 ms
+
+summary
+  Writing 1000 chars interleaved into a SliceTree
+     2.46x faster than Writing 1000 chars interleaved into a string
+
+group Write interleaved x10000
+Writing 10000 chars interleaved into a SliceTree             6.9 ms         144.4 (  6.8 ms …   7.4 ms)   6.9 ms   7.4 ms   7.4 ms
+Writing 10000 chars interleaved into a string              299.2 ms           3.3 (295.7 ms … 302.1 ms) 300.7 ms 302.1 ms 302.1 ms
+
+summary
+  Writing 10000 chars interleaved into a SliceTree
+    43.20x faster than Writing 10000 chars interleaved into a string
 ```
 
 ### Remove
