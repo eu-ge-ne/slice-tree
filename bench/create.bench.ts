@@ -3,7 +3,7 @@ import { SliceTree } from "../src/tree.ts";
 Deno.bench(
   "Creating a SliceTree",
   {
-    group: "Creation",
+    group: "Create",
     baseline: true,
   },
   () => {
@@ -14,7 +14,7 @@ Deno.bench(
 Deno.bench(
   "Creating a string",
   {
-    group: "Creation",
+    group: "Create",
   },
   () => {
     const _ = crypto.randomUUID();
