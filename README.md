@@ -26,7 +26,7 @@ A `piece table` data structure implemented using `red-black tree`.
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
-    - [Remove](#remove)
+    - [Erase](#erase)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -388,9 +388,41 @@ summary
     43.20x faster than Writing 10000 chars interleaved into a string
 ```
 
-### Remove
+### Erase
 
 ```bash
+❯ deno bench bench/erase.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.3 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/erase.bench.ts
+
+benchmark                                             time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+----------------------------------------------------- ----------------------------- --------------------- --------------------------
+
+group Erase sequential x10000
+Erasing 10000 chars sequentially from a SliceTree              1.6 ms         639.7 (  1.5 ms …   2.0 ms)   1.6 ms   1.8 ms   1.9 ms
+Erasing 10000 chars sequentially from a string                38.7 µs        25,870 ( 36.8 µs … 118.9 µs)  37.7 µs  73.6 µs  75.8 µs
+
+summary
+  Erasing 10000 chars sequentially from a SliceTree
+    40.44x slower than Erasing 10000 chars sequentially from a string
+
+group Erase sequential x100000
+Erasing 100000 chars sequentially from a SliceTree            20.4 ms          49.1 ( 19.7 ms …  21.4 ms)  20.8 ms  21.4 ms  21.4 ms
+Erasing 100000 chars sequentially from a string              387.4 µs         2,581 (369.2 µs … 661.1 µs) 401.4 µs 484.2 µs 648.0 µs
+
+summary
+  Erasing 100000 chars sequentially from a SliceTree
+    52.54x slower than Erasing 100000 chars sequentially from a string
+
+group Erase sequential x1000000
+Erasing 1000000 chars sequentially from a SliceTree          269.8 ms           3.7 (259.8 ms … 277.8 ms) 273.4 ms 277.8 ms 277.8 ms
+Erasing 1000000 chars sequentially from a string               3.9 ms         257.6 (  3.8 ms …   5.0 ms)   3.9 ms   5.0 ms   5.0 ms
+
+summary
+  Erasing 1000000 chars sequentially from a SliceTree
+    69.52x slower than Erasing 1000000 chars sequentially from a string
 ```
 
 ## License

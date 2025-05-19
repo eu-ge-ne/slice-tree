@@ -8,13 +8,13 @@ function str(n: number): string {
   return str;
 }
 
-for (let power = 1; power < 7; power += 1) {
+for (let power = 4; power < 7; power += 1) {
   const n = 10 ** power;
 
   Deno.bench(
-    `Removing ${n} chars sequentially from a SliceTree`,
+    `Erasing ${n} chars sequentially from a SliceTree`,
     {
-      group: `Removal sequential x${n}`,
+      group: `Erase sequential x${n}`,
       baseline: true,
     },
     (b) => {
@@ -31,9 +31,9 @@ for (let power = 1; power < 7; power += 1) {
   );
 
   Deno.bench(
-    `Removing ${n} chars sequentially from a string`,
+    `Erasing ${n} chars sequentially from a string`,
     {
-      group: `Removal sequential x${n}`,
+      group: `Erase sequential x${n}`,
     },
     (b) => {
       let text = str(n);
