@@ -18,7 +18,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --test --experimental-transform-types"
+    "test": "node --test --experimental-transform-types --experimental-test-coverage"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
