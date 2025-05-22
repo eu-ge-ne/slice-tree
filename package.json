@@ -25,6 +25,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test --experimental-transform-types --experimental-test-coverage",
+    "format": "prettier --check .",
     "lint": "eslint src test"
   },
   "devDependencies": {
