@@ -3,6 +3,17 @@
   "version": "0.2.0",
   "license": "MIT",
   "description": "A `piece table` data structure implemented using `red-black tree`.",
+  "keywords": [
+    "piece-table",
+    "rope",
+    "binary-search-tree",
+    "red-black-tree",
+    "enfilade",
+    "javascript",
+    "typescript",
+    "nodejs"
+  ],
+  "author": "Yevhenii (Eugene) Pobochnyi <eugene.pobochny@gmail.com>",
   "homepage": "https://github.com/eu-ge-ne/slice-tree#readme",
   "bugs": {
     "url": "https://github.com/eu-ge-ne/slice-tree/issues"
@@ -11,12 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/eu-ge-ne/slice-tree.git"
   },
-  "author": "",
   "type": "module",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "node --test --experimental-transform-types --experimental-test-coverage",
     "lint": "eslint src test"
