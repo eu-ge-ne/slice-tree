@@ -100,15 +100,17 @@ export function split_node(
 }
 
 export function node_growable(x: Node): boolean {
-  return (x.buffer.text.length < 100) &&
-    (x.slice_start + x.slice_length === x.buffer.text.length);
+  return (
+    x.buffer.text.length < 100 &&
+    x.slice_start + x.slice_length === x.buffer.text.length
+  );
 }
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
     x.length = x.left.length + x.slice_length + x.right.length;
-    x.eols_length = x.left.eols_length + x.slice_eols_length +
-      x.right.eols_length;
+    x.eols_length =
+      x.left.eols_length + x.slice_eols_length + x.right.eols_length;
 
     x = x.p;
   }

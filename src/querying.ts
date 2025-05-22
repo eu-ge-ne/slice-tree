@@ -22,7 +22,7 @@ export function search(
 }
 
 export function search_eol(x: Node, j: number): number | undefined {
-  for (let i = 0; x !== NIL;) {
+  for (let i = 0; x !== NIL; ) {
     if (j < x.left.eols_length) {
       x = x.left;
     } else {

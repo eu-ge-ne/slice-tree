@@ -115,7 +115,7 @@ export class SliceTree {
     let x = first.node;
     let offset = first.offset;
 
-    while ((x !== NIL) && (remaining > 0)) {
+    while (x !== NIL && remaining > 0) {
       let n = x.slice_length - offset;
 
       if (n > remaining) {
@@ -229,7 +229,7 @@ export class SliceTree {
     let p = NIL;
     let insert_case = InsertionCase.Root;
 
-    for (let x = this.root; x !== NIL;) {
+    for (let x = this.root; x !== NIL; ) {
       if (index <= x.left.length) {
         p = x;
         x = x.left;
@@ -336,7 +336,7 @@ export class SliceTree {
         split_node(this, last.node, last.offset, 0);
       }
 
-      while ((x !== NIL) && (i < count)) {
+      while (x !== NIL && i < count) {
         i += x.slice_length;
         const next = successor(x);
         delete_node(this, x);
