@@ -1,4 +1,5 @@
-import { assertEquals } from "@std/assert";
+import assert from "node:assert/strict";
+import { test } from "node:test";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
@@ -63,7 +64,7 @@ function test_erase_head(text: SliceTree, n: number): void {
 
   while (expected.length > 0) {
     assert_iterator(text.read(0), expected);
-    assertEquals(text.count, expected.length);
+    assert.equal(text.count, expected.length);
     assert_tree(text);
 
     text.erase(0, n);
@@ -71,7 +72,7 @@ function test_erase_head(text: SliceTree, n: number): void {
   }
 
   assert_iterator(text.read(0), "");
-  assertEquals(text.count, 0);
+  assert.equal(text.count, 0);
   assert_tree(text);
 }
 
@@ -80,7 +81,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
 
   while (expected.length > 0) {
     assert_iterator(text.read(0), expected);
-    assertEquals(text.count, expected.length);
+    assert.equal(text.count, expected.length);
     assert_tree(text);
 
     text.erase(-n, n);
@@ -88,7 +89,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
   }
 
   assert_iterator(text.read(0), "");
-  assertEquals(text.count, 0);
+  assert.equal(text.count, 0);
   assert_tree(text);
 }
 
@@ -97,7 +98,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
 
   while (expected.length > 0) {
     assert_iterator(text.read(0), expected);
-    assertEquals(text.count, expected.length);
+    assert.equal(text.count, expected.length);
     assert_tree(text);
 
     const pos = Math.floor(text.count / 2);
@@ -106,56 +107,68 @@ function test_erase_middle(text: SliceTree, n: number): void {
   }
 
   assert_iterator(text.read(0), "");
-  assertEquals(text.count, 0);
+  assert.equal(text.count, 0);
   assert_tree(text);
 }
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the beginning of a text`, () => {
-    test_erase_head(slice_tree(), n);
-  });
-}
+test("Erase from the beginning of a text", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_head(slice_tree(), n);
+    });
+  }
+});
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the beginning of a text reversed`, () => {
-    test_erase_head(slice_tree_reversed(), n);
-  });
-}
+test("Erase from the beginning of a text reversed", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_head(slice_tree_reversed(), n);
+    });
+  }
+});
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the end of a text`, () => {
-    test_erase_tail(slice_tree(), n);
-  });
-}
+test("Erase from the end of a text", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_tail(slice_tree(), n);
+    });
+  }
+});
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the end of a text reversed`, () => {
-    test_erase_tail(slice_tree_reversed(), n);
-  });
-}
+test("Erase from the end of a text reversed", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_tail(slice_tree_reversed(), n);
+    });
+  }
+});
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the middle of a text`, () => {
-    test_erase_middle(slice_tree(), n);
-  });
-}
+test("Erase from the middle of a text", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_middle(slice_tree(), n);
+    });
+  }
+});
 
-for (let n = 1; n <= 10; n += 1) {
-  Deno.test(`Erase ${n} chars from the middle of text reversed`, () => {
-    test_erase_middle(slice_tree_reversed(), n);
-  });
-}
+test("Erase from the middle of text reversed", (t) => {
+  for (let n = 1; n <= 10; n += 1) {
+    t.test(`${n} chars`, () => {
+      test_erase_middle(slice_tree_reversed(), n);
+    });
+  }
+});
 
-Deno.test("Erase causing splitting nodes", () => {
+test("Erase causing splitting nodes", () => {
   const text = new SliceTree(EXPECTED);
 
   let expected = EXPECTED;
 
-  for (let n = 2; text.count > 0;) {
+  for (let n = 2; text.count > 0; ) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
       assert_iterator(text.read(0), expected);
-      assertEquals(text.count, expected.length);
+      assert.equal(text.count, expected.length);
       assert_tree(text);
 
       text.erase(s * i, 2);
@@ -165,6 +178,6 @@ Deno.test("Erase causing splitting nodes", () => {
   }
 
   assert_iterator(text.read(0), "");
-  assertEquals(text.count, 0);
+  assert.equal(text.count, 0);
   assert_tree(text);
 });

@@ -1,12 +1,12 @@
-import { assert, assertEquals } from "@std/assert";
+import assert from "node:assert/strict";
 
 import { NIL, type Node, type Tree } from "../src/node.ts";
 
-export function assert_iterator<T>(
-  actual: Generator<T>,
+export function assert_iterator(
+  actual: IteratorObject<string>,
   expected: string,
 ): void {
-  assertEquals(actual.toArray().join(""), expected);
+  assert.equal(actual.toArray().join(""), expected);
 }
 
 export function assert_tree(tree: Tree): void {

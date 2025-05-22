@@ -1,0 +1,28 @@
+{
+  "name": "slice-tree",
+  "version": "0.2.0",
+  "license": "MIT",
+  "description": "A `piece table` data structure implemented using `red-black tree`.",
+  "homepage": "https://github.com/eu-ge-ne/slice-tree#readme",
+  "bugs": {
+    "url": "https://github.com/eu-ge-ne/slice-tree/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eu-ge-ne/slice-tree.git"
+  },
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test --experimental-transform-types"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "prettier": "3.5.3",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "include": ["src", "test"],
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "Preserve",
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  }
+}

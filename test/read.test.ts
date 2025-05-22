@@ -1,14 +1,17 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
-Deno.test("Read empty", () => {
+test("Read empty", () => {
   const text = new SliceTree();
 
   assert_iterator(text.read(0), "");
   assert_tree(text);
 });
 
-Deno.test("Read at start >= count", () => {
+test("Read at start >= count", () => {
   const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(4), "m");
@@ -17,7 +20,7 @@ Deno.test("Read at start >= count", () => {
   assert_tree(text);
 });
 
-Deno.test("Read at start < 0", () => {
+test("Read at start < 0", () => {
   const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0), "Lorem");
@@ -26,7 +29,7 @@ Deno.test("Read at start < 0", () => {
   assert_tree(text);
 });
 
-Deno.test("Read up to end >= count", () => {
+test("Read up to end >= count", () => {
   const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0, 4), "Lore");
@@ -35,7 +38,7 @@ Deno.test("Read up to end >= count", () => {
   assert_tree(text);
 });
 
-Deno.test("Read up to end < 0", () => {
+test("Read up to end < 0", () => {
   const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(0, -1), "Lore");
@@ -43,7 +46,7 @@ Deno.test("Read up to end < 0", () => {
   assert_tree(text);
 });
 
-Deno.test("Read with end <= start", () => {
+test("Read with end <= start", () => {
   const text = new SliceTree("Lorem");
 
   assert_iterator(text.read(2, 3), "r");

@@ -1,9 +1,10 @@
-import { assertEquals } from "@std/assert";
+import assert from "node:assert/strict";
+import { test } from "node:test";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
-Deno.test("Line at valid index", () => {
+test("Line at valid index", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem\naliqua.");
@@ -36,43 +37,47 @@ Deno.test("Line at valid index", () => {
   assert_iterator(text.line(16), "dolore\n");
   assert_iterator(text.line(17), "magna\n");
   assert_iterator(text.line(18), "aliqua.");
+
   assert_tree(text);
 });
 
-Deno.test("Line at index >= line_count", () => {
+test("Line at index >= line_count", () => {
   const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.line(4), "amet");
   assert_iterator(text.line(5), "");
   assert_iterator(text.line(6), "");
+
   assert_tree(text);
 });
 
-Deno.test("Line at index < 0", () => {
+test("Line at index < 0", () => {
   const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.line(0), "Lorem\n");
   assert_iterator(text.line(-1), "amet");
   assert_iterator(text.line(-2), "sit\n");
+
   assert_tree(text);
 });
 
-Deno.test("Write adds lines", () => {
+test("Write adds lines", () => {
   const text = new SliceTree();
 
   for (let i = 0; i < 10; i += 1) {
     text.write(text.count, `${i}\n`);
 
-    assertEquals(text.line_count, i + 2);
+    assert.equal(text.line_count, i + 2);
     assert_iterator(text.line(i), `${i}\n`);
   }
 
-  assertEquals(text.line_count, 11);
+  assert.equal(text.line_count, 11);
   assert_iterator(text.line(11), "");
+
   assert_tree(text);
 });
 
-Deno.test("Erase removes lines", () => {
+test("Erase removes lines", () => {
   const text = new SliceTree();
 
   text.write(0, "Lorem");
@@ -83,9 +88,10 @@ Deno.test("Erase removes lines", () => {
   text.erase(0, 6);
   text.erase(5, 1);
 
-  assertEquals(text.count, 5);
-  assertEquals(text.line_count, 1);
-  assertEquals(text.read(0).toArray().join(""), "ipsum");
-  assertEquals(text.line(0).toArray().join(""), "ipsum");
+  assert.equal(text.count, 5);
+  assert.equal(text.line_count, 1);
+  assert.equal(text.read(0).toArray().join(""), "ipsum");
+  assert.equal(text.line(0).toArray().join(""), "ipsum");
+
   assert_tree(text);
 });
