@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+import { expect } from "vitest";
 
 import { NIL, type Node, type Tree } from "../src/node.ts";
 
@@ -6,13 +6,13 @@ export function assert_iterator(
   actual: IteratorObject<string>,
   expected: string,
 ): void {
-  assert.equal(actual.toArray().join(""), expected);
+  expect(actual.toArray().join("")).toBe(expected);
 }
 
 export function assert_tree(tree: Tree): void {
   // 1. Every node is either red or black.
   // 2. The root is black.
-  assert(!tree.root.red);
+  expect(tree.root.red).toBe(false);
 
   assert_node(tree.root);
 
@@ -23,18 +23,19 @@ export function assert_tree(tree: Tree): void {
 
   const heights = Array.from(leaf_parents).map(black_height);
   for (const height of heights) {
-    assert(Math.abs(heights[0]! - height) === 0);
+    expect(Math.abs(heights[0]! - height)).toBe(0);
   }
 }
 
 function assert_node(x: Node): void {
   // 3. Every leaf (NIL) is black.
   if (x === NIL) {
-    assert(!x.red);
+    expect(x.red).toBe(false);
   } else {
     // 4. If a node is red, then both its children are black.
     if (x.red) {
-      assert(!x.left.red && !x.right.red);
+      expect(x.left.red).toBe(false);
+      expect(x.right.red).toBe(false);
     }
 
     assert_node(x.left);

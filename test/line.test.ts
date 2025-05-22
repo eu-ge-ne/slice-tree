@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
@@ -67,11 +66,11 @@ test("Write adds lines", () => {
   for (let i = 0; i < 10; i += 1) {
     text.write(text.count, `${i}\n`);
 
-    assert.equal(text.line_count, i + 2);
+    expect(text.line_count).toBe(i + 2);
     assert_iterator(text.line(i), `${i}\n`);
   }
 
-  assert.equal(text.line_count, 11);
+  expect(text.line_count).toBe(11);
   assert_iterator(text.line(11), "");
 
   assert_tree(text);
@@ -88,10 +87,10 @@ test("Erase removes lines", () => {
   text.erase(0, 6);
   text.erase(5, 1);
 
-  assert.equal(text.count, 5);
-  assert.equal(text.line_count, 1);
-  assert.equal(text.read(0).toArray().join(""), "ipsum");
-  assert.equal(text.line(0).toArray().join(""), "ipsum");
+  expect(text.count).toBe(5);
+  expect(text.line_count).toBe(1);
+  assert_iterator(text.read(0), "ipsum");
+  assert_iterator(text.line(0), "ipsum");
 
   assert_tree(text);
 });

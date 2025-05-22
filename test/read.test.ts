@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test } from "vitest";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";

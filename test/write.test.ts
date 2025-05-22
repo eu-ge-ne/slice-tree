@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
@@ -9,32 +8,32 @@ test("Write to the end of a text", () => {
 
   text.write(text.count, "Lorem");
   assert_iterator(text.read(0), "Lorem");
-  assert.equal(text.count, 5);
+  expect(text.count).toBe(5);
   assert_tree(text);
 
   text.write(text.count, " ipsum");
   assert_iterator(text.read(0), "Lorem ipsum");
-  assert.equal(text.count, 11);
+  expect(text.count).toBe(11);
   assert_tree(text);
 
   text.write(text.count, " dolor");
   assert_iterator(text.read(0), "Lorem ipsum dolor");
-  assert.equal(text.count, 17);
+  expect(text.count).toBe(17);
   assert_tree(text);
 
   text.write(text.count, " sit");
   assert_iterator(text.read(0), "Lorem ipsum dolor sit");
-  assert.equal(text.count, 21);
+  expect(text.count).toBe(21);
   assert_tree(text);
 
   text.write(text.count, " amet,");
   assert_iterator(text.read(0), "Lorem ipsum dolor sit amet,");
-  assert.equal(text.count, 27);
+  expect(text.count).toBe(27);
   assert_tree(text);
 
   text.write(text.count, " consectetur");
   assert_iterator(text.read(0), "Lorem ipsum dolor sit amet, consectetur");
-  assert.equal(text.count, 39);
+  expect(text.count).toBe(39);
   assert_tree(text);
 
   text.write(text.count, " adipiscing");
@@ -42,7 +41,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing",
   );
-  assert.equal(text.count, 50);
+  expect(text.count).toBe(50);
   assert_tree(text);
 
   text.write(text.count, " elit,");
@@ -50,7 +49,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
   );
-  assert.equal(text.count, 56);
+  expect(text.count).toBe(56);
   assert_tree(text);
 
   text.write(text.count, " sed");
@@ -58,7 +57,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed",
   );
-  assert.equal(text.count, 60);
+  expect(text.count).toBe(60);
   assert_tree(text);
 
   text.write(text.count, " do");
@@ -66,7 +65,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
   );
-  assert.equal(text.count, 63);
+  expect(text.count).toBe(63);
   assert_tree(text);
 
   text.write(text.count, " eiusmod");
@@ -74,7 +73,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
   );
-  assert.equal(text.count, 71);
+  expect(text.count).toBe(71);
   assert_tree(text);
 
   text.write(text.count, " tempor");
@@ -82,7 +81,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
   );
-  assert.equal(text.count, 78);
+  expect(text.count).toBe(78);
   assert_tree(text);
 
   text.write(text.count, " incididunt");
@@ -90,7 +89,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
   );
-  assert.equal(text.count, 89);
+  expect(text.count).toBe(89);
   assert_tree(text);
 
   text.write(text.count, " ut");
@@ -98,7 +97,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut",
   );
-  assert.equal(text.count, 92);
+  expect(text.count).toBe(92);
   assert_tree(text);
 
   text.write(text.count, " labore");
@@ -106,7 +105,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
   );
-  assert.equal(text.count, 99);
+  expect(text.count).toBe(99);
   assert_tree(text);
 
   text.write(text.count, " et");
@@ -114,7 +113,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et",
   );
-  assert.equal(text.count, 102);
+  expect(text.count).toBe(102);
   assert_tree(text);
 
   text.write(text.count, " dolore");
@@ -122,7 +121,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
   );
-  assert.equal(text.count, 109);
+  expect(text.count).toBe(109);
   assert_tree(text);
 
   text.write(text.count, " magna");
@@ -130,7 +129,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna",
   );
-  assert.equal(text.count, 115);
+  expect(text.count).toBe(115);
   assert_tree(text);
 
   text.write(text.count, " aliqua.");
@@ -138,7 +137,7 @@ test("Write to the end of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 123);
+  expect(text.count).toBe(123);
   assert_tree(text);
 });
 
@@ -147,32 +146,32 @@ test("Write to the beginning of a text", () => {
 
   text.write(0, " aliqua.");
   assert_iterator(text.read(0), " aliqua.");
-  assert.equal(text.count, 8);
+  expect(text.count).toBe(8);
   assert_tree(text);
 
   text.write(0, " magna");
   assert_iterator(text.read(0), " magna aliqua.");
-  assert.equal(text.count, 14);
+  expect(text.count).toBe(14);
   assert_tree(text);
 
   text.write(0, " dolore");
   assert_iterator(text.read(0), " dolore magna aliqua.");
-  assert.equal(text.count, 21);
+  expect(text.count).toBe(21);
   assert_tree(text);
 
   text.write(0, " et");
   assert_iterator(text.read(0), " et dolore magna aliqua.");
-  assert.equal(text.count, 24);
+  expect(text.count).toBe(24);
   assert_tree(text);
 
   text.write(0, " labore");
   assert_iterator(text.read(0), " labore et dolore magna aliqua.");
-  assert.equal(text.count, 31);
+  expect(text.count).toBe(31);
   assert_tree(text);
 
   text.write(0, " ut");
   assert_iterator(text.read(0), " ut labore et dolore magna aliqua.");
-  assert.equal(text.count, 34);
+  expect(text.count).toBe(34);
   assert_tree(text);
 
   text.write(0, " incididunt");
@@ -180,7 +179,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 45);
+  expect(text.count).toBe(45);
   assert_tree(text);
 
   text.write(0, " tempor");
@@ -188,7 +187,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 52);
+  expect(text.count).toBe(52);
   assert_tree(text);
 
   text.write(0, " eiusmod");
@@ -196,7 +195,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 60);
+  expect(text.count).toBe(60);
   assert_tree(text);
 
   text.write(0, " do");
@@ -204,7 +203,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 63);
+  expect(text.count).toBe(63);
   assert_tree(text);
 
   text.write(0, " sed");
@@ -212,7 +211,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 67);
+  expect(text.count).toBe(67);
   assert_tree(text);
 
   text.write(0, " elit,");
@@ -220,7 +219,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 73);
+  expect(text.count).toBe(73);
   assert_tree(text);
 
   text.write(0, " adipiscing");
@@ -228,7 +227,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 84);
+  expect(text.count).toBe(84);
   assert_tree(text);
 
   text.write(0, " consectetur");
@@ -236,7 +235,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 96);
+  expect(text.count).toBe(96);
   assert_tree(text);
 
   text.write(0, " amet,");
@@ -244,7 +243,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 102);
+  expect(text.count).toBe(102);
   assert_tree(text);
 
   text.write(0, " sit");
@@ -252,7 +251,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 106);
+  expect(text.count).toBe(106);
   assert_tree(text);
 
   text.write(0, " dolor");
@@ -260,7 +259,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 112);
+  expect(text.count).toBe(112);
   assert_tree(text);
 
   text.write(0, " ipsum");
@@ -268,7 +267,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     " ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 118);
+  expect(text.count).toBe(118);
   assert_tree(text);
 
   text.write(0, "Lorem");
@@ -276,7 +275,7 @@ test("Write to the beginning of a text", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 123);
+  expect(text.count).toBe(123);
   assert_tree(text);
 });
 
@@ -285,17 +284,17 @@ test("Write splitting nodes", () => {
 
   text.write(0, "Lorem aliqua.");
   assert_iterator(text.read(0), "Lorem aliqua.");
-  assert.equal(text.count, 13);
+  expect(text.count).toBe(13);
   assert_tree(text);
 
   text.write(5, " ipsum magna");
   assert_iterator(text.read(0), "Lorem ipsum magna aliqua.");
-  assert.equal(text.count, 25);
+  expect(text.count).toBe(25);
   assert_tree(text);
 
   text.write(11, " dolor dolore");
   assert_iterator(text.read(0), "Lorem ipsum dolor dolore magna aliqua.");
-  assert.equal(text.count, 38);
+  expect(text.count).toBe(38);
   assert_tree(text);
 
   text.write(17, " sit et");
@@ -303,7 +302,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit et dolore magna aliqua.",
   );
-  assert.equal(text.count, 45);
+  expect(text.count).toBe(45);
   assert_tree(text);
 
   text.write(21, " amet, labore");
@@ -311,7 +310,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 58);
+  expect(text.count).toBe(58);
   assert_tree(text);
 
   text.write(27, " consectetur ut");
@@ -319,7 +318,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 73);
+  expect(text.count).toBe(73);
   assert_tree(text);
 
   text.write(39, " adipiscing incididunt");
@@ -327,7 +326,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 95);
+  expect(text.count).toBe(95);
   assert_tree(text);
 
   text.write(50, " elit, tempor");
@@ -335,7 +334,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 108);
+  expect(text.count).toBe(108);
   assert_tree(text);
 
   text.write(56, " sed eiusmod");
@@ -343,7 +342,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 120);
+  expect(text.count).toBe(120);
   assert_tree(text);
 
   text.write(60, " do");
@@ -351,7 +350,7 @@ test("Write splitting nodes", () => {
     text.read(0),
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
-  assert.equal(text.count, 123);
+  expect(text.count).toBe(123);
   assert_tree(text);
 });
 
@@ -360,16 +359,16 @@ test("Write at the negative index", () => {
 
   text.write(0, "ipsum");
   assert_iterator(text.read(0), "ipsum");
-  assert.equal(text.count, 5);
+  expect(text.count).toBe(5);
   assert_tree(text);
 
   text.write(-5, " ");
   assert_iterator(text.read(0), " ipsum");
-  assert.equal(text.count, 6);
+  expect(text.count).toBe(6);
   assert_tree(text);
 
   text.write(-6, "Lorem");
   assert_iterator(text.read(0), "Lorem ipsum");
-  assert.equal(text.count, 11);
+  expect(text.count).toBe(11);
   assert_tree(text);
 });
