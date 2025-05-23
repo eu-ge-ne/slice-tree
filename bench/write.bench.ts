@@ -1,137 +1,65 @@
 import { SliceTree } from "../src/tree.ts";
 
-for (let power = 3; power < 6; power += 1) {
-  const n = 10 ** power;
+import { str } from "./utils.ts";
 
-  Deno.bench(
-    `Appending ${n} chars into a SliceTree`,
-    {
-      group: `Append x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = new SliceTree();
+const N = 10 ** 5;
 
-      b.start();
+Deno.bench("Appending into a SliceTree", {
+  group: "Append",
+  baseline: true,
+}, (b) => {
+  const text = new SliceTree();
 
-      for (let i = 0; i < n; i += 1) {
-        text.write(text.count, crypto.randomUUID());
-      }
+  b.start();
 
-      b.end();
-    },
-  );
+  for (let i = 0; i < N; i += 1) {
+    text.write(text.count, str(1));
+  }
 
-  Deno.bench(
-    `Appending ${n} chars into a string`,
-    {
-      group: `Append x${n}`,
-    },
-    (b) => {
-      let text = "";
+  b.end();
+});
 
-      b.start();
+Deno.bench("Appending into a string", {
+  group: "Append",
+}, (b) => {
+  let text = "";
 
-      for (let i = 0; i < n; i += 1) {
-        text += crypto.randomUUID();
-      }
+  b.start();
 
-      b.end();
-    },
-  );
-}
+  for (let i = 0; i < N; i += 1) {
+    text += str(1);
+  }
 
-for (let power = 2; power < 5; power += 1) {
-  const n = 10 ** power;
+  b.end();
+});
 
-  Deno.bench(
-    `Writing ${n} chars sequentially into a SliceTree`,
-    {
-      group: `Write sequential x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = new SliceTree(crypto.randomUUID());
-      text.write(text.count, crypto.randomUUID());
+Deno.bench("Inserting into a SliceTree", {
+  group: "Insert",
+  baseline: true,
+}, (b) => {
+  const text = new SliceTree(str(2));
 
-      let pos = 36;
+  b.start();
 
-      b.start();
+  for (let i = 0; i < N; i += 1) {
+    const pos = Math.trunc(text.count / 2);
+    text.write(pos, str(2));
+  }
 
-      for (let i = 0; i < n; i += 1) {
-        text.write(pos, crypto.randomUUID());
-        pos += 36;
-      }
+  b.end();
+});
 
-      b.end();
-    },
-  );
+Deno.bench("Inserting 1M chars into a string", {
+  group: "Insert",
+}, (b) => {
+  let text = str(2);
 
-  Deno.bench(
-    `Writing ${n} chars sequentially into a string`,
-    {
-      group: `Write sequential x${n}`,
-    },
-    (b) => {
-      let text = crypto.randomUUID() + crypto.randomUUID();
+  b.start();
 
-      let pos = 36;
+  for (let i = 0; i < N; i += 1) {
+    const pos = Math.trunc(text.length / 2);
+    text = text.slice(0, pos) + str(2) + text.slice(pos);
+  }
 
-      b.start();
-
-      for (let i = 0; i < n; i += 1) {
-        text = text.slice(0, pos) + crypto.randomUUID() + text.slice(pos);
-        pos += 36;
-      }
-
-      b.end();
-    },
-  );
-}
-
-for (let power = 2; power < 5; power += 1) {
-  const n = 10 ** power;
-
-  Deno.bench(
-    `Writing ${n} chars interleaved into a SliceTree`,
-    {
-      group: `Write interleaved x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = new SliceTree(crypto.randomUUID());
-
-      let pos = Math.trunc(text.count / 2);
-
-      b.start();
-
-      for (let i = 0; i < n; i += 1) {
-        text.write(pos, crypto.randomUUID());
-        pos = Math.trunc(text.count / 2);
-      }
-
-      b.end();
-    },
-  );
-
-  Deno.bench(
-    `Writing ${n} chars interleaved into a string`,
-    {
-      group: `Write interleaved x${n}`,
-    },
-    (b) => {
-      let text = crypto.randomUUID();
-
-      let pos = Math.trunc(text.length / 2);
-
-      b.start();
-
-      for (let i = 0; i < n; i += 1) {
-        text = text.slice(0, pos) + crypto.randomUUID() + text.slice(pos);
-        pos = Math.trunc(text.length / 2);
-      }
-
-      b.end();
-    },
-  );
-}
+  b.end();
+});
