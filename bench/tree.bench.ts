@@ -44,51 +44,6 @@ function read_line(text: string, index: number): string {
   }
 }
 
-for (let power = 0; power < 3; power += 1) {
-  const n = 10 ** power;
-
-  Deno.bench(
-    `Removing x${n} from a SliceTree`,
-    {
-      group: `Removing x${n}`,
-      baseline: true,
-    },
-    (b) => {
-      const text = createSliceTree();
-
-      b.start();
-
-      let pos = TEST_STRING_SIZE * 10;
-      for (let i = 1; i <= n; i += 1) {
-        text.erase(pos, TEST_STRING_SIZE);
-        pos += TEST_STRING_SIZE * 10;
-      }
-
-      b.end();
-    },
-  );
-
-  Deno.bench(
-    `Removing x${n} from a string`,
-    {
-      group: `Removing x${n}`,
-    },
-    (b) => {
-      let text = createString();
-
-      b.start();
-
-      let pos = TEST_STRING_SIZE * 10;
-      for (let i = 1; i <= n; i += 1) {
-        text = text.slice(0, pos) + text.slice(pos + TEST_STRING_SIZE);
-        pos += TEST_STRING_SIZE * 10;
-      }
-
-      b.end();
-    },
-  );
-}
-
 Deno.bench(
   "Accessing a line in a SliceTree",
   {

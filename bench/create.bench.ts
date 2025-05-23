@@ -1,14 +1,18 @@
 import { SliceTree } from "../src/tree.ts";
 
+import { str } from "./utils.ts";
+
+const N = 10 ** 6;
+
 Deno.bench("Creating a SliceTree", {
   group: "Create",
   baseline: true,
 }, () => {
-  const _ = new SliceTree(crypto.randomUUID());
+  const _ = new SliceTree(str(N));
 });
 
 Deno.bench("Creating a string", {
   group: "Create",
 }, () => {
-  const _ = crypto.randomUUID();
+  const _ = str(N);
 });
