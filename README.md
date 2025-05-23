@@ -27,6 +27,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Create](#create)
     - [Write](#write)
     - [Erase](#erase)
+    - [Line](#line)
   - [License](#license)
 
 > In computing, a piece table is a data structure typically used to represent a
@@ -284,7 +285,6 @@ assertEquals(text.read(0).toArray().join(""), "Lorem");
 
 ```bash
 ❯ deno bench bench/create.bench.ts
-Check file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/create.bench.ts
     CPU | Apple M4 Pro
 Runtime | Deno 2.3.3 (aarch64-apple-darwin)
 
@@ -294,12 +294,12 @@ benchmark              time/iter (avg)        iter/s      (min … max)         
 ---------------------- ----------------------------- --------------------- --------------------------
 
 group Create
-Creating a SliceTree          209.4 ns     4,776,000 (204.4 ns … 231.1 ns) 210.8 ns 218.3 ns 220.1 ns
-Creating a string              88.2 ns    11,330,000 ( 86.6 ns … 102.7 ns)  88.6 ns  95.8 ns  99.6 ns
+Creating a SliceTree            2.8 ms         354.4 (  2.7 ms …   3.7 ms)   2.9 ms   3.7 ms   3.7 ms
+Creating a string               2.5 ms         396.4 (  2.4 ms …   3.1 ms)   2.5 ms   3.1 ms   3.1 ms
 
 summary
   Creating a SliceTree
-     2.37x slower than Creating a string
+     1.12x slower than Creating a string
 ```
 
 ### Write
@@ -312,117 +312,75 @@ Runtime | Deno 2.3.3 (aarch64-apple-darwin)
 
 file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/write.bench.ts
 
-benchmark                                           time/iter (avg)        iter/s      (min … max)           p75      p99     p995
---------------------------------------------------- ----------------------------- --------------------- --------------------------
+benchmark                          time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+---------------------------------- ----------------------------- --------------------- --------------------------
 
-group Append x1000
-Appending 1000 chars into a SliceTree                      288.0 µs         3,472 (278.0 µs … 370.5 µs) 286.0 µs 351.5 µs 355.0 µs
-Appending 1000 chars into a string                          89.7 µs        11,150 ( 87.3 µs … 180.9 µs)  89.7 µs 126.6 µs 128.7 µs
-
-summary
-  Appending 1000 chars into a SliceTree
-     3.21x slower than Appending 1000 chars into a string
-
-group Append x10000
-Appending 10000 chars into a SliceTree                       3.2 ms         307.8 (  3.1 ms …   4.0 ms)   3.3 ms   4.0 ms   4.0 ms
-Appending 10000 chars into a string                        887.4 µs         1,127 (874.4 µs …   1.1 ms) 885.3 µs 969.5 µs   1.0 ms
+group Append
+Appending into a SliceTree                 28.8 ms          34.7 ( 26.7 ms …  33.8 ms)  29.7 ms  33.8 ms  33.8 ms
+Appending into a string                     9.4 ms         106.7 (  9.2 ms …  10.5 ms)   9.4 ms  10.5 ms  10.5 ms
 
 summary
-  Appending 10000 chars into a SliceTree
-     3.66x slower than Appending 10000 chars into a string
+  Appending into a SliceTree
+     3.08x slower than Appending into a string
 
-group Append x100000
-Appending 100000 chars into a SliceTree                     37.1 ms          26.9 ( 35.6 ms …  42.8 ms)  37.2 ms  42.8 ms  42.8 ms
-Appending 100000 chars into a string                         9.1 ms         110.3 (  8.8 ms …  10.6 ms)   8.9 ms  10.6 ms  10.6 ms
-
-summary
-  Appending 100000 chars into a SliceTree
-     4.10x slower than Appending 100000 chars into a string
-
-group Write sequential x100
-Writing 100 chars sequentially into a SliceTree             27.4 µs        36,500 ( 26.3 µs … 248.5 µs)  27.4 µs  32.4 µs  34.3 µs
-Writing 100 chars sequentially into a string                19.1 µs        52,310 ( 18.0 µs … 163.2 µs)  19.0 µs  23.4 µs  26.2 µs
+group Insert
+Inserting into a SliceTree                 87.3 ms          11.5 ( 84.2 ms …  89.1 ms)  88.5 ms  89.1 ms  89.1 ms
+Inserting 1M chars into a string             1.7 s           0.6 (   1.6 s …    1.8 s)    1.7 s    1.8 s    1.8 s
 
 summary
-  Writing 100 chars sequentially into a SliceTree
-     1.43x slower than Writing 100 chars sequentially into a string
-
-group Write sequential x1000
-Writing 1000 chars sequentially into a SliceTree           306.5 µs         3,262 (298.0 µs … 563.7 µs) 308.1 µs 362.2 µs 417.5 µs
-Writing 1000 chars sequentially into a string                1.1 ms         885.5 (726.6 µs …   1.6 ms)   1.3 ms   1.5 ms   1.5 ms
-
-summary
-  Writing 1000 chars sequentially into a SliceTree
-     3.68x faster than Writing 1000 chars sequentially into a string
-
-group Write sequential x10000
-Writing 10000 chars sequentially into a SliceTree            3.5 ms         284.8 (  3.4 ms …   4.0 ms)   3.5 ms   3.9 ms   4.0 ms
-Writing 10000 chars sequentially into a string             283.1 ms           3.5 (271.2 ms … 297.1 ms) 285.4 ms 297.1 ms 297.1 ms
-
-summary
-  Writing 10000 chars sequentially into a SliceTree
-    80.63x faster than Writing 10000 chars sequentially into a string
-
-group Write interleaved x100
-Writing 100 chars interleaved into a SliceTree              44.9 µs        22,250 ( 43.6 µs … 829.9 µs)  44.8 µs  50.2 µs  51.7 µs
-Writing 100 chars interleaved into a string                 19.8 µs        50,620 ( 18.2 µs … 150.2 µs)  19.8 µs  24.2 µs  26.7 µs
-
-summary
-  Writing 100 chars interleaved into a SliceTree
-     2.27x slower than Writing 100 chars interleaved into a string
-
-group Write interleaved x1000
-Writing 1000 chars interleaved into a SliceTree            565.1 µs         1,769 (553.8 µs … 869.4 µs) 565.3 µs 692.3 µs 708.3 µs
-Writing 1000 chars interleaved into a string                 1.4 ms         719.0 (821.7 µs …   1.9 ms)   1.6 ms   1.8 ms   1.9 ms
-
-summary
-  Writing 1000 chars interleaved into a SliceTree
-     2.46x faster than Writing 1000 chars interleaved into a string
-
-group Write interleaved x10000
-Writing 10000 chars interleaved into a SliceTree             6.9 ms         144.4 (  6.8 ms …   7.4 ms)   6.9 ms   7.4 ms   7.4 ms
-Writing 10000 chars interleaved into a string              299.2 ms           3.3 (295.7 ms … 302.1 ms) 300.7 ms 302.1 ms 302.1 ms
-
-summary
-  Writing 10000 chars interleaved into a SliceTree
-    43.20x faster than Writing 10000 chars interleaved into a string
+  Inserting into a SliceTree
+    19.22x faster than Inserting 1M chars into a string
 ```
 
 ### Erase
 
 ```bash
 ❯ deno bench bench/erase.bench.ts
+Check file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/erase.bench.ts
     CPU | Apple M4 Pro
 Runtime | Deno 2.3.3 (aarch64-apple-darwin)
 
 file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/erase.bench.ts
 
-benchmark                                             time/iter (avg)        iter/s      (min … max)           p75      p99     p995
------------------------------------------------------ ----------------------------- --------------------- --------------------------
+benchmark                   time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+--------------------------- ----------------------------- --------------------- --------------------------
 
-group Erase sequential x10000
-Erasing 10000 chars sequentially from a SliceTree              1.6 ms         639.7 (  1.5 ms …   2.0 ms)   1.6 ms   1.8 ms   1.9 ms
-Erasing 10000 chars sequentially from a string                38.7 µs        25,870 ( 36.8 µs … 118.9 µs)  37.7 µs  73.6 µs  75.8 µs
-
-summary
-  Erasing 10000 chars sequentially from a SliceTree
-    40.44x slower than Erasing 10000 chars sequentially from a string
-
-group Erase sequential x100000
-Erasing 100000 chars sequentially from a SliceTree            20.4 ms          49.1 ( 19.7 ms …  21.4 ms)  20.8 ms  21.4 ms  21.4 ms
-Erasing 100000 chars sequentially from a string              387.4 µs         2,581 (369.2 µs … 661.1 µs) 401.4 µs 484.2 µs 648.0 µs
+group Trim
+Trimming a SliceTree               637.3 µs         1,569 (577.0 µs …   1.1 ms) 680.8 µs 939.8 µs   1.0 ms
+Trimming a string                  391.3 µs         2,556 (368.8 µs … 759.8 µs) 397.0 µs 674.5 µs 703.6 µs
 
 summary
-  Erasing 100000 chars sequentially from a SliceTree
-    52.54x slower than Erasing 100000 chars sequentially from a string
+  Trimming a SliceTree
+     1.63x slower than Trimming a string
 
-group Erase sequential x1000000
-Erasing 1000000 chars sequentially from a SliceTree          269.8 ms           3.7 (259.8 ms … 277.8 ms) 273.4 ms 277.8 ms 277.8 ms
-Erasing 1000000 chars sequentially from a string               3.9 ms         257.6 (  3.8 ms …   5.0 ms)   3.9 ms   5.0 ms   5.0 ms
+group Delete
+Deleting from a SliceTree           20.9 ms          47.9 ( 20.3 ms …  22.0 ms)  21.2 ms  22.0 ms  22.0 ms
+Deleting from a string             167.7 ms           6.0 (166.9 ms … 169.3 ms) 167.8 ms 169.3 ms 169.3 ms
 
 summary
-  Erasing 1000000 chars sequentially from a SliceTree
-    69.52x slower than Erasing 1000000 chars sequentially from a string
+  Deleting from a SliceTree
+     8.03x faster than Deleting from a string
+```
+
+### Line
+
+```bash
+❯ deno bench bench/line.bench.ts
+    CPU | Apple M4 Pro
+Runtime | Deno 2.3.3 (aarch64-apple-darwin)
+
+file:///Users/eug/Dev/github.com/eu-ge-ne/slice-tree/bench/line.bench.ts
+
+benchmark                         time/iter (avg)        iter/s      (min … max)           p75      p99     p995
+--------------------------------- ----------------------------- --------------------- --------------------------
+
+group Line
+Accessing a line in a SliceTree          157.9 µs         6,332 (145.3 µs … 281.0 µs) 152.6 µs 224.6 µs 234.8 µs
+Accessing a line in a string              40.4 ms          24.8 ( 39.4 ms …  44.1 ms)  40.5 ms  44.1 ms  44.1 ms
+
+summary
+  Accessing a line in a SliceTree
+   255.80x faster than Accessing a line in a string
 ```
 
 ## License
