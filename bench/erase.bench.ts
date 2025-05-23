@@ -1,71 +1,65 @@
 import { SliceTree } from "../src/tree.ts";
 
-import { for_exp, str } from "./utils.ts";
+import { str } from "./utils.ts";
 
-for_exp(4, 7, (n) => {
-  Deno.bench(`Erasing ${n} chars sequentially from a SliceTree`, {
-    group: `Erase sequential x${n}`,
-    baseline: true,
-  }, (b) => {
-    const text = new SliceTree(str(n));
+const N = 10 ** 5;
 
-    b.start();
+Deno.bench("Trimming a SliceTree", {
+  group: "Trim",
+  baseline: true,
+}, (b) => {
+  const text = new SliceTree(str(N));
 
-    for (let i = 1; i <= n; i += 1) {
-      text.erase(0, 1);
-    }
+  b.start();
 
-    b.end();
-  });
+  for (let i = 0; i < N; i += 1) {
+    text.erase(-1, 1);
+  }
 
-  Deno.bench(`Erasing ${n} chars sequentially from a string`, {
-    group: `Erase sequential x${n}`,
-  }, (b) => {
-    let text = str(n);
-
-    b.start();
-
-    for (let i = 1; i <= n; i += 1) {
-      text = text.slice(1);
-    }
-
-    b.end();
-  });
+  b.end();
 });
 
-for_exp(3, 6, (n) => {
-  Deno.bench(`Erasing ${n} chars interleaved from a SliceTree`, {
-    group: `Erase interleaved x${n}`,
-    baseline: true,
-  }, (b) => {
-    const text = new SliceTree(str(n * 2));
+Deno.bench("Trimming a string", {
+  group: "Trim",
+}, (b) => {
+  let text = str(N);
 
-    let pos = 0;
+  b.start();
 
-    b.start();
+  for (let i = 0; i < N; i += 1) {
+    text = text.slice(0, -1);
+  }
 
-    for (let i = 1; i <= n; i += 1) {
-      text.erase(pos, 1);
-      pos += 2;
-    }
+  b.end();
+});
 
-    b.end();
-  });
+Deno.bench("Deleting from a SliceTree", {
+  group: "Delete",
+  baseline: true,
+}, (b) => {
+  const text = new SliceTree(str(N));
 
-  Deno.bench(`Erasing ${n} chars interleaved from a string`, {
-    group: `Erase interleaved x${n}`,
-  }, (b) => {
-    let text = str(n * 2);
+  b.start();
 
-    let pos = 0;
+  for (let i = 0; i < N; i += 1) {
+    const pos = Math.trunc(text.count / 2);
+    text.erase(pos, 1);
+  }
 
-    b.start();
+  b.end();
+});
 
-    for (let i = 1; i <= n; i += 1) {
-      text = text.slice(0, pos) + text.slice(pos + 1);
-      pos += 2;
-    }
+Deno.bench("Deleting from a string", {
+  group: "Delete",
+}, (b) => {
+  let text = str(N);
 
-    b.end();
-  });
+  b.start();
+
+  for (let i = 0; i < N; i += 1) {
+    const pos = Math.trunc(text.length / 2);
+    text = text.slice(0, pos) + text.slice(pos + 1);
+  }
+
+  b.end();
 });

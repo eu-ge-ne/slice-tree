@@ -4,8 +4,8 @@ import { str } from "./utils.ts";
 
 const N = 10 ** 5;
 
-Deno.bench(`Appending into a SliceTree`, {
-  group: `Append`,
+Deno.bench("Appending into a SliceTree", {
+  group: "Append",
   baseline: true,
 }, (b) => {
   const text = new SliceTree();
@@ -19,8 +19,8 @@ Deno.bench(`Appending into a SliceTree`, {
   b.end();
 });
 
-Deno.bench(`Appending into a string`, {
-  group: `Append`,
+Deno.bench("Appending into a string", {
+  group: "Append",
 }, (b) => {
   let text = "";
 
@@ -33,8 +33,8 @@ Deno.bench(`Appending into a string`, {
   b.end();
 });
 
-Deno.bench(`Inserting into a SliceTree`, {
-  group: `Insert`,
+Deno.bench("Inserting into a SliceTree", {
+  group: "Insert",
   baseline: true,
 }, (b) => {
   const text = new SliceTree(str(2));
@@ -49,8 +49,8 @@ Deno.bench(`Inserting into a SliceTree`, {
   b.end();
 });
 
-Deno.bench(`Inserting 1M chars into a string`, {
-  group: `Insert`,
+Deno.bench("Inserting 1M chars into a string", {
+  group: "Insert",
 }, (b) => {
   let text = str(2);
 
