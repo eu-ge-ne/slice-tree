@@ -1,10 +1,22 @@
 import { expect, test } from "vitest";
 
+import * as mod from "../src/mod.ts";
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
 test("Create empty", () => {
   const text = new SliceTree();
+
+  assert_iterator(text.read(0), "");
+
+  expect(text.count).toBe(0);
+  expect(text.line_count).toBe(0);
+
+  assert_tree(text);
+});
+
+test("Create empty from mod.ts", () => {
+  const text = new mod.SliceTree();
 
   assert_iterator(text.read(0), "");
 
