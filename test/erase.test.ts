@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, describe } from "vitest";
 
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
@@ -116,31 +116,40 @@ function range(n: number): number[] {
     .map((_, i) => i + 1);
 }
 
-test.for(range(10))(`Erase %i chars from the beginning of a text`, (n) => {
-  test_erase_head(slice_tree(), n);
+describe("Erase from the beginning of a text", () => {
+  test.for(range(10))(`%i chars`, (n) => {
+    test_erase_head(slice_tree(), n);
+  });
 });
 
-test.for(range(10))(
-  `Erase %i chars from the beginning of a text reversed`,
-  (n) => {
+describe("Erase from the beginning of a text reversed", () => {
+  test.for(range(10))(`%i chars`, (n) => {
     test_erase_head(slice_tree_reversed(), n);
-  },
-);
-
-test.for(range(10))(`Erase %i chars from the end of a text`, (n) => {
-  test_erase_tail(slice_tree(), n);
+  });
 });
 
-test.for(range(10))(`Erase %i chars from the end of a text reversed`, (n) => {
-  test_erase_tail(slice_tree_reversed(), n);
+describe("Erase from the end of a text", () => {
+  test.for(range(10))(`%i chars`, (n) => {
+    test_erase_tail(slice_tree(), n);
+  });
 });
 
-test.for(range(10))(`Erase %i from the middle of a text`, (n) => {
-  test_erase_middle(slice_tree(), n);
+describe("Erase from the end of a text reversed", () => {
+  test.for(range(10))(`%i chars`, (n) => {
+    test_erase_tail(slice_tree_reversed(), n);
+  });
 });
 
-test.for(range(10))(`Erase %i from the middle of text reversed`, (n) => {
-  test_erase_middle(slice_tree_reversed(), n);
+describe("Erase from the middle of a text", () => {
+  test.for(range(10))(`%i chars`, (n) => {
+    test_erase_middle(slice_tree(), n);
+  });
+});
+
+describe("Erase from the middle of text reversed", () => {
+  test.for(range(10))(`%i chars`, (n) => {
+    test_erase_middle(slice_tree_reversed(), n);
+  });
 });
 
 test("Erase causing splitting nodes", () => {
