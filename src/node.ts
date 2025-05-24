@@ -63,9 +63,11 @@ export function resize_node(x: Node, length: number): void {
 
   x.slice_eols_length = eols_slice_length(
     x.buffer.eols,
-    x.slice_start + length,
+    x.slice_start + x.slice_length,
     x.slice_eols_start,
   );
+
+  bubble_update(x);
 }
 
 export function split_node(
