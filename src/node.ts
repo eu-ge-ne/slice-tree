@@ -61,9 +61,12 @@ export function create_node(
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
 
-  x.slice_eols_length =
-    eol_index(x.buffer.eols, x.slice_start + x.slice_length) -
-    x.slice_eols_start;
+  const slice_eols_end = eol_index(
+    x.buffer.eols,
+    x.slice_start + x.slice_length,
+  );
+
+  x.slice_eols_length = slice_eols_end - x.slice_eols_start;
 
   bubble_update(x);
 }
@@ -80,8 +83,8 @@ export function split_node(
   resize_node(x, index);
 
   const slice_eols_start = eol_index(x.buffer.eols, slice_start);
-  const slice_eols_length =
-    eol_index(x.buffer.eols, slice_start + slice_length) - slice_eols_start;
+  const slice_eols_end = eol_index(x.buffer.eols, slice_start + slice_length);
+  const slice_eols_length = slice_eols_end - slice_eols_start;
 
   const node = create_node(
     x.buffer,

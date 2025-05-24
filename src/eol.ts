@@ -14,11 +14,13 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
 
 export function eol_index(eols: readonly EOL[], index: number): number {
   let i = 0;
+
   for (; i < eols.length; i += 1) {
     if (eols[i]!.start >= index) {
       break;
     }
   }
+
   return i;
 }
 
