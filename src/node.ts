@@ -13,9 +13,9 @@ export interface Node {
   right: Node;
 
   readonly buffer: Buffer;
-  readonly slice_start: number;
+  slice_start: number;
   slice_length: number;
-  readonly slice_eols_start: number;
+  slice_eols_start: number;
   slice_eols_length: number;
 
   length: number;
@@ -67,6 +67,25 @@ export function resize_node(x: Node, length: number): void {
     x.slice_start + x.slice_length,
   );
 
+  x.slice_eols_length = slice_eols_end - x.slice_eols_start;
+
+  bubble_update(x);
+}
+
+export function trim_node_start(x: Node, count: number): void {
+  x.slice_start += count;
+  x.slice_length -= count;
+
+  x.slice_eols_start = eol_index(
+    x.buffer.eols,
+    x.slice_eols_start,
+    x.slice_start,
+  );
+  const slice_eols_end = eol_index(
+    x.buffer.eols,
+    x.slice_eols_start,
+    x.slice_start + x.slice_length,
+  );
   x.slice_eols_length = slice_eols_end - x.slice_eols_start;
 
   bubble_update(x);
