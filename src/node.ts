@@ -1,5 +1,5 @@
 import type { Buffer } from "./buffer.ts";
-import { eol_index } from "./eol.ts";
+import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -61,7 +61,7 @@ export function create_node(
 export function resize_node(x: Node, length: number): void {
   x.slice_length = length;
 
-  const slice_eols_end = eol_index(
+  const slice_eols_end = find_eol(
     x.buffer.eols,
     x.slice_eols_start,
     x.slice_start + x.slice_length,
@@ -76,13 +76,13 @@ export function shrink_node_from_start(x: Node, count: number): void {
   x.slice_start += count;
   x.slice_length -= count;
 
-  x.slice_eols_start = eol_index(
+  x.slice_eols_start = find_eol(
     x.buffer.eols,
     x.slice_eols_start,
     x.slice_start,
   );
 
-  const slice_eols_end = eol_index(
+  const slice_eols_end = find_eol(
     x.buffer.eols,
     x.slice_eols_start,
     x.slice_start + x.slice_length,
@@ -104,16 +104,18 @@ export function split_node(
 
   resize_node(x, index);
 
-  const slice_eols_start = eol_index(
+  const slice_eols_start = find_eol(
     x.buffer.eols,
     x.slice_eols_start + x.slice_eols_length,
     slice_start,
   );
-  const slice_eols_end = eol_index(
+
+  const slice_eols_end = find_eol(
     x.buffer.eols,
     slice_eols_start,
     slice_start + slice_length,
   );
+
   const slice_eols_length = slice_eols_end - slice_eols_start;
 
   const node = create_node(

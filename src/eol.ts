@@ -12,7 +12,7 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
   }));
 }
 
-export function eol_index(
+export function find_eol(
   eols: readonly EOL[],
   start: number,
   index: number,
