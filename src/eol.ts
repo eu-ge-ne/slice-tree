@@ -17,15 +17,15 @@ export function eol_index(
   from: number,
   index: number,
 ): number {
-  let i = from;
+  let a = from;
 
-  for (; i < eols.length; i += 1) {
-    if (eols[i]!.start >= index) {
+  for (; a < eols.length; a += 1) {
+    if (eols[a]!.start >= index) {
       break;
     }
   }
 
-  return i;
+  return a;
 }
 
 /*
