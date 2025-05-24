@@ -311,12 +311,12 @@ export class SliceTree {
       index = Math.max(index + this.count, 0);
     }
 
-    const first2 = search(this.root, index);
-    if (!first2) {
+    const first = search(this.root, index);
+    if (!first) {
       return;
     }
 
-    const { node, offset } = first2;
+    const { node, offset } = first;
 
     const offset2 = offset + count;
 
