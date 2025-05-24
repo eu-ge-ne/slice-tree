@@ -40,8 +40,8 @@ function assert_node(x: Node): void {
     assert_node(x.left);
     assert_node(x.right);
 
-    // 6. length > 0
-    assert(x.slice_length > 0);
+    // 6. text_length > 0
+    assert(x.text_length > 0);
   }
 }
 

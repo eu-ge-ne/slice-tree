@@ -13,8 +13,8 @@ export interface Node {
   right: Node;
 
   readonly buffer: Buffer;
-  slice_start: number;
-  slice_length: number;
+  text_start: number;
+  text_length: number;
   eols_start: number;
   eols_length: number;
 
@@ -36,8 +36,8 @@ nil.right = NIL;
 
 export function create_node(
   buffer: Buffer,
-  slice_start: number,
-  slice_length: number,
+  text_start: number,
+  text_length: number,
   eols_start: number,
   eols_length: number,
 ): Node {
@@ -48,23 +48,23 @@ export function create_node(
     right: NIL,
 
     buffer,
-    slice_start,
-    slice_length,
+    text_start,
+    text_length,
     eols_start,
     eols_length,
 
-    char_count: slice_length,
+    char_count: text_length,
     eol_count: eols_length,
   };
 }
 
 export function resize_node(x: Node, length: number): void {
-  x.slice_length = length;
+  x.text_length = length;
 
   const eols_end = find_eol_index(
     x.buffer.eols,
     x.eols_start,
-    x.slice_start + x.slice_length,
+    x.text_start + x.text_length,
   );
 
   x.eols_length = eols_end - x.eols_start;
@@ -73,15 +73,15 @@ export function resize_node(x: Node, length: number): void {
 }
 
 export function shrink_node_from_start_todo(x: Node, count: number): void {
-  x.slice_start += count;
-  x.slice_length -= count;
+  x.text_start += count;
+  x.text_length -= count;
 
-  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.slice_start);
+  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.text_start);
 
   const eols_end = find_eol_index(
     x.buffer.eols,
     x.eols_start,
-    x.slice_start + x.slice_length,
+    x.text_start + x.text_length,
   );
 
   x.eols_length = eols_end - x.eols_start;
@@ -95,29 +95,29 @@ export function split_node(
   index: number,
   delete_count: number,
 ): Node {
-  const slice_start = x.slice_start + index + delete_count;
-  const slice_length = x.slice_length - index - delete_count;
+  const text_start = x.text_start + index + delete_count;
+  const text_length = x.text_length - index - delete_count;
 
   resize_node(x, index);
 
   const eols_start = find_eol_index(
     x.buffer.eols,
     x.eols_start + x.eols_length,
-    slice_start,
+    text_start,
   );
 
   const eols_end = find_eol_index(
     x.buffer.eols,
     eols_start,
-    slice_start + slice_length,
+    text_start + text_length,
   );
 
   const eols_length = eols_end - eols_start;
 
   const node = create_node(
     x.buffer,
-    slice_start,
-    slice_length,
+    text_start,
+    text_length,
     eols_start,
     eols_length,
   );
@@ -129,12 +129,12 @@ export function split_node(
 
 export function node_growable(x: Node): boolean {
   return (x.buffer.text.length < 100) &&
-    (x.slice_start + x.slice_length === x.buffer.text.length);
+    (x.text_start + x.text_length === x.buffer.text.length);
 }
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.char_count = x.left.char_count + x.slice_length + x.right.char_count;
+    x.char_count = x.left.char_count + x.text_length + x.right.char_count;
     x.eol_count = x.left.eol_count + x.eols_length + x.right.eol_count;
     x = x.p;
   }
