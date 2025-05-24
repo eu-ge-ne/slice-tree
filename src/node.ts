@@ -72,7 +72,7 @@ export function resize_node(x: Node, length: number): void {
   bubble_update(x);
 }
 
-export function shrink_node_from_start_todo(x: Node, count: number): void {
+export function shrink_node(x: Node, count: number): void {
   x.text_start += count;
   x.text_length -= count;
 
