@@ -14,10 +14,10 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
 
 export function find_eol_index(
   eols: readonly EOL[],
-  start: number,
+  eols_start: number,
   index: number,
 ): number {
-  let a = start;
+  let a = eols_start;
   let b = eols.length - 1;
   let i = 0;
   let v = 0;

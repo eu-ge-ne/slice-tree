@@ -6,7 +6,7 @@ import {
   NIL,
   node_growable,
   resize_node,
-  shrink_node_from_start,
+  shrink_node_from_start_todo,
   split_node,
 } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
@@ -328,7 +328,7 @@ export class SliceTree {
       }
     } else if (offset2 < node.slice_length) {
       if (offset === 0) {
-        shrink_node_from_start(node, count);
+        shrink_node_from_start_todo(node, count);
       } else {
         split_node(this, node, offset, count);
       }
