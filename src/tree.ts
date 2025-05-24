@@ -2,11 +2,11 @@ import { create_buffer, grow_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
-  bubble_update,
   create_node,
   NIL,
   node_growable,
   resize_node,
+  shrink_node,
   split_node,
 } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
@@ -52,7 +52,7 @@ export class SliceTree {
    * ```
    */
   get count(): number {
-    return this.root.length;
+    return this.root.char_count;
   }
 
   /**
@@ -72,7 +72,7 @@ export class SliceTree {
    * ```
    */
   get line_count(): number {
-    return this.root.length === 0 ? 0 : this.root.eols_length + 1;
+    return this.root.char_count === 0 ? 0 : this.root.eol_count + 1;
   }
 
   /**
@@ -116,7 +116,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.slice_length - offset;
+      let n = x.text_length - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -126,8 +126,8 @@ export class SliceTree {
       }
 
       yield x.buffer.text.slice(
-        x.slice_start + offset,
-        x.slice_start + offset + n,
+        x.text_start + offset,
+        x.text_start + offset + n,
       );
 
       x = successor(x);
@@ -230,19 +230,19 @@ export class SliceTree {
     let insert_case = InsertionCase.Root;
 
     for (let x = this.root; x !== NIL;) {
-      if (index <= x.left.length) {
+      if (index <= x.left.char_count) {
         p = x;
         x = x.left;
         insert_case = InsertionCase.Left;
       } else {
-        index -= x.left.length;
+        index -= x.left.char_count;
 
-        if (index < x.slice_length) {
+        if (index < x.text_length) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.slice_length;
+          index -= x.text_length;
 
           p = x;
           x = x.right;
@@ -253,9 +253,8 @@ export class SliceTree {
 
     if (insert_case === InsertionCase.Right && node_growable(p)) {
       grow_buffer(p.buffer, text);
-      resize_node(p, p.slice_length + text.length);
 
-      bubble_update(p);
+      resize_node(p, p.text_length + text.length);
     } else {
       const buffer = create_buffer(text);
       const child = create_node(buffer, 0, text.length, 0, buffer.eols.length);
@@ -317,18 +316,28 @@ export class SliceTree {
       return;
     }
 
-    if (first.offset + count === first.node.slice_length) {
-      resize_node(first.node, first.node.slice_length - count);
+    const { node, offset } = first;
 
-      bubble_update(first.node);
-    } else if (first.offset + count <= first.node.slice_length) {
-      split_node(this, first.node, first.offset, count);
+    const offset2 = offset + count;
+
+    if (offset2 === node.text_length) {
+      if (offset === 0) {
+        delete_node(this, node);
+      } else {
+        resize_node(node, node.text_length - count);
+      }
+    } else if (offset2 < node.text_length) {
+      if (offset === 0) {
+        shrink_node(node, count);
+      } else {
+        split_node(this, node, offset, count);
+      }
     } else {
-      let x = first.node;
+      let x = node;
       let i = 0;
 
-      if (first.offset !== 0) {
-        x = split_node(this, first.node, first.offset, 0);
+      if (offset !== 0) {
+        x = split_node(this, node, offset, 0);
       }
 
       const last = search(this.root, index + count);
@@ -337,9 +346,12 @@ export class SliceTree {
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.slice_length;
+        i += x.text_length;
+
         const next = successor(x);
+
         delete_node(this, x);
+
         x = next;
       }
     }

@@ -89,3 +89,29 @@ Deno.test("Erase removes lines", () => {
   assertEquals(text.line(0).toArray().join(""), "ipsum");
   assert_tree(text);
 });
+
+Deno.test("Erasing newline char removes line", () => {
+  const text = new SliceTree(" \n \n");
+
+  assertEquals(text.line_count, 3);
+
+  text.erase(1, 1);
+
+  assertEquals(text.read(0).toArray().join(""), "  \n");
+  assertEquals(text.line_count, 2);
+
+  assert_tree(text);
+});
+
+Deno.test("Erasing first newline char removes line", () => {
+  const text = new SliceTree("\n\n");
+
+  assertEquals(text.line_count, 3);
+
+  text.erase(0, 1);
+
+  assertEquals(text.read(0).toArray().join(""), "\n");
+  assertEquals(text.line_count, 2);
+
+  assert_tree(text);
+});

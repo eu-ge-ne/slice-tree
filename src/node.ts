@@ -1,5 +1,5 @@
 import type { Buffer } from "./buffer.ts";
-import { eols_slice_length } from "./eol.ts";
+import { find_eol_index } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -13,19 +13,19 @@ export interface Node {
   right: Node;
 
   readonly buffer: Buffer;
-  readonly slice_start: number;
-  slice_length: number;
-  readonly slice_eols_start: number;
-  slice_eols_length: number;
-
-  length: number;
+  text_start: number;
+  text_length: number;
+  eols_start: number;
   eols_length: number;
+
+  char_count: number;
+  eol_count: number;
 }
 
 const nil = {
   red: false,
-  length: 0,
-  eols_length: 0,
+  char_count: 0,
+  eol_count: 0,
 } as Node;
 
 export const NIL: Node = Object.create(nil);
@@ -36,10 +36,10 @@ nil.right = NIL;
 
 export function create_node(
   buffer: Buffer,
-  slice_start: number,
-  slice_length: number,
-  slice_eols_start: number,
-  slice_eols_length: number,
+  text_start: number,
+  text_length: number,
+  eols_start: number,
+  eols_length: number,
 ): Node {
   return {
     red: true,
@@ -48,24 +48,45 @@ export function create_node(
     right: NIL,
 
     buffer,
-    slice_start,
-    slice_length,
-    slice_eols_start,
-    slice_eols_length,
+    text_start,
+    text_length,
+    eols_start,
+    eols_length,
 
-    length: slice_length,
-    eols_length: slice_eols_length,
+    char_count: text_length,
+    eol_count: eols_length,
   };
 }
 
 export function resize_node(x: Node, length: number): void {
-  x.slice_length = length;
+  x.text_length = length;
 
-  x.slice_eols_length = eols_slice_length(
+  const eols_end = find_eol_index(
     x.buffer.eols,
-    x.slice_start + length,
-    x.slice_eols_start,
+    x.eols_start,
+    x.text_start + x.text_length,
   );
+
+  x.eols_length = eols_end - x.eols_start;
+
+  bubble_update(x);
+}
+
+export function shrink_node(x: Node, count: number): void {
+  x.text_start += count;
+  x.text_length -= count;
+
+  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.text_start);
+
+  const eols_end = find_eol_index(
+    x.buffer.eols,
+    x.eols_start,
+    x.text_start + x.text_length,
+  );
+
+  x.eols_length = eols_end - x.eols_start;
+
+  bubble_update(x);
 }
 
 export function split_node(
@@ -74,24 +95,31 @@ export function split_node(
   index: number,
   delete_count: number,
 ): Node {
-  const slice_start = x.slice_start + index + delete_count;
-  const slice_length = x.slice_length - index - delete_count;
+  const text_start = x.text_start + index + delete_count;
+  const text_length = x.text_length - index - delete_count;
 
   resize_node(x, index);
 
-  const slice_eols_start = x.slice_eols_start + x.slice_eols_length;
-  const slice_eols_length = eols_slice_length(
+  const eols_start = find_eol_index(
     x.buffer.eols,
-    slice_start + slice_length,
-    slice_eols_start,
+    x.eols_start + x.eols_length,
+    text_start,
   );
+
+  const eols_end = find_eol_index(
+    x.buffer.eols,
+    eols_start,
+    text_start + text_length,
+  );
+
+  const eols_length = eols_end - eols_start;
 
   const node = create_node(
     x.buffer,
-    slice_start,
-    slice_length,
-    slice_eols_start,
-    slice_eols_length,
+    text_start,
+    text_length,
+    eols_start,
+    eols_length,
   );
 
   insert_after(tree, x, node);
@@ -101,15 +129,13 @@ export function split_node(
 
 export function node_growable(x: Node): boolean {
   return (x.buffer.text.length < 100) &&
-    (x.slice_start + x.slice_length === x.buffer.text.length);
+    (x.text_start + x.text_length === x.buffer.text.length);
 }
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.length = x.left.length + x.slice_length + x.right.length;
-    x.eols_length = x.left.eols_length + x.slice_eols_length +
-      x.right.eols_length;
-
+    x.char_count = x.left.char_count + x.text_length + x.right.char_count;
+    x.eol_count = x.left.eol_count + x.eols_length + x.right.eol_count;
     x = x.p;
   }
 }

@@ -12,14 +12,12 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
   }));
 }
 
-export function eols_slice_length(
+export function find_eol_index(
   eols: readonly EOL[],
-  slice_end: number,
-  start: number,
+  eols_start: number,
+  index: number,
 ): number {
-  slice_end -= 1;
-
-  let a = start;
+  let a = eols_start;
   let b = eols.length - 1;
   let i = 0;
   let v = 0;
@@ -28,15 +26,14 @@ export function eols_slice_length(
     i = Math.trunc((a + b) / 2);
     v = eols[i]!.start;
 
-    if (v < slice_end) {
+    if (v < index) {
       a = i + 1;
-    } else if (v > slice_end) {
+    } else if (v > index) {
       b = i - 1;
     } else {
-      b = i;
       break;
     }
   }
 
-  return b + 1 - start;
+  return a;
 }
