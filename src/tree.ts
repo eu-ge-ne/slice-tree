@@ -52,7 +52,7 @@ export class SliceTree {
    * ```
    */
   get count(): number {
-    return this.root.length;
+    return this.root.char_count;
   }
 
   /**
@@ -72,7 +72,7 @@ export class SliceTree {
    * ```
    */
   get line_count(): number {
-    return this.root.length === 0 ? 0 : this.root.eols_length + 1;
+    return this.root.char_count === 0 ? 0 : this.root.eol_count + 1;
   }
 
   /**
@@ -230,12 +230,12 @@ export class SliceTree {
     let insert_case = InsertionCase.Root;
 
     for (let x = this.root; x !== NIL;) {
-      if (index <= x.left.length) {
+      if (index <= x.left.char_count) {
         p = x;
         x = x.left;
         insert_case = InsertionCase.Left;
       } else {
-        index -= x.left.length;
+        index -= x.left.char_count;
 
         if (index < x.slice_length) {
           p = x;
