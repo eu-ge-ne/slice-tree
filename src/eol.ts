@@ -12,8 +12,12 @@ export function create_eols(text: string, start = 0): IteratorObject<EOL> {
   }));
 }
 
-export function eol_index(eols: readonly EOL[], index: number): number {
-  let i = 0;
+export function eol_index(
+  eols: readonly EOL[],
+  from: number,
+  index: number,
+): number {
+  let i = from;
 
   for (; i < eols.length; i += 1) {
     if (eols[i]!.start >= index) {
@@ -24,6 +28,7 @@ export function eol_index(eols: readonly EOL[], index: number): number {
   return i;
 }
 
+/*
 export function eols_slice_length(
   eols: readonly EOL[],
   slice_end: number,
@@ -52,3 +57,4 @@ export function eols_slice_length(
 
   return b + 1 - start;
 }
+*/
