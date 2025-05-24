@@ -311,30 +311,33 @@ export class SliceTree {
       index = Math.max(index + this.count, 0);
     }
 
-    const first = search(this.root, index);
-    if (!first) {
+    const first2 = search(this.root, index);
+    if (!first2) {
       return;
     }
 
-    // TODO
-    if (first.offset + count === first.node.slice_length) {
-      if (first.offset === 0) {
-        delete_node(this, first.node);
+    const { node, offset } = first2;
+
+    const offset2 = offset + count;
+
+    if (offset2 === node.slice_length) {
+      if (offset === 0) {
+        delete_node(this, node);
       } else {
-        resize_node(first.node, first.node.slice_length - count);
+        resize_node(node, node.slice_length - count);
       }
-    } else if (first.offset + count <= first.node.slice_length) {
-      if (first.offset === 0) {
-        shrink_node_from_start(first.node, count);
+    } else if (offset2 < node.slice_length) {
+      if (offset === 0) {
+        shrink_node_from_start(node, count);
       } else {
-        split_node(this, first.node, first.offset, count);
+        split_node(this, node, offset, count);
       }
     } else {
-      let x = first.node;
+      let x = node;
       let i = 0;
 
-      if (first.offset !== 0) {
-        x = split_node(this, first.node, first.offset, 0);
+      if (offset !== 0) {
+        x = split_node(this, node, offset, 0);
       }
 
       const last = search(this.root, index + count);
