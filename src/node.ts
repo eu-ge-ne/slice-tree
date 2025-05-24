@@ -72,7 +72,7 @@ export function resize_node(x: Node, length: number): void {
   bubble_update(x);
 }
 
-export function trim_node_start(x: Node, count: number): void {
+export function shrink_node_from_start(x: Node, count: number): void {
   x.slice_start += count;
   x.slice_length -= count;
 
@@ -81,11 +81,13 @@ export function trim_node_start(x: Node, count: number): void {
     x.slice_eols_start,
     x.slice_start,
   );
+
   const slice_eols_end = eol_index(
     x.buffer.eols,
     x.slice_eols_start,
     x.slice_start + x.slice_length,
   );
+
   x.slice_eols_length = slice_eols_end - x.slice_eols_start;
 
   bubble_update(x);
