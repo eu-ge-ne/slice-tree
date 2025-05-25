@@ -81,7 +81,7 @@ Deno.test("Erase removes lines", () => {
   text.write(11, "\n");
 
   text.erase(0, 6);
-  text.erase(5, 1);
+  text.erase(5, 6);
 
   assertEquals(text.count, 5);
   assertEquals(text.line_count, 1);
@@ -95,7 +95,7 @@ Deno.test("Erasing newline char removes line", () => {
 
   assertEquals(text.line_count, 3);
 
-  text.erase(1, 1);
+  text.erase(1, 2);
 
   assertEquals(text.read(0).toArray().join(""), "  \n");
   assertEquals(text.line_count, 2);
