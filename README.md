@@ -197,7 +197,7 @@ the specified index.
 Syntax
 
 ```ts ignore
-line_range(index: number): readonly [number, number | undefined] | undefined
+line_range(index: number): readonly [number, number] | undefined
 ```
 
 Example
