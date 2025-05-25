@@ -162,7 +162,7 @@ export class SliceTree {
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_eol(this.root, index) ?? (this.count);
+      const end = search_eol(this.root, index) ?? this.count;
 
       return [start, end];
     }
