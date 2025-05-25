@@ -168,3 +168,23 @@ Deno.test("Erase causing splitting nodes", () => {
   assertEquals(text.count, 0);
   assert_tree(text);
 });
+
+Deno.test("Erase end < 0", () => {
+  const text = new SliceTree("Lorem\n ipsum");
+
+  text.erase(5, -6);
+
+  assert_iterator(text.read(0), "Lorem ipsum");
+
+  assert_tree(text);
+});
+
+Deno.test("Erase end <= start", () => {
+  const text = new SliceTree("Lorem ipsum");
+
+  text.erase(5, -6);
+
+  assert_iterator(text.read(0), "Lorem ipsum");
+
+  assert_tree(text);
+});
