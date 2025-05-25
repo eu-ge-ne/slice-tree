@@ -287,10 +287,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the range from index (inclusive) to index + count (exclusive).
+   * Removes the text between the specified start (inclusive) and end (exclusive) positions.
    *
-   * @param index Index at witch to start removing the text.
-   * @param count The number of characters to remove.
+   * @param start Start index at witch to start removing the text.
+   * @param end Optional end index.
    * @returns A void value.
    *
    * @example Usage
@@ -301,7 +301,7 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem ipsum");
    *
-   * text.erase(5, 6);;
+   * text.erase(5, 11);;
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```

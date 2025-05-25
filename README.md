@@ -105,7 +105,7 @@ assertEquals(text.line(1).toArray().join(""), "ipsum\n");
 assertEquals(text.line(2).toArray().join(""), "");
 
 text.erase(0, 6);
-text.erase(5, 1);
+text.erase(5, 6);
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
@@ -257,13 +257,13 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.prototype.erase()`
 
-Removes the text in the range from index (inclusive) to index + count
-(exclusive).
+Removes the text between the specified start (inclusive) and end (exclusive)
+positions.
 
 Syntax
 
 ```ts ignore
-erase(index: number, count: number): void
+erase(start: number, end = Number.MAX_SAFE_INTEGER): void
 ```
 
 Example
@@ -274,7 +274,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem ipsum");
 
-text.erase(5, 6);
+text.erase(5, 11);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
