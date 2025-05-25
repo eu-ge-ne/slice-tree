@@ -152,7 +152,7 @@ export class SliceTree {
    * assertEquals(text.line_range(0), [0, 6]);
    * ```
    */
-  line_range(index: number): readonly [number, number | undefined] | undefined {
+  line_range(index: number): readonly [number, number] | undefined {
     if (index < 0) {
       index = Math.max(index + this.line_count, 0);
     }
@@ -162,7 +162,7 @@ export class SliceTree {
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_eol(this.root, index);
+      const end = search_eol(this.root, index) ?? (this.count);
 
       return [start, end];
     }

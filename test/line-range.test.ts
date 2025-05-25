@@ -26,16 +26,22 @@ Deno.test("Line range at valid index", () => {
   assertEquals(text.line_range(15), [100, 103]);
   assertEquals(text.line_range(16), [103, 110]);
   assertEquals(text.line_range(17), [110, 116]);
-  assertEquals(text.line_range(18), [116, undefined]);
+  assertEquals(text.line_range(18), [116, 123]);
+
+  assertEquals(text.count, 123);
+
   assert_tree(text);
 });
 
 Deno.test("Line range at index >= line_count", () => {
   const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
-  assertEquals(text.line_range(4), [22, undefined]);
+  assertEquals(text.line_range(4), [22, 26]);
   assertEquals(text.line_range(5), undefined);
   assertEquals(text.line_range(6), undefined);
+
+  assertEquals(text.count, 26);
+
   assert_tree(text);
 });
 
@@ -43,7 +49,10 @@ Deno.test("Line range at index < 0", () => {
   const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
   assertEquals(text.line_range(0), [0, 6]);
-  assertEquals(text.line_range(-1), [22, undefined]);
+  assertEquals(text.line_range(-1), [22, 26]);
   assertEquals(text.line_range(-2), [18, 22]);
+
+  assertEquals(text.count, 26);
+
   assert_tree(text);
 });
