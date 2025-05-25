@@ -306,18 +306,26 @@ export class SliceTree {
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
    */
-  erase(index: number, count: number): void {
-    if (index < 0) {
-      index = Math.max(index + this.count, 0);
+  erase(start: number, end = Number.MAX_SAFE_INTEGER): void {
+    if (start < 0) {
+      start = Math.max(start + this.count, 0);
     }
 
-    const first = search(this.root, index);
+    const first = search(this.root, start);
     if (!first) {
       return;
     }
 
-    const { node, offset } = first;
+    if (end < 0) {
+      end = Math.max(end + this.count, 0);
+    }
 
+    if (end <= start) {
+      return;
+    }
+
+    const { node, offset } = first;
+    const count = end - start;
     const offset2 = offset + count;
 
     if (offset2 === node.text_length) {
@@ -340,7 +348,7 @@ export class SliceTree {
         x = split_node(this, node, offset, 0);
       }
 
-      const last = search(this.root, index + count);
+      const last = search(this.root, end);
       if (last && last.offset !== 0) {
         split_node(this, last.node, last.offset, 0);
       }

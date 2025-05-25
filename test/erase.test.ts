@@ -83,7 +83,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
-    text.erase(-n, n);
+    text.erase(-n, text.count);
     expected = expected.slice(0, -n);
   }
 
@@ -101,7 +101,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
     assert_tree(text);
 
     const pos = Math.floor(text.count / 2);
-    text.erase(pos, n);
+    text.erase(pos, pos + n);
     expected = expected.slice(0, pos) + expected.slice(pos + n);
   }
 
@@ -158,7 +158,7 @@ Deno.test("Erase causing splitting nodes", () => {
       assertEquals(text.count, expected.length);
       assert_tree(text);
 
-      text.erase(s * i, 2);
+      text.erase(s * i, s * i + 2);
       expected = expected.slice(0, s * i) + expected.slice(s * i + 2);
     }
     n += 1;
