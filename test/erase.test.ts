@@ -188,3 +188,60 @@ Deno.test("Erase end <= start", () => {
 
   assert_tree(text);
 });
+
+Deno.test("Erase removes lines", () => {
+  const text = new SliceTree();
+
+  text.write(0, "Lorem");
+  text.write(5, "ipsum");
+  text.write(5, "\n");
+  text.write(11, "\n");
+
+  text.erase(0, 6);
+  text.erase(5, 6);
+
+  assertEquals(text.count, 5);
+  assertEquals(text.line_count, 1);
+  assertEquals(text.read(0).toArray().join(""), "ipsum");
+  assertEquals(text.line(0).toArray().join(""), "ipsum");
+  assert_tree(text);
+});
+
+Deno.test("Erasing newline char removes line", () => {
+  const text = new SliceTree(" \n \n");
+
+  assertEquals(text.line_count, 3);
+
+  text.erase(1, 2);
+
+  assertEquals(text.read(0).toArray().join(""), "  \n");
+  assertEquals(text.line_count, 2);
+
+  assert_tree(text);
+});
+
+Deno.test("Erasing first newline char removes line", () => {
+  const text = new SliceTree("\n\n");
+
+  assertEquals(text.line_count, 3);
+
+  text.erase(0, 1);
+
+  assertEquals(text.read(0).toArray().join(""), "\n");
+  assertEquals(text.line_count, 2);
+
+  assert_tree(text);
+});
+
+Deno.test("Erasing line followed by newline", () => {
+  const text = new SliceTree(" \n \n\n \n");
+
+  assertEquals(text.line_count, 5);
+
+  text.erase(2, 4);
+
+  assert_iterator(text.read(0), " \n\n \n");
+  assertEquals(text.line_count, 4);
+
+  assert_tree(text);
+});
