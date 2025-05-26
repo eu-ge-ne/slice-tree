@@ -31,6 +31,7 @@ export function find_eol_index(
     } else if (v > index) {
       b = i - 1;
     } else {
+      a = i;
       break;
     }
   }

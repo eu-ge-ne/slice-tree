@@ -233,7 +233,7 @@ Deno.test("Erasing first newline char removes line", () => {
   assert_tree(text);
 });
 
-Deno.test("todo", () => {
+Deno.test("Erasing line followed by newline", () => {
   const text = new SliceTree(" \n \n\n \n");
 
   assertEquals(text.line_count, 5);
