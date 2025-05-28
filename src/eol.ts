@@ -1,4 +1,4 @@
-const LINE_BREAKS_RE = /r?\n/gm;
+const LINE_BREAKS_RE = /\r?\n/gm;
 
 export interface EOL {
   readonly start: number;
