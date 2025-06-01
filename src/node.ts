@@ -1,4 +1,3 @@
-import { insert_after } from "./insertion.ts";
 import { Slice } from "./slice.ts";
 
 export interface Tree {
@@ -27,9 +26,7 @@ nil.p = NIL;
 nil.left = NIL;
 nil.right = NIL;
 
-export function node_from_text(text: string): Node {
-  const slice = Slice.from_text(text);
-
+export function create_node(slice: Slice): Node {
   return {
     red: true,
     p: NIL,
@@ -41,29 +38,8 @@ export function node_from_text(text: string): Node {
   };
 }
 
-export function split(
-  tree: Tree,
-  x: Node,
-  index: number,
-  delete_count: number,
-): Node {
-  const slice = x.slice.split(index, delete_count);
-
-  bubble_update(x);
-
-  const node: Node = {
-    red: true,
-    p: NIL,
-    left: NIL,
-    right: NIL,
-    slice,
-    total_chars: slice.length,
-    total_eols: slice.eols_length,
-  };
-
-  insert_after(tree, x, node);
-
-  return node;
+export function node_from_text(text: string): Node {
+  return create_node(Slice.from_text(text));
 }
 
 export function bubble_update(x: Node): void {

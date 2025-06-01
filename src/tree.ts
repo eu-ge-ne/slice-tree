@@ -1,7 +1,8 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, NIL, node_from_text, split } from "./node.ts";
+import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
+import { split } from "./splitting.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
