@@ -125,7 +125,7 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield slice_node(x, offset, offset + n);
+      yield* slice_node(x, offset, offset + n);
 
       x = successor(x);
       offset = 0;

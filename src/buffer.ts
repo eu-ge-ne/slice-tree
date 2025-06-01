@@ -19,23 +19,7 @@ export class Buffer {
     this.char_count += [...text].length;
   }
 
-  slice(start: number, end: number): string {
-    let i = 0;
-    let a = 0;
-    let b = 0;
-
-    for (const char of this.#text) {
-      if (i < start) {
-        a += char.length;
-        i += 1;
-      } else if (i < end) {
-        b += char.length;
-        i += 1;
-      } else {
-        break;
-      }
-    }
-
-    return this.#text.slice(a, a + b);
+  slice(start: number, end: number): IteratorObject<string> {
+    return this.#text[Symbol.iterator]().drop(start).take(end - start);
   }
 }

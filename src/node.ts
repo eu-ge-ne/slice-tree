@@ -140,7 +140,11 @@ export function bubble_update(x: Node): void {
   }
 }
 
-export function slice_node(x: Node, start: number, end: number): string {
+export function slice_node(
+  x: Node,
+  start: number,
+  end: number,
+): IteratorObject<string> {
   return x.buffer.slice(x.chars_start + start, x.chars_start + end);
 }
 
