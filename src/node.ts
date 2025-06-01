@@ -27,7 +27,7 @@ nil.p = NIL;
 nil.left = NIL;
 nil.right = NIL;
 
-export function create_node(text: string): Node {
+export function node_from_text(text: string): Node {
   const slice = Slice.from_text(text);
 
   return {
