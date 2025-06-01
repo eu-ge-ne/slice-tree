@@ -59,6 +59,17 @@ export function create_node(text: string): Node {
   };
 }
 
+export function node_growable(x: Node): boolean {
+  return (x.buffer.char_count < 100) &&
+    (x.chars_start + x.chars_length === x.buffer.char_count);
+}
+
+export function grow_node(x: Node, text: string): void {
+  grow_buffer(x.buffer, text);
+
+  resize_node(x, x.chars_length + [...text].length);
+}
+
 export function resize_node(x: Node, length: number): void {
   x.chars_length = length;
 
@@ -73,7 +84,7 @@ export function resize_node(x: Node, length: number): void {
   bubble_update(x);
 }
 
-export function shrink_node(x: Node, count: number): void {
+export function trim_node_start(x: Node, count: number): void {
   x.chars_start += count;
   x.chars_length -= count;
 
@@ -136,11 +147,6 @@ export function split_node(
   return node;
 }
 
-export function node_growable(x: Node): boolean {
-  return (x.buffer.char_count < 100) &&
-    (x.chars_start + x.chars_length === x.buffer.char_count);
-}
-
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
     x.char_count = x.left.char_count + x.chars_length + x.right.char_count;
@@ -151,10 +157,4 @@ export function bubble_update(x: Node): void {
 
 export function slice_node(x: Node, start: number, end: number): string {
   return slice_buffer(x.buffer, x.chars_start + start, x.chars_start + end);
-}
-
-export function grow_node(x: Node, text: string): void {
-  grow_buffer(x.buffer, text);
-
-  resize_node(x, x.chars_length + [...text].length);
 }
