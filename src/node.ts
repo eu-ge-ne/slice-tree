@@ -1,9 +1,4 @@
-import {
-  type Buffer,
-  create_buffer,
-  grow_buffer,
-  slice_buffer,
-} from "./buffer.ts";
+import { Buffer } from "./buffer.ts";
 import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
@@ -40,7 +35,7 @@ nil.left = NIL;
 nil.right = NIL;
 
 export function create_node(text: string): Node {
-  const buffer = create_buffer(text);
+  const buffer = new Buffer(text);
 
   return {
     red: true,
@@ -64,7 +59,7 @@ export function node_growable(x: Node): boolean {
 }
 
 export function grow_node(x: Node, text: string): void {
-  grow_buffer(x.buffer, text);
+  x.buffer.append(text);
 
   resize(x, x.chars_length + [...text].length);
 }
@@ -145,7 +140,7 @@ export function bubble_update(x: Node): void {
 }
 
 export function slice_node(x: Node, start: number, end: number): string {
-  return slice_buffer(x.buffer, x.chars_start + start, x.chars_start + end);
+  return x.buffer.slice(x.chars_start + start, x.chars_start + end);
 }
 
 function resize(x: Node, length: number): void {
