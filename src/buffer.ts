@@ -1,5 +1,4 @@
 import { add_eols, type EOL } from "./eol.ts";
-import { count_chars } from "./unicode.ts";
 
 export interface Buffer {
   text: string;
@@ -8,7 +7,7 @@ export interface Buffer {
 }
 
 export function create_buffer(text: string): Buffer {
-  const char_count = count_chars(text);
+  const char_count = [...text].length;
 
   const eols: EOL[] = [];
 
@@ -25,7 +24,7 @@ export function grow_buffer(buffer: Buffer, text: string): void {
   add_eols(buffer.eols, text, buffer.char_count);
 
   buffer.text += text;
-  buffer.char_count += count_chars(text);
+  buffer.char_count += [...text].length;
 }
 
 export function slice_buffer(
