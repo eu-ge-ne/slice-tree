@@ -1,8 +1,8 @@
-import { grow_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
   create_node,
+  grow_node,
   NIL,
   node_growable,
   resize_node,
@@ -249,9 +249,7 @@ export class SliceTree {
     }
 
     if (insert_case === InsertionCase.Right && node_growable(p)) {
-      grow_buffer(p.buffer, text);
-
-      resize_node(p, p.chars_length + [...text].length);
+      grow_node(p, text);
     } else {
       const child = create_node(text);
 

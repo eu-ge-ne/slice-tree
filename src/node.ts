@@ -1,4 +1,9 @@
-import { type Buffer, create_buffer, slice_buffer } from "./buffer.ts";
+import {
+  type Buffer,
+  create_buffer,
+  grow_buffer,
+  slice_buffer,
+} from "./buffer.ts";
 import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
@@ -146,4 +151,10 @@ export function bubble_update(x: Node): void {
 
 export function slice_node(x: Node, start: number, end: number): string {
   return slice_buffer(x.buffer, x.chars_start + start, x.chars_start + end);
+}
+
+export function grow_node(x: Node, text: string): void {
+  grow_buffer(x.buffer, text);
+
+  resize_node(x, x.chars_length + [...text].length);
 }
