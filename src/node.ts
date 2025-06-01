@@ -84,7 +84,7 @@ export function trim_node_start(x: Node, count: number): void {
   bubble_update(x);
 }
 
-export function split_node(
+export function split(
   tree: Tree,
   x: Node,
   index: number,

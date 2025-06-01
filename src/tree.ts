@@ -7,7 +7,7 @@ import {
   node_growable,
   read,
   shrink_node,
-  split_node,
+  split,
   trim_node_start,
 } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
@@ -271,8 +271,7 @@ export class SliceTree {
         }
 
         case InsertionCase.Split: {
-          const y = split_node(this, p, index, 0);
-
+          const y = split(this, p, index, 0);
           insert_left(this, y, child);
           break;
         }
@@ -332,19 +331,19 @@ export class SliceTree {
       if (offset === 0) {
         trim_node_start(node, count);
       } else {
-        split_node(this, node, offset, count);
+        split(this, node, offset, count);
       }
     } else {
       let x = node;
       let i = 0;
 
       if (offset !== 0) {
-        x = split_node(this, node, offset, 0);
+        x = split(this, node, offset, 0);
       }
 
       const last = search(this.root, end);
       if (last && last.offset !== 0) {
-        split_node(this, last.node, last.offset, 0);
+        split(this, last.node, last.offset, 0);
       }
 
       while ((x !== NIL) && (i < count)) {
