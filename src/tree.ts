@@ -1,15 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import {
-  create_node,
-  grow,
-  growable,
-  NIL,
-  read,
-  shrink,
-  split,
-  trim_start,
-} from "./node.ts";
+import { create_node, grow, NIL, trim_end, split, trim_start } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
 
 /**
@@ -116,7 +107,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.chars_length - offset;
+      let n = x.slice.chars_length - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -125,7 +116,7 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield* read(x, offset, n);
+      yield* x.slice.read(offset, n);
 
       x = successor(x);
       offset = 0;
@@ -234,12 +225,12 @@ export class SliceTree {
       } else {
         index -= x.left.total_chars;
 
-        if (index < x.chars_length) {
+        if (index < x.slice.chars_length) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.chars_length;
+          index -= x.slice.chars_length;
 
           p = x;
           x = x.right;
@@ -248,7 +239,7 @@ export class SliceTree {
       }
     }
 
-    if (insert_case === InsertionCase.Right && growable(p)) {
+    if (insert_case === InsertionCase.Right && p.slice.growable) {
       grow(p, text);
     } else {
       const child = create_node(text);
@@ -321,13 +312,13 @@ export class SliceTree {
     const count = end - start;
     const offset2 = offset + count;
 
-    if (offset2 === node.chars_length) {
+    if (offset2 === node.slice.chars_length) {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        shrink(node, count);
+        trim_end(node, count);
       }
-    } else if (offset2 < node.chars_length) {
+    } else if (offset2 < node.slice.chars_length) {
       if (offset === 0) {
         trim_start(node, count);
       } else {
@@ -347,7 +338,7 @@ export class SliceTree {
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.chars_length;
+        i += x.slice.chars_length;
 
         const next = successor(x);
 
