@@ -18,14 +18,14 @@ export interface Node {
   eols_start: number;
   eols_length: number;
 
-  char_count: number;
-  eol_count: number;
+  total_chars: number;
+  total_eols: number;
 }
 
 const nil = {
   red: false,
-  char_count: 0,
-  eol_count: 0,
+  total_chars: 0,
+  total_eols: 0,
 } as Node;
 
 export const NIL: Node = Object.create(nil);
@@ -49,8 +49,8 @@ export function create_node(text: string): Node {
     eols_start: 0,
     eols_length: buffer.eols.length,
 
-    char_count: buffer.char_count,
-    eol_count: buffer.eols.length,
+    total_chars: buffer.char_count,
+    total_eols: buffer.eols.length,
   };
 }
 
@@ -122,8 +122,8 @@ export function split_node(
     eols_start,
     eols_length,
 
-    char_count: chars_length,
-    eol_count: eols_length,
+    total_chars: chars_length,
+    total_eols: eols_length,
   };
 
   insert_after(tree, x, node);
@@ -133,8 +133,8 @@ export function split_node(
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.char_count = x.left.char_count + x.chars_length + x.right.char_count;
-    x.eol_count = x.left.eol_count + x.eols_length + x.right.eol_count;
+    x.total_chars = x.left.total_chars + x.chars_length + x.right.total_chars;
+    x.total_eols = x.left.total_eols + x.eols_length + x.right.total_eols;
     x = x.p;
   }
 }

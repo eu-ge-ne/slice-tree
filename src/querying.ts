@@ -5,10 +5,10 @@ export function search(
   i: number,
 ): { node: Node; offset: number } | undefined {
   while (x !== NIL) {
-    if (i < x.left.char_count) {
+    if (i < x.left.total_chars) {
       x = x.left;
     } else {
-      i -= x.left.char_count;
+      i -= x.left.total_chars;
 
       if (i < x.chars_length) {
         return { node: x, offset: i };
@@ -23,11 +23,11 @@ export function search(
 
 export function search_eol(x: Node, j: number): number | undefined {
   for (let i = 0; x !== NIL;) {
-    if (j < x.left.eol_count) {
+    if (j < x.left.total_eols) {
       x = x.left;
     } else {
-      j -= x.left.eol_count;
-      i += x.left.char_count;
+      j -= x.left.total_eols;
+      i += x.left.total_chars;
 
       if (j < x.eols_length) {
         return i + x.buffer.eols[x.eols_start + j]!.end - x.chars_start;
