@@ -13,8 +13,8 @@ export interface Node {
   right: Node;
 
   readonly buffer: Buffer;
-  text_start: number;
-  text_length: number;
+  chars_start: number;
+  chars_length: number;
   eols_start: number;
   eols_length: number;
 
@@ -36,8 +36,8 @@ nil.right = NIL;
 
 export function create_node(
   buffer: Buffer,
-  text_start: number,
-  text_length: number,
+  chars_start: number,
+  chars_length: number,
   eols_start: number,
   eols_length: number,
 ): Node {
@@ -48,23 +48,23 @@ export function create_node(
     right: NIL,
 
     buffer,
-    text_start,
-    text_length,
+    chars_start,
+    chars_length,
     eols_start,
     eols_length,
 
-    char_count: text_length,
+    char_count: chars_length,
     eol_count: eols_length,
   };
 }
 
 export function resize_node(x: Node, length: number): void {
-  x.text_length = length;
+  x.chars_length = length;
 
   const eols_end = find_eol_index(
     x.buffer.eols,
     x.eols_start,
-    x.text_start + x.text_length,
+    x.chars_start + x.chars_length,
   );
 
   x.eols_length = eols_end - x.eols_start;
@@ -73,15 +73,15 @@ export function resize_node(x: Node, length: number): void {
 }
 
 export function shrink_node(x: Node, count: number): void {
-  x.text_start += count;
-  x.text_length -= count;
+  x.chars_start += count;
+  x.chars_length -= count;
 
-  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.text_start);
+  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.chars_start);
 
   const eols_end = find_eol_index(
     x.buffer.eols,
     x.eols_start,
-    x.text_start + x.text_length,
+    x.chars_start + x.chars_length,
   );
 
   x.eols_length = eols_end - x.eols_start;
@@ -95,8 +95,8 @@ export function split_node(
   index: number,
   delete_count: number,
 ): Node {
-  const text_start = x.text_start + index + delete_count;
-  const text_length = x.text_length - index - delete_count;
+  const text_start = x.chars_start + index + delete_count;
+  const text_length = x.chars_length - index - delete_count;
 
   resize_node(x, index);
 
@@ -128,13 +128,13 @@ export function split_node(
 }
 
 export function node_growable(x: Node): boolean {
-  return (x.buffer.text.length < 100) &&
-    (x.text_start + x.text_length === x.buffer.text.length);
+  return (x.buffer.char_count < 100) &&
+    (x.chars_start + x.chars_length === x.buffer.char_count);
 }
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.char_count = x.left.char_count + x.text_length + x.right.char_count;
+    x.char_count = x.left.char_count + x.chars_length + x.right.char_count;
     x.eol_count = x.left.eol_count + x.eols_length + x.right.eol_count;
     x = x.p;
   }

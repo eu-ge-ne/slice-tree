@@ -116,7 +116,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.text_length - offset;
+      let n = x.chars_length - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -126,8 +126,8 @@ export class SliceTree {
       }
 
       yield x.buffer.text.slice(
-        x.text_start + offset,
-        x.text_start + offset + n,
+        x.chars_start + offset,
+        x.chars_start + offset + n,
       );
 
       x = successor(x);
@@ -237,12 +237,12 @@ export class SliceTree {
       } else {
         index -= x.left.char_count;
 
-        if (index < x.text_length) {
+        if (index < x.chars_length) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.text_length;
+          index -= x.chars_length;
 
           p = x;
           x = x.right;
@@ -254,7 +254,7 @@ export class SliceTree {
     if (insert_case === InsertionCase.Right && node_growable(p)) {
       grow_buffer(p.buffer, text);
 
-      resize_node(p, p.text_length + text.length);
+      resize_node(p, p.chars_length + text.length);
     } else {
       const buffer = create_buffer(text);
       const child = create_node(buffer, 0, text.length, 0, buffer.eols.length);
@@ -328,13 +328,13 @@ export class SliceTree {
     const count = end - start;
     const offset2 = offset + count;
 
-    if (offset2 === node.text_length) {
+    if (offset2 === node.chars_length) {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        resize_node(node, node.text_length - count);
+        resize_node(node, node.chars_length - count);
       }
-    } else if (offset2 < node.text_length) {
+    } else if (offset2 < node.chars_length) {
       if (offset === 0) {
         shrink_node(node, count);
       } else {
@@ -354,7 +354,7 @@ export class SliceTree {
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.text_length;
+        i += x.chars_length;
 
         const next = successor(x);
 

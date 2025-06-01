@@ -9,6 +9,7 @@ Deno.test("Create empty", () => {
   assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assertEquals(text.line_count, 0);
+
   assert_tree(text);
 });
 
@@ -23,5 +24,16 @@ Deno.test("Create with content", () => {
   );
   assertEquals(text.count, 123);
   assertEquals(text.line_count, 19);
+
+  assert_tree(text);
+});
+
+Deno.test("Create with multiple code units", () => {
+  const text = new SliceTree("Lorem😄ipsum");
+
+  assert_iterator(text.read(0), "Lorem😄ipsum");
+  assertEquals(text.count, 12);
+  assertEquals(text.line_count, 1);
+
   assert_tree(text);
 });

@@ -1,15 +1,27 @@
-const LINE_BREAKS_RE = /\r?\n/gm;
-
 export interface EOL {
   readonly start: number;
   readonly end: number;
 }
 
-export function create_eols(text: string, start = 0): IteratorObject<EOL> {
-  return text.matchAll(LINE_BREAKS_RE).map((x) => ({
-    start: start + x.index,
-    end: start + x.index + x[0].length,
-  }));
+export function create_eols(text: string, start = 0): EOL[] {
+  const eols: EOL[] = [];
+
+  let i = 0;
+  let prev: string | undefined;
+
+  for (const char of text) {
+    if (char === "\n") {
+      eols.push({
+        start: start + i - (prev === "\r" ? 1 : 0),
+        end: start + i + 1,
+      });
+    }
+
+    prev = char;
+    i += 1;
+  }
+
+  return eols;
 }
 
 export function find_eol_index(
