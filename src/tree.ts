@@ -1,6 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { create_node, grow, NIL, split, trim_end, trim_start } from "./node.ts";
+import { bubble_update, create_node, NIL, split } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
 
 /**
@@ -240,7 +240,9 @@ export class SliceTree {
     }
 
     if (insert_case === InsertionCase.Right && p.slice.growable) {
-      grow(p, text);
+      p.slice.append(text);
+
+      bubble_update(p);
     } else {
       const child = create_node(text);
 
@@ -316,11 +318,13 @@ export class SliceTree {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        trim_end(node, count);
+        node.slice.trim_end(count);
+        bubble_update(node);
       }
     } else if (offset2 < node.slice.length) {
       if (offset === 0) {
-        trim_start(node, count);
+        node.slice.trim_start(count);
+        bubble_update(node);
       } else {
         split(this, node, offset, count);
       }

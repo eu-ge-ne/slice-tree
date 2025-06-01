@@ -41,21 +41,6 @@ export function create_node(text: string): Node {
   };
 }
 
-export function grow(x: Node, text: string): void {
-  x.slice.append(text);
-  bubble_update(x);
-}
-
-export function trim_end(x: Node, count: number): void {
-  x.slice.trim_end(count);
-  bubble_update(x);
-}
-
-export function trim_start(x: Node, count: number): void {
-  x.slice.trim_start(count);
-  bubble_update(x);
-}
-
 export function split(
   tree: Tree,
   x: Node,
