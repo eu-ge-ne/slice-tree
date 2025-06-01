@@ -1,5 +1,5 @@
 import type { Buffer } from "./buffer.ts";
-import { find_eol_index } from "./eol.ts";
+import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
 export interface Tree {
@@ -61,7 +61,7 @@ export function create_node(
 export function resize_node(x: Node, length: number): void {
   x.chars_length = length;
 
-  const eols_end = find_eol_index(
+  const eols_end = find_eol(
     x.buffer.eols,
     x.eols_start,
     x.chars_start + x.chars_length,
@@ -76,9 +76,9 @@ export function shrink_node(x: Node, count: number): void {
   x.chars_start += count;
   x.chars_length -= count;
 
-  x.eols_start = find_eol_index(x.buffer.eols, x.eols_start, x.chars_start);
+  x.eols_start = find_eol(x.buffer.eols, x.eols_start, x.chars_start);
 
-  const eols_end = find_eol_index(
+  const eols_end = find_eol(
     x.buffer.eols,
     x.eols_start,
     x.chars_start + x.chars_length,
@@ -100,13 +100,13 @@ export function split_node(
 
   resize_node(x, index);
 
-  const eols_start = find_eol_index(
+  const eols_start = find_eol(
     x.buffer.eols,
     x.eols_start + x.eols_length,
     text_start,
   );
 
-  const eols_end = find_eol_index(
+  const eols_end = find_eol(
     x.buffer.eols,
     eols_start,
     text_start + text_length,

@@ -20,7 +20,7 @@ export function add_eols(eols: EOL[], text: string, start = 0): void {
   }
 }
 
-export function find_eol_index(
+export function find_eol(
   eols: readonly EOL[],
   eols_start: number,
   index: number,
