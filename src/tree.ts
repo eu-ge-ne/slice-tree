@@ -1,4 +1,4 @@
-import { create_buffer, grow_buffer, slice_buffer } from "./buffer.ts";
+import { grow_buffer, slice_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
@@ -28,15 +28,7 @@ export class SliceTree {
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
-      const buffer = create_buffer(text);
-
-      this.root = create_node(
-        buffer,
-        0,
-        buffer.char_count,
-        0,
-        buffer.eols.length,
-      );
+      this.root = create_node(text);
 
       this.root.red = false;
     }
@@ -264,14 +256,7 @@ export class SliceTree {
 
       resize_node(p, p.chars_length + [...text].length);
     } else {
-      const buffer = create_buffer(text);
-      const child = create_node(
-        buffer,
-        0,
-        buffer.char_count,
-        0,
-        buffer.eols.length,
-      );
+      const child = create_node(text);
 
       switch (insert_case) {
         case InsertionCase.Root: {

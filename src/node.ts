@@ -1,4 +1,4 @@
-import type { Buffer } from "./buffer.ts";
+import { type Buffer, create_buffer } from "./buffer.ts";
 import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
@@ -34,13 +34,9 @@ nil.p = NIL;
 nil.left = NIL;
 nil.right = NIL;
 
-export function create_node(
-  buffer: Buffer,
-  chars_start: number,
-  chars_length: number,
-  eols_start: number,
-  eols_length: number,
-): Node {
+export function create_node(text: string): Node {
+  const buffer = create_buffer(text);
+
   return {
     red: true,
     p: NIL,
@@ -48,13 +44,13 @@ export function create_node(
     right: NIL,
 
     buffer,
-    chars_start,
-    chars_length,
-    eols_start,
-    eols_length,
+    chars_start: 0,
+    chars_length: buffer.char_count,
+    eols_start: 0,
+    eols_length: buffer.eols.length,
 
-    char_count: chars_length,
-    eol_count: eols_length,
+    char_count: buffer.char_count,
+    eol_count: buffer.eols.length,
   };
 }
 
@@ -114,13 +110,21 @@ export function split_node(
 
   const eols_length = eols_end - eols_start;
 
-  const node = create_node(
-    x.buffer,
+  const node: Node = {
+    red: true,
+    p: NIL,
+    left: NIL,
+    right: NIL,
+
+    buffer: x.buffer,
     chars_start,
     chars_length,
     eols_start,
     eols_length,
-  );
+
+    char_count: chars_length,
+    eol_count: eols_length,
+  };
 
   insert_after(tree, x, node);
 
