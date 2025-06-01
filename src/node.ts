@@ -36,8 +36,8 @@ export function create_node(text: string): Node {
     left: NIL,
     right: NIL,
     slice,
-    total_chars: slice.buffer.char_count,
-    total_eols: slice.buffer.eol_starts.length,
+    total_chars: slice.chars_length,
+    total_eols: slice.eols_length,
   };
 }
 
