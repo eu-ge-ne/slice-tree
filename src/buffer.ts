@@ -19,8 +19,8 @@ export class Buffer {
     this.char_count += [...text].length;
   }
 
-  slice(start: number, end: number): IteratorObject<string> {
-    return this.#text[Symbol.iterator]().drop(start).take(end - start);
+  read(start: number, count: number): IteratorObject<string> {
+    return this.#text[Symbol.iterator]().drop(start).take(count);
   }
 
   find_eol(eols_start: number, index: number): number {

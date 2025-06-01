@@ -5,8 +5,8 @@ import {
   grow_node,
   NIL,
   node_growable,
+  read,
   shrink_node,
-  slice_node,
   split_node,
   trim_node_start,
 } from "./node.ts";
@@ -125,7 +125,7 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield* slice_node(x, offset, offset + n);
+      yield* read(x, offset, n);
 
       x = successor(x);
       offset = 0;
