@@ -68,7 +68,7 @@ export function shrink_node(x: Node, count: number): void {
   resize(x, x.chars_length - count);
 }
 
-export function trim_node_start(x: Node, count: number): void {
+export function trim_start(x: Node, count: number): void {
   x.chars_start += count;
   x.chars_length -= count;
 
