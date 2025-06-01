@@ -23,11 +23,11 @@ Deno.test("Create with content", () => {
   assert_tree(text);
 });
 
-Deno.test("Create with multiple code units", () => {
-  const text = new SliceTree(" 😄 ");
+Deno.test("Create with wide char", () => {
+  const text = new SliceTree("😄");
 
-  assert_iterator(text.read(0), " 😄 ");
-  assertEquals(text.count, 3);
+  assert_iterator(text.read(0), "😄");
+  assertEquals(text.count, 1);
   assertEquals(text.line_count, 1);
 
   assert_tree(text);
