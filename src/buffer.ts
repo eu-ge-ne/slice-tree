@@ -33,28 +33,20 @@ export function slice_buffer(
   end: number,
 ): string {
   let i = 0;
+  let a = 0;
+  let b = 0;
 
-  let s = 0;
   for (const char of buffer.text) {
-    if (i === start) {
+    if (i < start) {
+      a += char.length;
+      i += 1;
+    } else if (i < end) {
+      b += char.length;
+      i += 1;
+    } else {
       break;
     }
-    i += 1;
-    s += char.length;
   }
 
-  const t = buffer.text.slice(s);
-
-  i = 0;
-
-  let e = 0;
-  for (const char of t) {
-    if (i === (end - start)) {
-      break;
-    }
-    i += 1;
-    e += char.length;
-  }
-
-  return t.slice(0, e);
+  return buffer.text.slice(a, a + b);
 }
