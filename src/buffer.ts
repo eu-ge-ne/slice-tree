@@ -1,7 +1,7 @@
 import { add_eols, type EOL } from "./eol.ts";
 
 export interface Buffer {
-  text: string;
+  _text: string;
   char_count: number;
   readonly eols: EOL[];
 }
@@ -14,7 +14,7 @@ export function create_buffer(text: string): Buffer {
   add_eols(eols, text);
 
   return {
-    text,
+    _text: text,
     char_count,
     eols,
   };
@@ -23,7 +23,7 @@ export function create_buffer(text: string): Buffer {
 export function grow_buffer(buffer: Buffer, text: string): void {
   add_eols(buffer.eols, text, buffer.char_count);
 
-  buffer.text += text;
+  buffer._text += text;
   buffer.char_count += [...text].length;
 }
 
@@ -36,7 +36,7 @@ export function slice_buffer(
   let a = 0;
   let b = 0;
 
-  for (const char of buffer.text) {
+  for (const char of buffer._text) {
     if (i < start) {
       a += char.length;
       i += 1;
@@ -48,5 +48,5 @@ export function slice_buffer(
     }
   }
 
-  return buffer.text.slice(a, a + b);
+  return buffer._text.slice(a, a + b);
 }

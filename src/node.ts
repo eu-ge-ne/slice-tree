@@ -60,8 +60,7 @@ export function create_node(text: string): Node {
 }
 
 export function node_growable(x: Node): boolean {
-  return (x.buffer.char_count < 100) &&
-    (x.chars_start + x.chars_length === x.buffer.char_count);
+  return x.chars_start + x.chars_length === x.buffer.char_count;
 }
 
 export function grow_node(x: Node, text: string): void {
