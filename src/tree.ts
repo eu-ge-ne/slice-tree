@@ -1,4 +1,4 @@
-import { create_buffer, grow_buffer } from "./buffer.ts";
+import { create_buffer, grow_buffer, slice_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
@@ -125,7 +125,8 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield x.buffer.text.slice(
+      yield slice_buffer(
+        x.buffer,
         x.chars_start + offset,
         x.chars_start + offset + n,
       );

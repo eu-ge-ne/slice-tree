@@ -27,6 +27,38 @@ export function grow_buffer(buffer: Buffer, text: string): void {
   buffer.char_count += count_chars(text);
 }
 
+export function slice_buffer(
+  buffer: Buffer,
+  start: number,
+  end: number,
+): string {
+  let i = 0;
+
+  let s = 0;
+  for (const char of buffer.text) {
+    if (i === start) {
+      break;
+    }
+    i += 1;
+    s += char.length;
+  }
+
+  const t = buffer.text.slice(s);
+
+  i = 0;
+
+  let e = 0;
+  for (const char of t) {
+    if (i === (end - start)) {
+      break;
+    }
+    i += 1;
+    e += char.length;
+  }
+
+  return t.slice(0, e);
+}
+
 function count_chars(text: string): number {
   let char_count = 0;
 
