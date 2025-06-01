@@ -29,10 +29,10 @@ Deno.test("Create with content", () => {
 });
 
 Deno.test("Create with multiple code units", () => {
-  const text = new SliceTree("Lorem😄ipsum");
+  const text = new SliceTree(" 😄 ");
 
-  assert_iterator(text.read(0), "Lorem😄ipsum");
-  assertEquals(text.count, 12);
+  assert_iterator(text.read(0), " 😄 ");
+  assertEquals(text.count, 3);
   assertEquals(text.line_count, 1);
 
   assert_tree(text);

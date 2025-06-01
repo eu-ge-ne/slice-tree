@@ -30,7 +30,14 @@ export class SliceTree {
     if (text && text.length > 0) {
       const buffer = create_buffer(text);
 
-      this.root = create_node(buffer, 0, text.length, 0, buffer.eols.length);
+      this.root = create_node(
+        buffer,
+        0,
+        buffer.char_count,
+        0,
+        buffer.eols.length,
+      );
+
       this.root.red = false;
     }
   }
