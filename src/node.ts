@@ -62,38 +62,18 @@ export function split(
   index: number,
   delete_count: number,
 ): Node {
-  const chars_start = x.slice.chars_start + index + delete_count;
-  const chars_length = x.slice.chars_length - index - delete_count;
+  const slice = x.slice.split(index, delete_count);
 
-  x.slice.resize(index);
   bubble_update(x);
-
-  const eols_start = x.slice.buffer.find_eol(
-    x.slice.eols_start + x.slice.eols_length,
-    chars_start,
-  );
-
-  const eols_end = x.slice.buffer.find_eol(
-    eols_start,
-    chars_start + chars_length,
-  );
-
-  const eols_length = eols_end - eols_start;
 
   const node: Node = {
     red: true,
     p: NIL,
     left: NIL,
     right: NIL,
-    slice: new Slice(
-      x.slice.buffer,
-      chars_start,
-      chars_length,
-      eols_start,
-      eols_length,
-    ),
-    total_chars: chars_length,
-    total_eols: eols_length,
+    slice,
+    total_chars: slice.chars_length,
+    total_eols: slice.eols_length,
   };
 
   insert_after(tree, x, node);

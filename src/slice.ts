@@ -67,6 +67,35 @@ export class Slice {
     this.eols_length = eols_end - this.eols_start;
   }
 
+  split(index: number, delete_count: number): Slice {
+    const chars_start = this.chars_start + index + delete_count;
+    const chars_length = this.chars_length - index - delete_count;
+
+    this.resize(index);
+
+    const eols_start = this.buffer.find_eol(
+      this.eols_start + this.eols_length,
+      chars_start,
+    );
+
+    const eols_end = this.buffer.find_eol(
+      eols_start,
+      chars_start + chars_length,
+    );
+
+    const eols_length = eols_end - eols_start;
+
+    const slice = new Slice(
+      this.buffer,
+      chars_start,
+      chars_length,
+      eols_start,
+      eols_length,
+    );
+
+    return slice;
+  }
+
   read(start: number, count: number): IteratorObject<string> {
     return this.buffer.read(this.chars_start + start, count);
   }
