@@ -8,6 +8,7 @@ export class Buffer {
   constructor(text: string) {
     this.#text = text;
     this.char_count = [...text].length;
+
     add_eols(this.eols, text);
   }
 
