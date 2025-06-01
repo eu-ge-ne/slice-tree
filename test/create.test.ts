@@ -14,16 +14,11 @@ Deno.test("Create empty", () => {
 });
 
 Deno.test("Create with content", () => {
-  const text = new SliceTree(
-    "Lorem\nipsum\ndolor\nsit\namet,\nconsectetur\nadipiscing\nelit,\nsed\ndo\neiusmod\ntempor\nincididunt\nut\nlabore\net\ndolore\nmagna\naliqua.",
-  );
+  const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
-  assert_iterator(
-    text.read(0),
-    "Lorem\nipsum\ndolor\nsit\namet,\nconsectetur\nadipiscing\nelit,\nsed\ndo\neiusmod\ntempor\nincididunt\nut\nlabore\net\ndolore\nmagna\naliqua.",
-  );
-  assertEquals(text.count, 123);
-  assertEquals(text.line_count, 19);
+  assert_iterator(text.read(0), "Lorem\nipsum\ndolor\nsit\namet");
+  assertEquals(text.count, 26);
+  assertEquals(text.line_count, 5);
 
   assert_tree(text);
 });
