@@ -40,7 +40,7 @@ function assert_node(x: Node): void {
     assert_node(x.left);
     assert_node(x.right);
 
-    // 6. text_length > 0
+    // 6. chars_length > 0
     assert(x.chars_length > 0);
   }
 }

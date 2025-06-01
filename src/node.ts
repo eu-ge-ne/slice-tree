@@ -95,29 +95,29 @@ export function split_node(
   index: number,
   delete_count: number,
 ): Node {
-  const text_start = x.chars_start + index + delete_count;
-  const text_length = x.chars_length - index - delete_count;
+  const chars_start = x.chars_start + index + delete_count;
+  const chars_length = x.chars_length - index - delete_count;
 
   resize_node(x, index);
 
   const eols_start = find_eol(
     x.buffer.eols,
     x.eols_start + x.eols_length,
-    text_start,
+    chars_start,
   );
 
   const eols_end = find_eol(
     x.buffer.eols,
     eols_start,
-    text_start + text_length,
+    chars_start + chars_length,
   );
 
   const eols_length = eols_end - eols_start;
 
   const node = create_node(
     x.buffer,
-    text_start,
-    text_length,
+    chars_start,
+    chars_length,
     eols_start,
     eols_length,
   );
