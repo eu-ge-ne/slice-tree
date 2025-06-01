@@ -1,4 +1,5 @@
 import { create_eols, type EOL } from "./eol.ts";
+import { count_chars } from "./unicode.ts";
 
 export interface Buffer {
   text: string;
@@ -57,14 +58,4 @@ export function slice_buffer(
   }
 
   return t.slice(0, e);
-}
-
-function count_chars(text: string): number {
-  let char_count = 0;
-
-  for (const _ of text) {
-    char_count += 1;
-  }
-
-  return char_count;
 }

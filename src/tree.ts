@@ -10,6 +10,7 @@ import {
   split_node,
 } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
+import { count_chars } from "./unicode.ts";
 
 /**
  * Implements a `piece table` data structure to represent text content.
@@ -262,10 +263,16 @@ export class SliceTree {
     if (insert_case === InsertionCase.Right && node_growable(p)) {
       grow_buffer(p.buffer, text);
 
-      resize_node(p, p.chars_length + text.length);
+      resize_node(p, p.chars_length + count_chars(text));
     } else {
       const buffer = create_buffer(text);
-      const child = create_node(buffer, 0, text.length, 0, buffer.eols.length);
+      const child = create_node(
+        buffer,
+        0,
+        buffer.char_count,
+        0,
+        buffer.eols.length,
+      );
 
       switch (insert_case) {
         case InsertionCase.Root: {
