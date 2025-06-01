@@ -1,4 +1,4 @@
-import { grow_buffer, slice_buffer } from "./buffer.ts";
+import { grow_buffer } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
@@ -7,6 +7,7 @@ import {
   node_growable,
   resize_node,
   shrink_node,
+  slice_node,
   split_node,
 } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
@@ -124,11 +125,7 @@ export class SliceTree {
         remaining -= n;
       }
 
-      yield slice_buffer(
-        x.buffer,
-        x.chars_start + offset,
-        x.chars_start + offset + n,
-      );
+      yield slice_node(x, offset, offset + n);
 
       x = successor(x);
       offset = 0;

@@ -1,4 +1,4 @@
-import { type Buffer, create_buffer } from "./buffer.ts";
+import { type Buffer, create_buffer, slice_buffer } from "./buffer.ts";
 import { find_eol } from "./eol.ts";
 import { insert_after } from "./insertion.ts";
 
@@ -142,4 +142,8 @@ export function bubble_update(x: Node): void {
     x.eol_count = x.left.eol_count + x.eols_length + x.right.eol_count;
     x = x.p;
   }
+}
+
+export function slice_node(x: Node, start: number, end: number): string {
+  return slice_buffer(x.buffer, x.chars_start + start, x.chars_start + end);
 }
