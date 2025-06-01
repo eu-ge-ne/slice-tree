@@ -53,18 +53,18 @@ export function create_node(text: string): Node {
   };
 }
 
-export function node_growable(x: Node): boolean {
+export function growable(x: Node): boolean {
   return (x.buffer.char_count < 100) &&
     (x.chars_start + x.chars_length === x.buffer.char_count);
 }
 
-export function grow_node(x: Node, text: string): void {
+export function grow(x: Node, text: string): void {
   x.buffer.append(text);
 
   resize(x, x.chars_length + [...text].length);
 }
 
-export function shrink_node(x: Node, count: number): void {
+export function shrink(x: Node, count: number): void {
   resize(x, x.chars_length - count);
 }
 

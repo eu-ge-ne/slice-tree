@@ -2,11 +2,11 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import {
   create_node,
-  grow_node,
+  grow,
+  growable,
   NIL,
-  node_growable,
   read,
-  shrink_node,
+  shrink,
   split,
   trim_start,
 } from "./node.ts";
@@ -248,8 +248,8 @@ export class SliceTree {
       }
     }
 
-    if (insert_case === InsertionCase.Right && node_growable(p)) {
-      grow_node(p, text);
+    if (insert_case === InsertionCase.Right && growable(p)) {
+      grow(p, text);
     } else {
       const child = create_node(text);
 
@@ -325,7 +325,7 @@ export class SliceTree {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        shrink_node(node, count);
+        shrink(node, count);
       }
     } else if (offset2 < node.chars_length) {
       if (offset === 0) {
