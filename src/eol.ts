@@ -3,9 +3,7 @@ export interface EOL {
   readonly end: number;
 }
 
-export function create_eols(text: string, start = 0): EOL[] {
-  const eols: EOL[] = [];
-
+export function add_eols(eols: EOL[], text: string, start = 0): void {
   let i = 0;
   let prev: string | undefined;
 
@@ -20,8 +18,6 @@ export function create_eols(text: string, start = 0): EOL[] {
     prev = char;
     i += 1;
   }
-
-  return eols;
 }
 
 export function find_eol_index(

@@ -1,15 +1,19 @@
 import { assertEquals } from "@std/assert";
 
-import { create_eols } from "../src/eol.ts";
+import { add_eols, type EOL } from "../src/eol.ts";
 
 Deno.test("parse no newlines", () => {
-  const eols = create_eols("Lorem ipsum");
+  const eols: EOL[] = [];
+
+  add_eols(eols, "Lorem ipsum");
 
   assertEquals(eols, []);
 });
 
 Deno.test("parse \n", () => {
-  const eols = create_eols("Lorem😄\nipsum😄\n");
+  const eols: EOL[] = [];
+
+  add_eols(eols, "Lorem😄\nipsum😄\n");
 
   assertEquals(eols, [
     { start: 6, end: 7 },
@@ -18,7 +22,9 @@ Deno.test("parse \n", () => {
 });
 
 Deno.test("parse \r\n", () => {
-  const eols = create_eols("Lorem😄\r\nipsum😄\r\n");
+  const eols: EOL[] = [];
+
+  add_eols(eols, "Lorem😄\r\nipsum😄\r\n");
 
   assertEquals(eols, [
     { start: 6, end: 8 },
@@ -27,7 +33,9 @@ Deno.test("parse \r\n", () => {
 });
 
 Deno.test("parse \n and \r\n", () => {
-  const eols = create_eols("Lorem😄\nipsum😄\r\n");
+  const eols: EOL[] = [];
+
+  add_eols(eols, "Lorem😄\nipsum😄\r\n");
 
   assertEquals(eols, [
     { start: 6, end: 7 },
