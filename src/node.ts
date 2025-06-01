@@ -67,21 +67,11 @@ export function node_growable(x: Node): boolean {
 export function grow_node(x: Node, text: string): void {
   grow_buffer(x.buffer, text);
 
-  resize_node(x, x.chars_length + [...text].length);
+  resize(x, x.chars_length + [...text].length);
 }
 
-export function resize_node(x: Node, length: number): void {
-  x.chars_length = length;
-
-  const eols_end = find_eol(
-    x.buffer.eols,
-    x.eols_start,
-    x.chars_start + x.chars_length,
-  );
-
-  x.eols_length = eols_end - x.eols_start;
-
-  bubble_update(x);
+export function shrink_node(x: Node, count: number): void {
+  resize(x, x.chars_length - count);
 }
 
 export function trim_node_start(x: Node, count: number): void {
@@ -110,7 +100,7 @@ export function split_node(
   const chars_start = x.chars_start + index + delete_count;
   const chars_length = x.chars_length - index - delete_count;
 
-  resize_node(x, index);
+  resize(x, index);
 
   const eols_start = find_eol(
     x.buffer.eols,
@@ -157,4 +147,18 @@ export function bubble_update(x: Node): void {
 
 export function slice_node(x: Node, start: number, end: number): string {
   return slice_buffer(x.buffer, x.chars_start + start, x.chars_start + end);
+}
+
+function resize(x: Node, length: number): void {
+  x.chars_length = length;
+
+  const eols_end = find_eol(
+    x.buffer.eols,
+    x.eols_start,
+    x.chars_start + x.chars_length,
+  );
+
+  x.eols_length = eols_end - x.eols_start;
+
+  bubble_update(x);
 }

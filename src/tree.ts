@@ -5,7 +5,7 @@ import {
   grow_node,
   NIL,
   node_growable,
-  resize_node,
+  shrink_node,
   slice_node,
   split_node,
   trim_node_start,
@@ -326,7 +326,7 @@ export class SliceTree {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        resize_node(node, node.chars_length - count);
+        shrink_node(node, count);
       }
     } else if (offset2 < node.chars_length) {
       if (offset === 0) {
