@@ -2,8 +2,8 @@ import { Buffer } from "./buffer.ts";
 
 export class Slice {
   buffer: Buffer;
-  chars_start: number;
-  chars_length: number;
+  start: number;
+  length: number;
   eols_start: number;
   eols_length: number;
 
@@ -15,8 +15,8 @@ export class Slice {
     eols_length: number,
   ) {
     this.buffer = buffer;
-    this.chars_start = chars_start;
-    this.chars_length = chars_length;
+    this.start = chars_start;
+    this.length = chars_length;
     this.eols_start = eols_start;
     this.eols_length = eols_length;
   }
@@ -29,47 +29,47 @@ export class Slice {
 
   get growable(): boolean {
     return (this.buffer.char_count < 100) &&
-      (this.chars_start + this.chars_length === this.buffer.char_count);
+      (this.start + this.length === this.buffer.char_count);
   }
 
   append(text: string): void {
     this.buffer.append(text);
 
-    this.resize(this.chars_length + [...text].length);
+    this.resize(this.length + [...text].length);
   }
 
   trim_end(n: number): void {
-    this.resize(this.chars_length - n);
+    this.resize(this.length - n);
   }
 
   trim_start(n: number): void {
-    this.chars_start += n;
-    this.chars_length -= n;
+    this.start += n;
+    this.length -= n;
 
-    this.eols_start = this.buffer.find_eol(this.eols_start, this.chars_start);
+    this.eols_start = this.buffer.find_eol(this.eols_start, this.start);
 
     const eols_end = this.buffer.find_eol(
       this.eols_start,
-      this.chars_start + this.chars_length,
+      this.start + this.length,
     );
 
     this.eols_length = eols_end - this.eols_start;
   }
 
-  resize(chars_length: number): void {
-    this.chars_length = chars_length;
+  resize(length: number): void {
+    this.length = length;
 
     const eols_end = this.buffer.find_eol(
       this.eols_start,
-      this.chars_start + this.chars_length,
+      this.start + this.length,
     );
 
     this.eols_length = eols_end - this.eols_start;
   }
 
   split(index: number, delete_count: number): Slice {
-    const chars_start = this.chars_start + index + delete_count;
-    const chars_length = this.chars_length - index - delete_count;
+    const chars_start = this.start + index + delete_count;
+    const chars_length = this.length - index - delete_count;
 
     this.resize(index);
 
@@ -97,6 +97,6 @@ export class Slice {
   }
 
   read(start: number, count: number): IteratorObject<string> {
-    return this.buffer.read(this.chars_start + start, count);
+    return this.buffer.read(this.start + start, count);
   }
 }

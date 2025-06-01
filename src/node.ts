@@ -36,7 +36,7 @@ export function create_node(text: string): Node {
     left: NIL,
     right: NIL,
     slice,
-    total_chars: slice.chars_length,
+    total_chars: slice.length,
     total_eols: slice.eols_length,
   };
 }
@@ -72,7 +72,7 @@ export function split(
     left: NIL,
     right: NIL,
     slice,
-    total_chars: slice.chars_length,
+    total_chars: slice.length,
     total_eols: slice.eols_length,
   };
 
@@ -83,8 +83,7 @@ export function split(
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.total_chars = x.left.total_chars + x.slice.chars_length +
-      x.right.total_chars;
+    x.total_chars = x.left.total_chars + x.slice.length + x.right.total_chars;
     x.total_eols = x.left.total_eols + x.slice.eols_length + x.right.total_eols;
     x = x.p;
   }

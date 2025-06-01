@@ -10,10 +10,10 @@ export function search(
     } else {
       i -= x.left.total_chars;
 
-      if (i < x.slice.chars_length) {
+      if (i < x.slice.length) {
         return { node: x, offset: i };
       } else {
-        i -= x.slice.chars_length;
+        i -= x.slice.length;
 
         x = x.right;
       }
@@ -30,10 +30,11 @@ export function search_eol(x: Node, j: number): number | undefined {
       i += x.left.total_chars;
 
       if (j < x.slice.eols_length) {
-        return i + x.slice.buffer.eol_ends[x.slice.eols_start + j]! - x.slice.chars_start;
+        return i + x.slice.buffer.eol_ends[x.slice.eols_start + j]! -
+          x.slice.start;
       } else {
         j -= x.slice.eols_length;
-        i += x.slice.chars_length;
+        i += x.slice.length;
 
         x = x.right;
       }

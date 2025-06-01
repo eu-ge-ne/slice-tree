@@ -1,6 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { create_node, grow, NIL, trim_end, split, trim_start } from "./node.ts";
+import { create_node, grow, NIL, split, trim_end, trim_start } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
 
 /**
@@ -107,7 +107,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.slice.chars_length - offset;
+      let n = x.slice.length - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -225,12 +225,12 @@ export class SliceTree {
       } else {
         index -= x.left.total_chars;
 
-        if (index < x.slice.chars_length) {
+        if (index < x.slice.length) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.slice.chars_length;
+          index -= x.slice.length;
 
           p = x;
           x = x.right;
@@ -312,13 +312,13 @@ export class SliceTree {
     const count = end - start;
     const offset2 = offset + count;
 
-    if (offset2 === node.slice.chars_length) {
+    if (offset2 === node.slice.length) {
       if (offset === 0) {
         delete_node(this, node);
       } else {
         trim_end(node, count);
       }
-    } else if (offset2 < node.slice.chars_length) {
+    } else if (offset2 < node.slice.length) {
       if (offset === 0) {
         trim_start(node, count);
       } else {
@@ -338,7 +338,7 @@ export class SliceTree {
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.slice.chars_length;
+        i += x.slice.length;
 
         const next = successor(x);
 
