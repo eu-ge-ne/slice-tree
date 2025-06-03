@@ -49,7 +49,7 @@ Deno.bench("Inserting into a SliceTree", {
   b.end();
 });
 
-Deno.bench("Inserting 1M chars into a string", {
+Deno.bench("Inserting into a string", {
   group: "Insert",
 }, (b) => {
   let text = str(2);

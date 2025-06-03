@@ -5,15 +5,15 @@ export function search(
   i: number,
 ): { node: Node; offset: number } | undefined {
   while (x !== NIL) {
-    if (i < x.left.char_count) {
+    if (i < x.left.len) {
       x = x.left;
     } else {
-      i -= x.left.char_count;
+      i -= x.left.len;
 
-      if (i < x.text_length) {
+      if (i < x.slice.len) {
         return { node: x, offset: i };
       } else {
-        i -= x.text_length;
+        i -= x.slice.len;
 
         x = x.right;
       }
@@ -23,17 +23,17 @@ export function search(
 
 export function search_eol(x: Node, j: number): number | undefined {
   for (let i = 0; x !== NIL;) {
-    if (j < x.left.eol_count) {
+    if (j < x.left.eols_len) {
       x = x.left;
     } else {
-      j -= x.left.eol_count;
-      i += x.left.char_count;
+      j -= x.left.eols_len;
+      i += x.left.len;
 
-      if (j < x.eols_length) {
-        return i + x.buffer.eols[x.eols_start + j]!.end - x.text_start;
+      if (j < x.slice.eols_len) {
+        return i + x.slice.get_eol_end(x.slice.eols_start + j) - x.slice.start;
       } else {
-        j -= x.eols_length;
-        i += x.text_length;
+        j -= x.slice.eols_len;
+        i += x.slice.len;
 
         x = x.right;
       }
