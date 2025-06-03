@@ -1,22 +1,22 @@
 export class Buffer {
   #text: string;
 
-  char_count: number;
+  length: number;
   eol_starts: number[] = [];
   eol_ends: number[] = [];
 
   constructor(text: string) {
     this.#text = text;
-    this.char_count = [...text].length;
+    this.length = [...text].length;
 
     this.#add_eols(text);
   }
 
   append(text: string): void {
-    this.#add_eols(text, this.char_count);
+    this.#add_eols(text, this.length);
 
     this.#text += text;
-    this.char_count += [...text].length;
+    this.length += [...text].length;
   }
 
   read(start: number, count: number): IteratorObject<string> {

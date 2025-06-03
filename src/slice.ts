@@ -10,15 +10,15 @@ export class Slice {
 
   constructor(
     buffer: Buffer,
-    chars_start: number,
-    chars_length: number,
+    start: number,
+    length: number,
     eols_start: number,
     eols_length: number,
   ) {
     this.#buf = buffer;
 
-    this.start = chars_start;
-    this.length = chars_length;
+    this.start = start;
+    this.length = length;
     this.eols_start = eols_start;
     this.eols_length = eols_length;
   }
@@ -26,12 +26,12 @@ export class Slice {
   static from_text(text: string): Slice {
     const buffer = new Buffer(text);
 
-    return new Slice(buffer, 0, buffer.char_count, 0, buffer.eol_starts.length);
+    return new Slice(buffer, 0, buffer.length, 0, buffer.eol_starts.length);
   }
 
   get growable(): boolean {
-    return (this.#buf.char_count < 100) &&
-      (this.start + this.length === this.#buf.char_count);
+    return (this.#buf.length < 100) &&
+      (this.start + this.length === this.#buf.length);
   }
 
   append(text: string): void {
@@ -70,29 +70,20 @@ export class Slice {
   }
 
   split(index: number, delete_count: number): Slice {
-    const chars_start = this.start + index + delete_count;
-    const chars_length = this.length - index - delete_count;
+    const start = this.start + index + delete_count;
+    const length = this.length - index - delete_count;
 
     this.resize(index);
 
     const eols_start = this.#buf.find_eol(
       this.eols_start + this.eols_length,
-      chars_start,
+      start,
     );
 
-    const eols_end = this.#buf.find_eol(eols_start, chars_start + chars_length);
-
+    const eols_end = this.#buf.find_eol(eols_start, start + length);
     const eols_length = eols_end - eols_start;
 
-    const slice = new Slice(
-      this.#buf,
-      chars_start,
-      chars_length,
-      eols_start,
-      eols_length,
-    );
-
-    return slice;
+    return new Slice(this.#buf, start, length, eols_start, eols_length);
   }
 
   read(start: number, count: number): IteratorObject<string> {
