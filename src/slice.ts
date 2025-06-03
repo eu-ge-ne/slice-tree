@@ -69,9 +69,9 @@ export class Slice {
     this.eols_length = eols_end - this.eols_start;
   }
 
-  split(index: number, delete_count: number): Slice {
-    const start = this.start + index + delete_count;
-    const length = this.length - index - delete_count;
+  split(index: number, gap: number): Slice {
+    const start = this.start + index + gap;
+    const length = this.length - index - gap;
 
     this.resize(index);
 
