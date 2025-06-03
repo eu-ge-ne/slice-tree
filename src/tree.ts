@@ -240,6 +240,20 @@ export class SliceTree {
     }
   }
 
+  write_line(line_index: number, column_index: number, text: string): void {
+    const range = this.line_range(line_index);
+    if (!range) {
+      return;
+    }
+
+    const index = range[0] + column_index;
+    if (index >= range[1]) {
+      return;
+    }
+
+    this.write(index, text);
+  }
+
   /**
    * Removes the text between the specified start (inclusive) and end (exclusive) positions.
    *
