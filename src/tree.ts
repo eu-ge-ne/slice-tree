@@ -125,39 +125,6 @@ export class SliceTree {
   }
 
   /**
-   * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
-   *
-   * @param index Line index.
-   * @returns A tuple of [start, end] indexes
-   *
-   * @example Usage
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = new SliceTree("Lorem\nipsum");
-   *
-   * assertEquals(text.line_range(0), [0, 6]);
-   * ```
-   */
-  line_range(index: number): readonly [number, number] | undefined {
-    if (index < 0) {
-      index = Math.max(index + this.line_count, 0);
-    }
-
-    const start = index === 0 ? 0 : search_eol(this.root, index - 1);
-
-    if (typeof start === "undefined") {
-      return undefined;
-    } else {
-      const end = search_eol(this.root, index) ?? this.count;
-
-      return [start, end];
-    }
-  }
-
-  /**
    * Returns the content of the line at the specified index.
    *
    * @param index Line index.
@@ -171,10 +138,10 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
    *
-   * assertEquals(text.line(1).toArray().join(""), "ipsum\n");
+   * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
    * ```
    */
-  *line(index: number): Generator<string> {
+  *read_line(index: number): Generator<string> {
     if (index < 0) {
       index = Math.max(index + this.line_count, 0);
     }
@@ -351,6 +318,39 @@ export class SliceTree {
 
         x = next;
       }
+    }
+  }
+
+  /**
+   * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
+   *
+   * @param index Line index.
+   * @returns A tuple of [start, end] indexes
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum");
+   *
+   * assertEquals(text.line_range(0), [0, 6]);
+   * ```
+   */
+  line_range(index: number): readonly [number, number] | undefined {
+    if (index < 0) {
+      index = Math.max(index + this.line_count, 0);
+    }
+
+    const start = index === 0 ? 0 : search_eol(this.root, index - 1);
+
+    if (typeof start === "undefined") {
+      return undefined;
+    } else {
+      const end = search_eol(this.root, index) ?? this.count;
+
+      return [start, end];
     }
   }
 }
