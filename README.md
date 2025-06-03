@@ -21,6 +21,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
     - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
+    - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
     - [`SliceTree.prototype.line_range()`](#slicetreeprototypeline_range)
   - [Benchmarks](#benchmarks)
@@ -169,7 +170,7 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.prototype.read()`
 
-Returns the text between the specified start (inclusive) and end (exclusive)
+Returns the content between the specified start (inclusive) and end (exclusive)
 positions.
 
 Syntax
@@ -212,7 +213,7 @@ assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 
 ### `SliceTree.prototype.write()`
 
-Inserts the given text at the specified index in the content.
+Inserts the text at the specified index in the content.
 
 Syntax
 
@@ -232,6 +233,10 @@ text.write(0, "Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
+
+### `SliceTree.prototype.write_line()`
+
+Inserts the text at the specified column in the specified line.
 
 ### `SliceTree.prototype.erase()`
 

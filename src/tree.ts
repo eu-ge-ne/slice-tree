@@ -68,7 +68,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text between the specified start (inclusive) and end (exclusive) positions.
+   * Returns the content between the specified start (inclusive) and end (exclusive) positions.
    *
    * @param start Start index.
    * @param end Optional end index.
@@ -158,7 +158,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the given text at the specified index in the content.
+   * Inserts the text at the specified index in the content.
    *
    * @param index Index at witch to insert the text.
    * @param text Text to insert.
@@ -238,6 +238,23 @@ export class SliceTree {
         }
       }
     }
+  }
+
+  /**
+   * Inserts the text at the specified column in the specified line.
+   */
+  write_line(line_index: number, column_index: number, text: string): void {
+    const range = this.line_range(line_index);
+    if (!range) {
+      return;
+    }
+
+    const index = range[0] + column_index;
+    if (index > range[1]) {
+      return;
+    }
+
+    this.write(index, text);
   }
 
   /**
