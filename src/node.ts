@@ -10,15 +10,11 @@ export interface Node {
   left: Node;
   right: Node;
   slice: Slice;
-  total_chars: number;
-  total_eols: number;
+  len: number;
+  eols_len: number;
 }
 
-const nil = {
-  red: false,
-  total_chars: 0,
-  total_eols: 0,
-} as Node;
+const nil = { red: false, len: 0, eols_len: 0 } as Node;
 
 export const NIL: Node = Object.create(nil);
 
@@ -33,8 +29,8 @@ export function create_node(slice: Slice): Node {
     left: NIL,
     right: NIL,
     slice,
-    total_chars: slice.length,
-    total_eols: slice.eols_length,
+    len: slice.len,
+    eols_len: slice.eols_len,
   };
 }
 
@@ -44,8 +40,8 @@ export function node_from_text(text: string): Node {
 
 export function bubble_update(x: Node): void {
   while (x !== NIL) {
-    x.total_chars = x.left.total_chars + x.slice.length + x.right.total_chars;
-    x.total_eols = x.left.total_eols + x.slice.eols_length + x.right.total_eols;
+    x.len = x.left.len + x.slice.len + x.right.len;
+    x.eols_len = x.left.eols_len + x.slice.eols_len + x.right.eols_len;
     x = x.p;
   }
 }

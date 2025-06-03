@@ -44,7 +44,7 @@ export class SliceTree {
    * ```
    */
   get count(): number {
-    return this.root.total_chars;
+    return this.root.len;
   }
 
   /**
@@ -64,7 +64,7 @@ export class SliceTree {
    * ```
    */
   get line_count(): number {
-    return this.root.total_chars === 0 ? 0 : this.root.total_eols + 1;
+    return this.root.len === 0 ? 0 : this.root.eols_len + 1;
   }
 
   /**
@@ -108,7 +108,7 @@ export class SliceTree {
     let offset = first.offset;
 
     while ((x !== NIL) && (remaining > 0)) {
-      let n = x.slice.length - offset;
+      let n = x.slice.len - offset;
 
       if (n > remaining) {
         n = remaining;
@@ -219,19 +219,19 @@ export class SliceTree {
     let insert_case = InsertionCase.Root;
 
     for (let x = this.root; x !== NIL;) {
-      if (index <= x.left.total_chars) {
+      if (index <= x.left.len) {
         p = x;
         x = x.left;
         insert_case = InsertionCase.Left;
       } else {
-        index -= x.left.total_chars;
+        index -= x.left.len;
 
-        if (index < x.slice.length) {
+        if (index < x.slice.len) {
           p = x;
           x = NIL;
           insert_case = InsertionCase.Split;
         } else {
-          index -= x.slice.length;
+          index -= x.slice.len;
 
           p = x;
           x = x.right;
@@ -315,14 +315,14 @@ export class SliceTree {
     const count = end - start;
     const offset2 = offset + count;
 
-    if (offset2 === node.slice.length) {
+    if (offset2 === node.slice.len) {
       if (offset === 0) {
         delete_node(this, node);
       } else {
         node.slice.trim_end(count);
         bubble_update(node);
       }
-    } else if (offset2 < node.slice.length) {
+    } else if (offset2 < node.slice.len) {
       if (offset === 0) {
         node.slice.trim_start(count);
         bubble_update(node);
@@ -343,7 +343,7 @@ export class SliceTree {
       }
 
       while ((x !== NIL) && (i < count)) {
-        i += x.slice.length;
+        i += x.slice.len;
 
         const next = successor(x);
 
