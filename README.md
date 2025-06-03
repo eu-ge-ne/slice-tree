@@ -21,6 +21,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
     - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
+    - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
     - [`SliceTree.prototype.line_range()`](#slicetreeprototypeline_range)
   - [Benchmarks](#benchmarks)
@@ -232,6 +233,10 @@ text.write(0, "Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
+
+### `SliceTree.prototype.write_line()`
+
+todo
 
 ### `SliceTree.prototype.erase()`
 
