@@ -158,7 +158,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the given text at the specified index in the content.
+   * Inserts the text at the specified index in the content.
    *
    * @param index Index at witch to insert the text.
    * @param text Text to insert.
@@ -240,6 +240,9 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Inserts the text at the specified column in the specified line.
+   */
   write_line(line_index: number, column_index: number, text: string): void {
     const range = this.line_range(line_index);
     if (!range) {

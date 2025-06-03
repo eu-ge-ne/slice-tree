@@ -213,7 +213,7 @@ assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 
 ### `SliceTree.prototype.write()`
 
-Inserts the given text at the specified index in the content.
+Inserts the text at the specified index in the content.
 
 Syntax
 
@@ -236,7 +236,7 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.prototype.write_line()`
 
-todo
+Inserts the text at the specified column in the specified line.
 
 ### `SliceTree.prototype.erase()`
 
