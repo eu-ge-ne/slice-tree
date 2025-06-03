@@ -170,7 +170,7 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.prototype.read()`
 
-Returns the text between the specified start (inclusive) and end (exclusive)
+Returns the content between the specified start (inclusive) and end (exclusive)
 positions.
 
 Syntax

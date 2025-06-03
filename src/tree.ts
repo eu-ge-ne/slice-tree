@@ -68,7 +68,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text between the specified start (inclusive) and end (exclusive) positions.
+   * Returns the content between the specified start (inclusive) and end (exclusive) positions.
    *
    * @param start Start index.
    * @param end Optional end index.
