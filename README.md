@@ -19,10 +19,10 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.count`](#slicetreeprototypecount)
     - [`SliceTree.prototype.line_count`](#slicetreeprototypeline_count)
     - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
-    - [`SliceTree.prototype.line_range()`](#slicetreeprototypeline_range)
-    - [`SliceTree.prototype.line()`](#slicetreeprototypeline)
+    - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
+    - [`SliceTree.prototype.line_range()`](#slicetreeprototypeline_range)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
@@ -78,21 +78,21 @@ const text = new SliceTree();
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
 assertEquals(text.read(0).toArray().join(""), "");
-assertEquals(text.line(0).toArray().join(""), "");
+assertEquals(text.read_line(0).toArray().join(""), "");
 
 text.write(0, "Lorem");
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "Lorem");
-assertEquals(text.line(0).toArray().join(""), "Lorem");
+assertEquals(text.read_line(0).toArray().join(""), "Lorem");
 
 text.write(5, "ipsum");
 
 assertEquals(text.count, 10);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "Loremipsum");
-assertEquals(text.line(0).toArray().join(""), "Loremipsum");
+assertEquals(text.read_line(0).toArray().join(""), "Loremipsum");
 
 text.write(5, "\n");
 text.write(11, "\n");
@@ -100,9 +100,9 @@ text.write(11, "\n");
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
 assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.line(0).toArray().join(""), "Lorem\n");
-assertEquals(text.line(1).toArray().join(""), "ipsum\n");
-assertEquals(text.line(2).toArray().join(""), "");
+assertEquals(text.read_line(0).toArray().join(""), "Lorem\n");
+assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(2).toArray().join(""), "");
 
 text.erase(0, 6);
 text.erase(5, 6);
@@ -110,7 +110,7 @@ text.erase(5, 6);
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "ipsum");
-assertEquals(text.line(0).toArray().join(""), "ipsum");
+assertEquals(text.read_line(0).toArray().join(""), "ipsum");
 ```
 
 ## API
@@ -189,29 +189,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
-### `SliceTree.prototype.line_range()`
-
-Returns the start index (inclusive) and the end index (exclusive) of the line at
-the specified index.
-
-Syntax
-
-```ts ignore
-line_range(index: number): readonly [number, number] | undefined
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = new SliceTree("Lorem\nipsum");
-
-assertEquals(text.line_range(0), [0, 6]);
-```
-
-### `SliceTree.prototype.line()`
+### `SliceTree.prototype.read_line()`
 
 Returns the content of the line at the specified index.
 
@@ -229,7 +207,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
-assertEquals(text.line(1).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 ```
 
 ### `SliceTree.prototype.write()`
@@ -277,6 +255,28 @@ const text = new SliceTree("Lorem ipsum");
 text.erase(5, 11);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
+```
+
+### `SliceTree.prototype.line_range()`
+
+Returns the start index (inclusive) and the end index (exclusive) of the line at
+the specified index.
+
+Syntax
+
+```ts ignore
+line_range(index: number): readonly [number, number] | undefined
+```
+
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum");
+
+assertEquals(text.line_range(0), [0, 6]);
 ```
 
 ## Benchmarks
