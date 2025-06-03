@@ -247,7 +247,7 @@ export class SliceTree {
     }
 
     const index = range[0] + column_index;
-    if (index >= range[1]) {
+    if (index > range[1]) {
       return;
     }
 
