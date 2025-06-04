@@ -68,7 +68,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content staring at the specified index.
+   * Returns the content starting at the specified index.
    *
    * @param index Start index.
    * @returns An iterator over the text content.
@@ -146,7 +146,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content staring at the specified line index.
+   * Returns the content starting at the specified line index.
    *
    * @param index Line index.
    * @returns An iterator over the text content.
@@ -277,7 +277,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text staring at the specified index.
+   * Removes the text starting at the specified index.
    *
    * @param index Index at witch to start removing the text.
    * @param count Number of characters to remove.

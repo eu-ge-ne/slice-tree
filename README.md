@@ -172,7 +172,7 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.prototype.read()`
 
-Returns the content staring at the specified index.
+Returns the content starting at the specified index.
 
 Syntax
 
@@ -214,7 +214,7 @@ assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 
 ### `SliceTree.prototype.read_from_line()`
 
-Returns the content staring at the specified line index.
+Returns the content starting at the specified line index.
 
 Syntax
 
@@ -271,7 +271,7 @@ write_line(line_index: number, column_index: number, text: string): void
 
 ### `SliceTree.prototype.erase()`
 
-Removes the text staring at the specified index.
+Removes the text starting at the specified index.
 
 Syntax
 
