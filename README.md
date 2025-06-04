@@ -16,16 +16,17 @@ A `piece table` data structure implemented using `red-black tree`.
   - [Examples](#examples)
   - [API](#api)
     - [`SliceTree()`](#slicetree)
-    - [`SliceTree.prototype.count`](#slicetreeprototypecount)
-    - [`SliceTree.prototype.line_count`](#slicetreeprototypeline_count)
-    - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
-    - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
-    - [`SliceTree.prototype.read_from_line()`](#slicetreeprototyperead_from_line)
-    - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
-    - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
-    - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
-    - [`SliceTree.prototype.erase_line()`](#slicetreeprototypeerase_line)
-    - [`SliceTree.prototype.find_line()`](#slicetreeprototypefind_line)
+    - [`SliceTree:count`](#slicetreecount)
+    - [`SliceTree:line_count`](#slicetreeline_count)
+    - [`SliceTree.proto.read()`](#slicetreeprotoread)
+    - [`SliceTree.proto.read_line()`](#slicetreeprotoread_line)
+    - [`SliceTree.proto.read_from_line()`](#slicetreeprotoread_from_line)
+    - [`SliceTree.proto.write()`](#slicetreeprotowrite)
+    - [`SliceTree.proto.write_line()`](#slicetreeprotowrite_line)
+    - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
+    - [`SliceTree.proto.erase_line()`](#slicetreeprotoerase_line)
+    - [`SliceTree.proto.erase_from_line()`](#slicetreeprotoerase_from_line)
+    - [`SliceTree.proto.find_line()`](#slicetreeprotofind_line)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
@@ -128,7 +129,7 @@ Syntax
 new SliceTree(text?: string)
 ```
 
-### `SliceTree.prototype.count`
+### `SliceTree:count`
 
 Returns the total number of characters in the text content.
 
@@ -149,7 +150,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.count, 11);
 ```
 
-### `SliceTree.prototype.line_count`
+### `SliceTree:line_count`
 
 Returns the number of lines in the text content.
 
@@ -170,7 +171,7 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line_count, 5);
 ```
 
-### `SliceTree.prototype.read()`
+### `SliceTree.proto.read()`
 
 Returns the content starting at the specified index.
 
@@ -191,7 +192,7 @@ const text = new SliceTree("Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
-### `SliceTree.prototype.read_line()`
+### `SliceTree.proto.read_line()`
 
 Returns the content of the line at the specified index.
 
@@ -212,7 +213,7 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 ```
 
-### `SliceTree.prototype.read_from_line()`
+### `SliceTree.proto.read_from_line()`
 
 Returns the content starting at the specified line index.
 
@@ -236,7 +237,7 @@ assertEquals(
 );
 ```
 
-### `SliceTree.prototype.write()`
+### `SliceTree.proto.write()`
 
 Inserts the text at the specified index in the content.
 
@@ -259,7 +260,7 @@ text.write(0, "Lorem ipsum");
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
 
-### `SliceTree.prototype.write_line()`
+### `SliceTree.proto.write_line()`
 
 Inserts the text at the specified column in the specified line.
 
@@ -269,7 +270,7 @@ Syntax
 write_line(line_index: number, column_index: number, text: string): void
 ```
 
-### `SliceTree.prototype.erase()`
+### `SliceTree.proto.erase()`
 
 Removes the text starting at the specified index.
 
@@ -292,7 +293,7 @@ text.erase(5, 6);
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
 
-### `SliceTree.prototype.erase_line()`
+### `SliceTree.proto.erase_line()`
 
 Removes the line at the specified index.
 
@@ -302,7 +303,11 @@ Syntax
 erase_line(line_index: number): void
 ```
 
-### `SliceTree.prototype.find_line()`
+### `SliceTree.proto.erase_from_line()`
+
+Removes the text starting at the specified line and column indexes.
+
+### `SliceTree.proto.find_line()`
 
 Returns the start index (inclusive) and the end index (exclusive) of the line at
 the specified index.
