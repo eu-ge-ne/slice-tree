@@ -277,10 +277,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text between the specified start (inclusive) and end (exclusive) positions.
+   * Removes the text staring at the specified index.
    *
-   * @param start Start index at witch to start removing the text.
-   * @param end Optional end index.
+   * @param index Index at witch to start removing the text.
+   * @param count Number of characters to remove.
    * @returns A void value.
    *
    * @example Usage
@@ -291,31 +291,26 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem ipsum");
    *
-   * text.erase(5, 11);;
+   * text.erase(5, 6);
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
    */
-  erase(start: number, end = Number.MAX_SAFE_INTEGER): void {
-    if (start < 0) {
-      start = Math.max(start + this.count, 0);
+  erase(index: number, count = Number.MAX_SAFE_INTEGER): void {
+    if (index < 0) {
+      index = Math.max(index + this.count, 0);
     }
 
-    const first = search(this.root, start);
+    const first = search(this.root, index);
     if (!first) {
       return;
     }
 
-    if (end < 0) {
-      end = Math.max(end + this.count, 0);
-    }
-
-    if (end <= start) {
+    if (count <= 0) {
       return;
     }
 
     const { node, offset } = first;
-    const count = end - start;
     const offset2 = offset + count;
 
     if (offset2 === node.slice.len) {
@@ -340,7 +335,7 @@ export class SliceTree {
         x = split(this, node, offset, 0);
       }
 
-      const last = search(this.root, end);
+      const last = search(this.root, index + count);
       if (last && last.offset !== 0) {
         split(this, last.node, last.offset, 0);
       }
