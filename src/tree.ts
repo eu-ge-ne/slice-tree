@@ -108,10 +108,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content of the line at the specified index.
+   * Returns characters from the line of text at the provided index.
    *
-   * @param index Line index.
-   * @returns An iterator over the text content.
+   * @param `index` Line index.
+   * @yields Characters.
    *
    * @example Usage
    *
