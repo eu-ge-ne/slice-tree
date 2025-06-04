@@ -244,7 +244,7 @@ export class SliceTree {
    * Inserts the text at the specified column in the specified line.
    */
   write_line(line_index: number, column_index: number, text: string): void {
-    const range = this.line_range(line_index);
+    const range = this.find_line(line_index);
     if (!range) {
       return;
     }
@@ -352,20 +352,24 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem\nipsum");
    *
-   * assertEquals(text.line_range(0), [0, 6]);
+   * assertEquals(text.find_line(0), [0, 6]);
    * ```
    */
-  line_range(index: number): readonly [number, number] | undefined {
-    if (index < 0) {
-      index = Math.max(index + this.line_count, 0);
+  find_line(line_index: number): readonly [number, number] | undefined {
+    if (line_index < 0) {
+      line_index = Math.max(line_index + this.line_count, 0);
     }
 
-    const start = index === 0 ? 0 : search_eol(this.root, index - 1);
+    if (line_index === this.line_count) {
+      return [this.count, this.count];
+    }
+
+    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_eol(this.root, index) ?? this.count;
+      const end = search_eol(this.root, line_index) ?? this.count;
 
       return [start, end];
     }
