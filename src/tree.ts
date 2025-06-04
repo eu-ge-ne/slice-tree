@@ -29,9 +29,9 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of characters in the text.
+   * Returns the number of characters in the text buffer.
    *
-   * @returns The number of characters.
+   * @returns Number of characters.
    *
    * @example Usage
    *
