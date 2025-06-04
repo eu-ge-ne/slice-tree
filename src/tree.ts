@@ -123,19 +123,19 @@ export class SliceTree {
    * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
    * ```
    */
-  *read_line(index: number): Generator<string> {
-    if (index < 0) {
-      index = Math.max(index + this.line_count, 0);
+  *read_line(line_index: number): Generator<string> {
+    if (line_index < 0) {
+      line_index = Math.max(line_index + this.line_count, 0);
     }
 
-    const start = index === 0 ? 0 : search_eol(this.root, index - 1);
+    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       yield "";
     } else {
       const iter = this.read(start);
 
-      const end = search_eol(this.root, index);
+      const end = search_eol(this.root, line_index);
 
       if (typeof end === "undefined") {
         yield* iter;
@@ -162,12 +162,12 @@ export class SliceTree {
    * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
    * ```
    */
-  *read_from_line(index: number): Generator<string> {
-    if (index < 0) {
-      index = Math.max(index + this.line_count, 0);
+  *read_from_line(line_index: number): Generator<string> {
+    if (line_index < 0) {
+      line_index = Math.max(line_index + this.line_count, 0);
     }
 
-    const start = index === 0 ? 0 : search_eol(this.root, index - 1);
+    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       yield "";
@@ -359,8 +359,21 @@ export class SliceTree {
     const range = this.find_line(line_index);
 
     if (range) {
-      this.erase(...range);
+      this.erase(range[0], range[1] - range[0]);
     }
+  }
+
+  erase_from_line(
+    line_index: number,
+    column_index: number,
+    count = Number.MAX_SAFE_INTEGER,
+  ): void {
+    const range = this.find_line(line_index);
+    if (!range) {
+      return;
+    }
+
+    this.erase(range[0] + column_index, count);
   }
 
   /**
