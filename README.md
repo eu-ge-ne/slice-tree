@@ -171,13 +171,12 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.prototype.read()`
 
-Returns the content between the specified start (inclusive) and end (exclusive)
-positions.
+Returns the content staring at the specified index.
 
 Syntax
 
 ```ts ignore
-*read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string>
+*read(index: number): Generator<string>
 ```
 
 Example
