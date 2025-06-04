@@ -271,13 +271,12 @@ write_line(line_index: number, column_index: number, text: string): void
 
 ### `SliceTree.prototype.erase()`
 
-Removes the text between the specified start (inclusive) and end (exclusive)
-positions.
+Removes the text staring at the specified index.
 
 Syntax
 
 ```ts ignore
-erase(start: number, end = Number.MAX_SAFE_INTEGER): void
+erase(index: number, count = Number.MAX_SAFE_INTEGER): void
 ```
 
 Example
@@ -288,7 +287,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem ipsum");
 
-text.erase(5, 11);
+text.erase(5, 6);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
