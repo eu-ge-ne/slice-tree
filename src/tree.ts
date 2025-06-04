@@ -110,6 +110,7 @@ export class SliceTree {
    * Returns the content of the line at the specified index.
    *
    * @param index Line index.
+   * @param stop_at_eol Stop reading the content at the end of line.
    * @returns An iterator over the text content.
    *
    * @example Usage
@@ -120,10 +121,10 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
    *
-   * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+   * assertEquals(text.read_line(1, true).toArray().join(""), "ipsum\n");
    * ```
    */
-  *read_line(index: number): Generator<string> {
+  *read_line(index: number, stop_at_eol = false): Generator<string> {
     if (index < 0) {
       index = Math.max(index + this.line_count, 0);
     }
@@ -133,7 +134,7 @@ export class SliceTree {
     if (typeof start === "undefined") {
       yield "";
     } else {
-      const end = search_eol(this.root, index);
+      const end = stop_at_eol ? search_eol(this.root, index) : undefined;
 
       if (typeof end === "undefined") {
         yield* this.read(start);
