@@ -20,6 +20,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.line_count`](#slicetreeprototypeline_count)
     - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
     - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
+    - [`SliceTree.prototype.read_from_line()`](#slicetreeprototyperead_from_line)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
@@ -102,9 +103,9 @@ text.write(11, "\n");
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
 assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.read_line(0, true).toArray().join(""), "Lorem\n");
-assertEquals(text.read_line(1, true).toArray().join(""), "ipsum\n");
-assertEquals(text.read_line(2, true).toArray().join(""), "");
+assertEquals(text.read_line(0).toArray().join(""), "Lorem\n");
+assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(2).toArray().join(""), "");
 
 text.erase(0, 6);
 text.erase(5, 6);
@@ -208,7 +209,31 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
-assertEquals(text.read_line(1, true).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+```
+
+### `SliceTree.prototype.read_from_line()`
+
+Returns the content staring at the specified line index.
+
+Syntax
+
+```ts ignore
+*read_from_line(index: number): Generator<string>
+```
+
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+
+assertEquals(
+  text.read_from_line(1).toArray().join(""),
+  "ipsum\ndolor\nsit\namet",
+);
 ```
 
 ### `SliceTree.prototype.write()`
