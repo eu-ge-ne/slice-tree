@@ -5,7 +5,7 @@ import { search, search_eol, successor } from "./querying.ts";
 import { split } from "./splitting.ts";
 
 /**
- * Implements a `piece table` data structure to represent text content.
+ * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
   /**
@@ -18,6 +18,7 @@ export class SliceTree {
    * Creates a `SliceTree` instance with optional initial text.
    *
    * @param text Optional initial text.
+   * @returns `SliceTree` instance.
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
@@ -28,7 +29,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the total number of characters in the text content.
+   * Returns the number of characters in the text.
    *
    * @returns The number of characters.
    *
@@ -48,7 +49,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of lines in the text content.
+   * Returns the number of lines in the text.
    *
    * @returns The number of lines.
    *
@@ -68,10 +69,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content starting at the specified index.
+   * Returns the text starting at the specified index.
    *
    * @param index Start index.
-   * @returns An iterator over the text content.
+   * @returns An iterator over the text.
    *
    * @example Usage
    *
