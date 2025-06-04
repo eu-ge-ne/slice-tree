@@ -68,10 +68,9 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content between the specified start (inclusive) and end (exclusive) positions.
+   * Returns the content staring at the specified index (inclusive).
    *
-   * @param start Start index.
-   * @param end Optional end index.
+   * @param index Start index.
    * @returns An iterator over the text content.
    *
    * @example Usage
@@ -85,41 +84,24 @@ export class SliceTree {
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
    */
-  *read(start: number, end = Number.MAX_SAFE_INTEGER): Generator<string> {
-    if (start < 0) {
-      start = Math.max(start + this.count, 0);
+  *read(index: number): Generator<string> {
+    if (index < 0) {
+      index = Math.max(index + this.count, 0);
     }
 
-    const first = search(this.root, start);
+    const first = search(this.root, index);
     if (!first) {
       return "";
     }
 
-    if (end < 0) {
-      end = Math.max(end + this.count, 0);
-    }
-
-    if (end <= start) {
-      return "";
-    }
-
-    let remaining = end - start;
     let x = first.node;
     let offset = first.offset;
 
-    while ((x !== NIL) && (remaining > 0)) {
-      let n = x.slice.len - offset;
-
-      if (n > remaining) {
-        n = remaining;
-        remaining = 0;
-      } else {
-        remaining -= n;
-      }
-
-      yield* x.slice.read(offset, n);
+    while (x !== NIL) {
+      yield* x.slice.read(offset, x.slice.len - offset);
 
       x = successor(x);
+
       offset = 0;
     }
   }
@@ -153,7 +135,11 @@ export class SliceTree {
     } else {
       const end = search_eol(this.root, index);
 
-      yield* this.read(start, end);
+      if (typeof end === "undefined") {
+        yield* this.read(start);
+      } else {
+        yield* this.read(start).take(end - start);
+      }
     }
   }
 
