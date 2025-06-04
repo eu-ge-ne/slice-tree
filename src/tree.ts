@@ -68,7 +68,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content staring at the specified index (inclusive).
+   * Returns the content staring at the specified index.
    *
    * @param index Start index.
    * @returns An iterator over the text content.
