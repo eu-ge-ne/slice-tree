@@ -339,6 +339,17 @@ export class SliceTree {
   }
 
   /**
+   * Removes the line at the specified index.
+   */
+  erase_line(line_index: number): void {
+    const range = this.find_line(line_index);
+
+    if (range) {
+      this.erase(...range);
+    }
+  }
+
+  /**
    * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
    *
    * @param index Line index.
