@@ -15,7 +15,7 @@ export class SliceTree {
   root = NIL;
 
   /**
-   * Creates a `SliceTree` instance with optional initial text.
+   * Creates an instance of `SliceTree` with some optional initial text.
    *
    * @param text Optional initial text.
    * @returns `SliceTree` instance.
