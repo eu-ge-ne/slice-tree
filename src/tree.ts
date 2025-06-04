@@ -49,9 +49,9 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of lines in the text.
+   * Returns the number of lines in the text buffer.
    *
-   * @returns The number of lines.
+   * @returns Number of lines.
    *
    * @example Usage
    *
