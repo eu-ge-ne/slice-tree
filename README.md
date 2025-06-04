@@ -102,9 +102,9 @@ text.write(11, "\n");
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
 assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.read_line(0).toArray().join(""), "Lorem\n");
-assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
-assertEquals(text.read_line(2).toArray().join(""), "");
+assertEquals(text.read_line(0, true).toArray().join(""), "Lorem\n");
+assertEquals(text.read_line(1, true).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(2, true).toArray().join(""), "");
 
 text.erase(0, 6);
 text.erase(5, 6);
@@ -197,7 +197,7 @@ Returns the content of the line at the specified index.
 Syntax
 
 ```ts ignore
-*line(index: number): Generator<string>
+*read_line(index: number, stop_at_eol = false): Generator<string>
 ```
 
 Example
@@ -208,7 +208,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
-assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+assertEquals(text.read_line(1, true).toArray().join(""), "ipsum\n");
 ```
 
 ### `SliceTree.prototype.write()`
