@@ -133,16 +133,35 @@ export class SliceTree {
     if (typeof start === "undefined") {
       yield "";
     } else {
+      const iter = this.read(start);
+
       const end = search_eol(this.root, index);
 
       if (typeof end === "undefined") {
-        yield* this.read(start);
+        yield* iter;
       } else {
-        yield* this.read(start).take(end - start);
+        yield* iter.take(end - start);
       }
     }
   }
 
+  /**
+   * Returns the content staring at the specified line index.
+   *
+   * @param index Line index.
+   * @returns An iterator over the text content.
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+   *
+   * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
+   * ```
+   */
   *read_from_line(index: number): Generator<string> {
     if (index < 0) {
       index = Math.max(index + this.line_count, 0);

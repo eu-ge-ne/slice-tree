@@ -20,6 +20,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.line_count`](#slicetreeprototypeline_count)
     - [`SliceTree.prototype.read()`](#slicetreeprototyperead)
     - [`SliceTree.prototype.read_line()`](#slicetreeprototyperead_line)
+    - [`SliceTree.prototype.read_from_line()`](#slicetreeprototyperead_from_line)
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
@@ -209,6 +210,30 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
+```
+
+### `SliceTree.prototype.read_from_line()`
+
+Returns the content staring at the specified line index.
+
+Syntax
+
+```ts ignore
+*read_from_line(index: number): Generator<string>
+```
+
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+
+assertEquals(
+  text.read_from_line(1).toArray().join(""),
+  "ipsum\ndolor\nsit\namet",
+);
 ```
 
 ### `SliceTree.prototype.write()`
