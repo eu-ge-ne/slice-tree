@@ -25,6 +25,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.proto.write_line()`](#slicetreeprotowrite_line)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
     - [`SliceTree.proto.erase_line()`](#slicetreeprotoerase_line)
+    - [`SliceTree.proto.erase_from_line()`](#slicetreeprotoerase_from_line)
     - [`SliceTree.proto.find_line()`](#slicetreeprotofind_line)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
@@ -301,6 +302,10 @@ Syntax
 ```ts ignore
 erase_line(line_index: number): void
 ```
+
+### `SliceTree.proto.erase_from_line()`
+
+Removes the text starting at the specified line and column indexes.
 
 ### `SliceTree.proto.find_line()`
 
