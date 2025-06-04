@@ -363,17 +363,19 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Removes the text starting at the specified line and column indexes.
+   */
   erase_from_line(
     line_index: number,
     column_index: number,
     count = Number.MAX_SAFE_INTEGER,
   ): void {
     const range = this.find_line(line_index);
-    if (!range) {
-      return;
-    }
 
-    this.erase(range[0] + column_index, count);
+    if (range) {
+      this.erase(range[0] + column_index, count);
+    }
   }
 
   /**
