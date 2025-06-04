@@ -17,7 +17,7 @@ export class SliceTree {
   /**
    * Creates an instance of `SliceTree` with some optional initial text.
    *
-   * @param text Optional initial text.
+   * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
   constructor(text?: string) {
@@ -69,10 +69,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the text starting at the specified index.
+   * Returns characters from the text buffer starting from the provided index.
    *
-   * @param index Start index.
-   * @returns An iterator over the text.
+   * @param `index` Start index.
+   * @yields Characters.
    *
    * @example Usage
    *
