@@ -338,6 +338,9 @@ export class SliceTree {
     }
   }
 
+  /**
+   * Removes the line at the specified index.
+   */
   erase_line(line_index: number): void {
     const range = this.find_line(line_index);
 

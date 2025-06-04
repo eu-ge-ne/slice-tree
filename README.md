@@ -23,6 +23,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.prototype.write()`](#slicetreeprototypewrite)
     - [`SliceTree.prototype.write_line()`](#slicetreeprototypewrite_line)
     - [`SliceTree.prototype.erase()`](#slicetreeprototypeerase)
+    - [`SliceTree.prototype.erase_line()`](#slicetreeprototypeerase_line)
     - [`SliceTree.prototype.find_line()`](#slicetreeprototypefind_line)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
@@ -238,6 +239,12 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 Inserts the text at the specified column in the specified line.
 
+Syntax
+
+```ts ignore
+write_line(line_index: number, column_index: number, text: string): void
+```
+
 ### `SliceTree.prototype.erase()`
 
 Removes the text between the specified start (inclusive) and end (exclusive)
@@ -260,6 +267,16 @@ const text = new SliceTree("Lorem ipsum");
 text.erase(5, 11);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
+```
+
+### `SliceTree.prototype.erase_line()`
+
+Removes the line at the specified index.
+
+Syntax
+
+```ts ignore
+erase_line(line_index: number): void
 ```
 
 ### `SliceTree.prototype.find_line()`
