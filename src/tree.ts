@@ -356,7 +356,9 @@ export class SliceTree {
   }
 
   /**
-   * Removes the line at the specified index.
+   * Removes the line of text in the buffer at the specified index.
+   *
+   * @param `line_index` Index of the line to remove.
    */
   erase_line(line_index: number): void {
     const range = this.find_line(line_index);
