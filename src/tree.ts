@@ -388,10 +388,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
+   * Returns the start index (inclusive) and the end index (exclusive) of the line of text in the buffer at the specified index.
    *
-   * @param index Line index.
-   * @returns A tuple of [start, end] indexes
+   * @param `line_index` Line index.
+   * @returns Tuple of [start, end] indexes
    *
    * @example Usage
    *
