@@ -316,6 +316,19 @@ Syntax
 erase_line(line_index: number): void
 ```
 
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum\ndolor");
+
+text.erase_line(1);
+
+assertEquals(text.read(0).toArray().join(""), "Lorem\ndolor");
+```
+
 ### `SliceTree.proto.erase_from_line()`
 
 Removes the text in the buffer starting at the specified line and column
