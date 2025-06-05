@@ -340,6 +340,19 @@ Syntax
 erase_from_line(line_index: number, column_index: number, count = Number.MAX_SAFE_INTEGER): void
 ```
 
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum\ndolor");
+
+text.erase_from_line(1, 0);
+
+assertEquals(text.read(0).toArray().join(""), "Lorem\n");
+```
+
 ### `SliceTree.proto.find_line()`
 
 Returns the start index (inclusive) and the end index (exclusive) of the line of

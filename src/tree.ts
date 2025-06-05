@@ -404,6 +404,14 @@ export class SliceTree {
    * @example
    *
    * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum\ndolor");
+   *
+   * text.erase_from_line(1, 0);
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\n");
    * ```
    */
   erase_from_line(
