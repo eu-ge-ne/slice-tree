@@ -6,7 +6,7 @@ export interface Reader {
 
 const EOL_RE = /\r?\n/gm;
 
-export const code_unit_reader: Reader = {
+export const unit_reader: Reader = {
   len(text: string): number {
     return text.length;
   },
@@ -23,7 +23,7 @@ export const code_unit_reader: Reader = {
   },
 };
 
-export const code_point_reader: Reader = {
+export const point_reader: Reader = {
   len(text: string): number {
     return [...text].length;
   },

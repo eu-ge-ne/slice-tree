@@ -77,7 +77,7 @@ bunx jsr add @eu-ge-ne/slice-tree
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units();
+const text = SliceTree.of_units();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
@@ -126,7 +126,7 @@ Creates an instance of `SliceTree` with some optional initial text.
 Syntax
 
 ```ts ignore
-SliceTree.of_code_units(text?: string)
+SliceTree.of_units(text?: string)
 ```
 
 ### `SliceTree:count`
@@ -145,7 +145,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem ipsum");
+const text = SliceTree.of_units("Lorem ipsum");
 
 assertEquals(text.count, 11);
 ```
@@ -166,7 +166,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.line_count, 5);
 ```
@@ -187,7 +187,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem ipsum");
+const text = SliceTree.of_units("Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
@@ -208,7 +208,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 ```
@@ -229,7 +229,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(
   text.read_from_line(1).toArray().join(""),
@@ -253,7 +253,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units();
+const text = SliceTree.of_units();
 
 text.write(0, "Lorem ipsum");
 
@@ -276,7 +276,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\ndolor");
+const text = SliceTree.of_units("Lorem\ndolor");
 
 text.write_line(1, 0, "ipsum\n");
 
@@ -299,7 +299,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem ipsum");
+const text = SliceTree.of_units("Lorem ipsum");
 
 text.erase(5, 6);
 
@@ -322,7 +322,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum\ndolor");
+const text = SliceTree.of_units("Lorem\nipsum\ndolor");
 
 text.erase_line(1);
 
@@ -346,7 +346,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum\ndolor");
+const text = SliceTree.of_units("Lorem\nipsum\ndolor");
 
 text.erase_from_line(1, 0);
 
@@ -370,7 +370,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.of_code_units("Lorem\nipsum");
+const text = SliceTree.of_units("Lorem\nipsum");
 
 assertEquals(text.find_line(0), [0, 6]);
 ```

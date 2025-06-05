@@ -3,8 +3,8 @@ import { assertEquals } from "@std/assert";
 import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
-Deno.test("Erase from line of code_units", () => {
-  const text = SliceTree.of_code_units("Lorem \nipsum \ndolor \nsit \namet");
+Deno.test("Erase from line of units", () => {
+  const text = SliceTree.of_units("Lorem \nipsum \ndolor \nsit \namet");
 
   assertEquals(text.line_count, 5);
 
@@ -23,10 +23,8 @@ Deno.test("Erase from line of code_units", () => {
   assert_tree(text);
 });
 
-Deno.test("Erase from line of code_points", () => {
-  const text = SliceTree.of_code_points(
-    "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet",
-  );
+Deno.test("Erase from line of points", () => {
+  const text = SliceTree.of_points("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet");
 
   assertEquals(text.line_count, 5);
 
