@@ -2,12 +2,25 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
+import { code_point_reader, type Reader } from "./reader.ts";
+import {
+  grow_slice,
+  slice_growable,
+  trim_slice_end,
+  trim_slice_start,
+} from "./slice.ts";
 import { split } from "./splitting.ts";
 
 /**
  * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
+  /**
+   * @ignore
+   * @internal
+   */
+  reader: Reader = code_point_reader;
+
   /**
    * @ignore
    * @internal
@@ -22,7 +35,7 @@ export class SliceTree {
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
-      this.root = node_from_text(text);
+      this.root = node_from_text(this.reader, text);
 
       this.root.red = false;
     }
@@ -99,8 +112,11 @@ export class SliceTree {
     let offset = first.offset;
 
     while (x !== NIL) {
-      yield* x.slice.read(offset, x.slice.len - offset);
-
+      yield* x.slice.buf.reader.read(
+        x.slice.buf.text,
+        x.slice.start + offset,
+        x.slice.len - offset,
+      );
       x = successor(x);
 
       offset = 0;
@@ -226,12 +242,12 @@ export class SliceTree {
       }
     }
 
-    if (insert_case === InsertionCase.Right && p.slice.growable) {
-      p.slice.append(text);
+    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
+      grow_slice(p.slice, text);
 
       bubble_update(p);
     } else {
-      const child = node_from_text(text);
+      const child = node_from_text(this.reader, text);
 
       switch (insert_case) {
         case InsertionCase.Root: {
@@ -333,12 +349,12 @@ export class SliceTree {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        node.slice.trim_end(count);
+        trim_slice_end(node.slice, count);
         bubble_update(node);
       }
     } else if (offset2 < node.slice.len) {
       if (offset === 0) {
-        node.slice.trim_start(count);
+        trim_slice_start(node.slice, count);
         bubble_update(node);
       } else {
         split(this, node, offset, count);

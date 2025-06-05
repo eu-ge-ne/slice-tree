@@ -31,61 +31,61 @@ export function slice_from_text(reader: Reader, text: string): Slice {
   return new_slice(buf, 0, buf.len, 0, buf.eol_starts.length);
 }
 
-export function slice_growable(slice: Slice): boolean {
-  return (slice.buf.len < 100) && (slice.start + slice.len === slice.buf.len);
+export function slice_growable(x: Slice): boolean {
+  return (x.buf.len < 100) && (x.start + x.len === x.buf.len);
 }
 
-export function grow_slice(slice: Slice, text: string): void {
-  grow_buffer(slice.buf, text);
+export function grow_slice(x: Slice, text: string): void {
+  grow_buffer(x.buf, text);
 
-  resize_slice(slice, slice.len + [...text].length);
+  resize_slice(x, x.len + [...text].length);
 }
 
-export function trim_slice_end(slice: Slice, n: number): void {
-  resize_slice(slice, slice.len - n);
+export function trim_slice_end(x: Slice, n: number): void {
+  resize_slice(x, x.len - n);
 }
 
-export function trim_slice_start(slice: Slice, n: number): void {
-  slice.start += n;
-  slice.len -= n;
+export function trim_slice_start(x: Slice, n: number): void {
+  x.start += n;
+  x.len -= n;
 
-  slice.eols_start = find_eol(slice.buf, slice.eols_start, slice.start);
+  x.eols_start = find_eol(x.buf, x.eols_start, x.start);
 
   const eols_end = find_eol(
-    slice.buf,
-    slice.eols_start,
-    slice.start + slice.len,
+    x.buf,
+    x.eols_start,
+    x.start + x.len,
   );
 
-  slice.eols_len = eols_end - slice.eols_start;
+  x.eols_len = eols_end - x.eols_start;
 }
 
-export function resize_slice(slice: Slice, len: number): void {
-  slice.len = len;
+export function resize_slice(x: Slice, len: number): void {
+  x.len = len;
 
   const eols_end = find_eol(
-    slice.buf,
-    slice.eols_start,
-    slice.start + slice.len,
+    x.buf,
+    x.eols_start,
+    x.start + x.len,
   );
 
-  slice.eols_len = eols_end - slice.eols_start;
+  x.eols_len = eols_end - x.eols_start;
 }
 
-export function split_slice(slice: Slice, index: number, gap: number): Slice {
-  const start = slice.start + index + gap;
-  const len = slice.len - index - gap;
+export function split_slice(x: Slice, index: number, gap: number): Slice {
+  const start = x.start + index + gap;
+  const len = x.len - index - gap;
 
-  resize_slice(slice, index);
+  resize_slice(x, index);
 
   const eols_start = find_eol(
-    slice.buf,
-    slice.eols_start + slice.eols_len,
+    x.buf,
+    x.eols_start + x.eols_len,
     start,
   );
 
-  const eols_end = find_eol(slice.buf, eols_start, start + len);
+  const eols_end = find_eol(x.buf, eols_start, start + len);
   const eols_len = eols_end - eols_start;
 
-  return new_slice(slice.buf, start, len, eols_start, eols_len);
+  return new_slice(x.buf, start, len, eols_start, eols_len);
 }

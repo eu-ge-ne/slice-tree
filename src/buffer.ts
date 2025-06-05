@@ -22,26 +22,22 @@ export function new_buffer(reader: Reader, text: string): Buffer {
   return buf;
 }
 
-export function grow_buffer(buf: Buffer, text: string): void {
-  buf.reader.eols(text, buf.len, buf.eol_starts, buf.eol_ends);
+export function grow_buffer(x: Buffer, text: string): void {
+  x.reader.eols(text, x.len, x.eol_starts, x.eol_ends);
 
-  buf.len = buf.reader.len(text);
-  buf.text += text;
+  x.len = x.reader.len(text);
+  x.text += text;
 }
 
-export function find_eol(
-  buf: Buffer,
-  eols_start: number,
-  index: number,
-): number {
+export function find_eol(x: Buffer, eols_start: number, index: number): number {
   let a = eols_start;
-  let b = buf.eol_starts.length - 1;
+  let b = x.eol_starts.length - 1;
   let i = 0;
   let v = 0;
 
   while (a <= b) {
     i = Math.trunc((a + b) / 2);
-    v = buf.eol_starts[i]!;
+    v = x.eol_starts[i]!;
 
     if (v < index) {
       a = i + 1;
