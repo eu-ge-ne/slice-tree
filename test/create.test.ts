@@ -24,7 +24,7 @@ Deno.test("Create with content", () => {
 });
 
 Deno.test("Create with wide char", () => {
-  const text = SliceTree.of_code_units("😄");
+  const text = SliceTree.of_code_points("😄");
 
   assert_iterator(text.read(0), "😄");
   assertEquals(text.count, 1);
