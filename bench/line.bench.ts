@@ -13,7 +13,7 @@ Deno.bench("Accessing a line in a SliceTree", {
   b.start();
 
   for (let i = 0; i < N; i += 1) {
-    const _ = text.line(i).toArray().join("");
+    const _ = text.read_line(i).toArray().join("");
   }
 
   b.end();
