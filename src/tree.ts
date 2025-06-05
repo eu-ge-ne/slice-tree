@@ -33,7 +33,7 @@ export class SliceTree {
    *
    * @returns Number of characters.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -53,7 +53,7 @@ export class SliceTree {
    *
    * @returns Number of lines.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -74,7 +74,7 @@ export class SliceTree {
    * @param `index` Start index.
    * @yields Characters.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -113,7 +113,7 @@ export class SliceTree {
    * @param `line_index` Line index.
    * @yields Characters.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -152,7 +152,7 @@ export class SliceTree {
    * @param `line_index` Line index.
    * @yields Characters.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -183,7 +183,7 @@ export class SliceTree {
    * @param `index` Index at witch to insert the text.
    * @param `text` Text to insert.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -266,7 +266,7 @@ export class SliceTree {
    * @param `column_index` Index of the column at witch to insert the text.
    * @param `text` Text to insert.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -299,7 +299,7 @@ export class SliceTree {
    * @param `index` Index at witch to start removing the text.
    * @param `count` Number of characters to remove.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
@@ -373,9 +373,17 @@ export class SliceTree {
    *
    * @param `line_index` Index of the line to remove.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum\ndolor");
+   *
+   * text.erase_line(1);
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\ndolor");
    * ```
    */
   erase_line(line_index: number): void {
@@ -393,7 +401,7 @@ export class SliceTree {
    * @param `column_index` Index of the column at witch to start removing the text.
    * @param `count` Number of characters to remove.
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * ```
@@ -416,7 +424,7 @@ export class SliceTree {
    * @param `line_index` Line index.
    * @returns Tuple of [start, end] indexes
    *
-   * @example Usage
+   * @example
    *
    * ```ts
    * import { assertEquals } from "jsr:@std/assert";
