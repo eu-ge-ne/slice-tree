@@ -14,13 +14,11 @@ export interface Node {
   eols_len: number;
 }
 
-const nil = { red: false, len: 0, eols_len: 0 } as Node;
+export const NIL = { red: false, len: 0, eols_len: 0 } as Node;
 
-export const NIL: Node = Object.create(nil);
-
-nil.p = NIL;
-nil.left = NIL;
-nil.right = NIL;
+NIL.p = NIL;
+NIL.left = NIL;
+NIL.right = NIL;
 
 export function create_node(slice: Slice): Node {
   return {
