@@ -4,7 +4,7 @@ export interface Reader {
   eols(text: string, index: number, starts: number[], ends: number[]): void;
 }
 
-const EOL_RE = /\r*\n/gm;
+const EOL_RE = /\r?\n/gm;
 
 export const code_unit_reader: Reader = {
   len(text: string): number {
