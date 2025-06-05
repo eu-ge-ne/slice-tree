@@ -69,7 +69,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters from the text buffer starting from the provided index.
+   * Returns the characters from the text buffer starting from the `index`.
    *
    * @param `index` Start index.
    * @yields Characters.
@@ -108,7 +108,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters from the line of text at the provided index.
+   * Returns the characters from the line of text at the `line_index`.
    *
    * @param `line_index` Line index.
    * @yields Characters.
@@ -147,7 +147,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters from the text buffer starting from the provided line index.
+   * Returns the characters from the text buffer starting from the `line_index`.
    *
    * @param `line_index` Line index.
    * @yields Characters.
@@ -178,11 +178,10 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text at the specified index in the content.
+   * Inserts a text into the buffer at the `index`.
    *
-   * @param index Index at witch to insert the text.
-   * @param text Text to insert.
-   * @returns A void value.
+   * @param `index` Index at witch to insert the text.
+   * @param `text` Text to insert.
    *
    * @example Usage
    *
