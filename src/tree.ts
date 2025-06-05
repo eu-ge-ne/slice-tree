@@ -2,7 +2,7 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
-import { code_point_reader, type Reader } from "./reader.ts";
+import { code_point_reader, code_unit_reader, type Reader } from "./reader.ts";
 import {
   grow_slice,
   slice_growable,
@@ -15,11 +15,7 @@ import { split } from "./splitting.ts";
  * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
-  /**
-   * @ignore
-   * @internal
-   */
-  reader: Reader = code_point_reader;
+  #reader: Reader;
 
   /**
    * @ignore
@@ -33,12 +29,21 @@ export class SliceTree {
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
-  constructor(text?: string) {
-    if (text && text.length > 0) {
-      this.root = node_from_text(this.reader, text);
+  private constructor(reader: Reader, text?: string) {
+    this.#reader = reader;
 
+    if (text && text.length > 0) {
+      this.root = node_from_text(reader, text);
       this.root.red = false;
     }
+  }
+
+  static of_code_units(text?: string): SliceTree {
+    return new SliceTree(code_unit_reader, text);
+  }
+
+  static of_code_points(text?: string): SliceTree {
+    return new SliceTree(code_point_reader, text);
   }
 
   /**
@@ -247,7 +252,7 @@ export class SliceTree {
 
       bubble_update(p);
     } else {
-      const child = node_from_text(this.reader, text);
+      const child = node_from_text(this.#reader, text);
 
       switch (insert_case) {
         case InsertionCase.Root: {

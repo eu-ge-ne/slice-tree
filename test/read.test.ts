@@ -2,7 +2,7 @@ import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
 Deno.test("Read empty", () => {
-  const text = new SliceTree();
+  const text = SliceTree.of_code_units();
 
   assert_iterator(text.read(0), "");
 
@@ -10,7 +10,7 @@ Deno.test("Read empty", () => {
 });
 
 Deno.test("Read", () => {
-  const text = new SliceTree("Lorem😄ipsum😄dolor");
+  const text = SliceTree.of_code_units("Lorem😄ipsum😄dolor");
 
   assert_iterator(text.read(6).take(6), "ipsum😄");
 
@@ -18,7 +18,7 @@ Deno.test("Read", () => {
 });
 
 Deno.test("Read at start >= count", () => {
-  const text = new SliceTree("Lorem");
+  const text = SliceTree.of_code_units("Lorem");
 
   assert_iterator(text.read(4), "m");
   assert_iterator(text.read(5), "");
@@ -28,7 +28,7 @@ Deno.test("Read at start >= count", () => {
 });
 
 Deno.test("Read at start < 0", () => {
-  const text = new SliceTree("Lorem");
+  const text = SliceTree.of_code_units("Lorem");
 
   assert_iterator(text.read(0), "Lorem");
   assert_iterator(text.read(-1), "m");

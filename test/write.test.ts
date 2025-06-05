@@ -4,7 +4,7 @@ import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
 Deno.test("Write to the end of a text", () => {
-  const text = new SliceTree();
+  const text = SliceTree.of_code_units();
 
   text.write(text.count, "Lorem");
   assert_iterator(text.read(0), "Lorem");
@@ -142,7 +142,7 @@ Deno.test("Write to the end of a text", () => {
 });
 
 Deno.test("Write to the beginning of a text", () => {
-  const text = new SliceTree();
+  const text = SliceTree.of_code_units();
 
   text.write(0, " aliqua.");
   assert_iterator(text.read(0), " aliqua.");
@@ -280,7 +280,7 @@ Deno.test("Write to the beginning of a text", () => {
 });
 
 Deno.test("Write splitting nodes", () => {
-  const text = new SliceTree();
+  const text = SliceTree.of_code_units();
 
   text.write(0, "Lorem aliqua.");
   assert_iterator(text.read(0), "Lorem aliqua.");
@@ -355,7 +355,7 @@ Deno.test("Write splitting nodes", () => {
 });
 
 Deno.test("Write at the negative index", () => {
-  const text = new SliceTree();
+  const text = SliceTree.of_code_units();
 
   text.write(0, "ipsum");
   assert_iterator(text.read(0), "ipsum");

@@ -4,7 +4,9 @@ import { SliceTree } from "../src/tree.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
 Deno.test("Erase from line", () => {
-  const text = new SliceTree("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
+  const text = SliceTree.of_code_units(
+    "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄",
+  );
 
   assertEquals(text.line_count, 5);
 

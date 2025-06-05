@@ -4,6 +4,25 @@ export interface Reader {
   eols(text: string, index: number, starts: number[], ends: number[]): void;
 }
 
+const EOL_RE = /\r*\n/gm;
+
+export const code_unit_reader: Reader = {
+  len(text: string): number {
+    return text.length;
+  },
+
+  *read(text: string, index: number, count: number): Generator<string> {
+    yield text.slice(index, index + count);
+  },
+
+  eols(text: string, index: number, starts: number[], ends: number[]): void {
+    for (const x of text.matchAll(EOL_RE)) {
+      starts.push(index + x.index);
+      ends.push(index + x.index + x[0].length);
+    }
+  },
+};
+
 export const code_point_reader: Reader = {
   len(text: string): number {
     return [...text].length;
