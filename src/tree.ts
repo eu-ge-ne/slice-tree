@@ -369,7 +369,11 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text starting at the specified line and column indexes.
+   * Removes the text in the buffer starting at the specified line and column indexes.
+   *
+   * @param `line_index` Index of the line at witch to start removing the text.
+   * @param `column_index` Index of the column at witch to start removing the text.
+   * @param `count` Number of characters to remove.
    */
   erase_from_line(
     line_index: number,
