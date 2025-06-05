@@ -13,7 +13,7 @@ Deno.test("Create empty", () => {
   assert_tree(text);
 });
 
-Deno.test("Create with content", () => {
+Deno.test("Create with code_units", () => {
   const text = SliceTree.of_code_units("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.read(0), "Lorem\nipsum\ndolor\nsit\namet");
@@ -23,7 +23,7 @@ Deno.test("Create with content", () => {
   assert_tree(text);
 });
 
-Deno.test("Create with wide char", () => {
+Deno.test("Create with code_points", () => {
   const text = SliceTree.of_code_points("😄");
 
   assert_iterator(text.read(0), "😄");
