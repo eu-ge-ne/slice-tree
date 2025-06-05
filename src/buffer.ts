@@ -4,8 +4,8 @@ export interface Buffer {
   readonly reader: Reader;
   text: string;
   len: number;
-  eols_i0: number[];
-  eols_i1: number[];
+  eol_starts: number[];
+  eol_ends: number[];
 }
 
 export function new_buffer(reader: Reader, text: string): Buffer {
@@ -13,17 +13,17 @@ export function new_buffer(reader: Reader, text: string): Buffer {
     reader,
     text,
     len: reader.len(text),
-    eols_i0: [],
-    eols_i1: [],
+    eol_starts: [],
+    eol_ends: [],
   };
 
-  reader.eols(text, 0, buf.eols_i0, buf.eols_i1);
+  reader.eols(text, 0, buf.eol_starts, buf.eol_ends);
 
   return buf;
 }
 
 export function grow_buffer(x: Buffer, text: string): void {
-  x.reader.eols(text, x.len, x.eols_i0, x.eols_i1);
+  x.reader.eols(text, x.len, x.eol_starts, x.eol_ends);
 
   x.len = x.reader.len(text);
   x.text += text;
@@ -31,13 +31,13 @@ export function grow_buffer(x: Buffer, text: string): void {
 
 export function find_eol(x: Buffer, eols_start: number, index: number): number {
   let a = eols_start;
-  let b = x.eols_i0.length - 1;
+  let b = x.eol_starts.length - 1;
   let i = 0;
   let v = 0;
 
   while (a <= b) {
     i = Math.trunc((a + b) / 2);
-    v = x.eols_i0[i]!;
+    v = x.eol_starts[i]!;
 
     if (v < index) {
       a = i + 1;
