@@ -260,7 +260,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts a text into the buffer at the `line_index`, `column_index`.
+   * Inserts a text into the buffer at the specified line and column indexes.
    *
    * @param `line_index` Index of the line at witch to insert the text.
    * @param `column_index` Index of the column at witch to insert the text.
