@@ -1,89 +1,91 @@
-import { Buffer } from "./buffer.ts";
+import { type Buffer, find_eol, grow_buffer, new_buffer } from "./buffer.ts";
+import type { Reader } from "./reader.ts";
 
-export class Slice {
-  #buf: Buffer;
-
+export interface Slice {
+  readonly buf: Buffer;
   start: number;
   len: number;
   eols_start: number;
   eols_len: number;
+}
 
-  constructor(
-    buffer: Buffer,
-    start: number,
-    len: number,
-    eols_start: number,
-    eols_len: number,
-  ) {
-    this.#buf = buffer;
+export function new_slice(
+  buf: Buffer,
+  start: number,
+  len: number,
+  eols_start: number,
+  eols_len: number,
+): Slice {
+  return {
+    buf,
+    start,
+    len,
+    eols_start,
+    eols_len,
+  };
+}
 
-    this.start = start;
-    this.len = len;
-    this.eols_start = eols_start;
-    this.eols_len = eols_len;
-  }
+export function slice_from_text(reader: Reader, text: string): Slice {
+  const buf = new_buffer(reader, text);
 
-  static from_text(text: string): Slice {
-    const buffer = new Buffer(text);
+  return new_slice(buf, 0, buf.len, 0, buf.eol_starts.length);
+}
 
-    return new Slice(buffer, 0, buffer.len, 0, buffer.eol_starts.length);
-  }
+export function slice_growable(slice: Slice): boolean {
+  return (slice.buf.len < 100) && (slice.start + slice.len === slice.buf.len);
+}
 
-  get growable(): boolean {
-    return (this.#buf.len < 100) && (this.start + this.len === this.#buf.len);
-  }
+export function grow_slice(slice: Slice, text: string): void {
+  grow_buffer(slice.buf, text);
 
-  append(text: string): void {
-    this.#buf.append(text);
+  resize_slice(slice, slice.len + [...text].length);
+}
 
-    this.resize(this.len + [...text].length);
-  }
+export function trim_slice_end(slice: Slice, n: number): void {
+  resize_slice(slice, slice.len - n);
+}
 
-  trim_end(n: number): void {
-    this.resize(this.len - n);
-  }
+export function trim_slice_start(slice: Slice, n: number): void {
+  slice.start += n;
+  slice.len -= n;
 
-  trim_start(n: number): void {
-    this.start += n;
-    this.len -= n;
+  slice.eols_start = find_eol(slice.buf, slice.eols_start, slice.start);
 
-    this.eols_start = this.#buf.find_eol(this.eols_start, this.start);
+  const eols_end = find_eol(
+    slice.buf,
+    slice.eols_start,
+    slice.start + slice.len,
+  );
 
-    const eols_end = this.#buf.find_eol(this.eols_start, this.start + this.len);
+  slice.eols_len = eols_end - slice.eols_start;
+}
 
-    this.eols_len = eols_end - this.eols_start;
-  }
+export function resize_slice(slice: Slice, len: number): void {
+  slice.len = len;
 
-  resize(len: number): void {
-    this.len = len;
+  const eols_end = find_eol(
+    slice.buf,
+    slice.eols_start,
+    slice.start + slice.len,
+  );
 
-    const eols_end = this.#buf.find_eol(this.eols_start, this.start + this.len);
+  slice.eols_len = eols_end - slice.eols_start;
+}
 
-    this.eols_len = eols_end - this.eols_start;
-  }
+export function split_slice(slice: Slice, index: number, gap: number): Slice {
+  const start = slice.start + index + gap;
+  const len = slice.len - index - gap;
 
-  split(index: number, gap: number): Slice {
-    const start = this.start + index + gap;
-    const len = this.len - index - gap;
+  resize_slice(slice, index);
 
-    this.resize(index);
+  const eols_start = find_eol(
+    slice.buf,
+    slice.eols_start + slice.eols_len,
+    start,
+  );
 
-    const eols_start = this.#buf.find_eol(
-      this.eols_start + this.eols_len,
-      start,
-    );
+  const eols_end = find_eol(slice.buf, eols_start, start + len);
+  const eols_len = eols_end - eols_start;
 
-    const eols_end = this.#buf.find_eol(eols_start, start + len);
-    const eols_len = eols_end - eols_start;
-
-    return new Slice(this.#buf, start, len, eols_start, eols_len);
-  }
-
-  read(start: number, count: number): IteratorObject<string> {
-    return this.#buf.read(this.start + start, count);
-  }
-
-  get_eol_end(i: number): number {
-    return this.#buf.eol_ends[i]!;
-  }
+  return new_slice(slice.buf, start, len, eols_start, eols_len);
 }
