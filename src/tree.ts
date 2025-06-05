@@ -69,7 +69,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters from the text buffer starting from the `index`.
+   * Returns the characters in the text buffer starting at the specified index.
    *
    * @param `index` Start index.
    * @yields Characters.
@@ -108,7 +108,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters from the line of text at the `line_index`.
+   * Returns the characters in the line of text buffer.
    *
    * @param `line_index` Line index.
    * @yields Characters.
@@ -147,7 +147,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters from the text buffer starting from the `line_index`.
+   * Returns the characters in the text buffer starting at the specified line index.
    *
    * @param `line_index` Line index.
    * @yields Characters.
@@ -178,7 +178,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts a text into the buffer at the `index`.
+   * Inserts a text into the buffer at the specified index.
    *
    * @param `index` Index at witch to insert the text.
    * @param `text` Text to insert.
@@ -260,7 +260,11 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text at the specified column in the specified line.
+   * Inserts a text into the buffer at the `line_index`, `column_index`.
+   *
+   * @param `line_index` Index of the line at witch to insert the text.
+   * @param `column_index` Index of the column at witch to insert the text.
+   * @param `text` Text to insert.
    */
   write_line(line_index: number, column_index: number, text: string): void {
     const range = this.find_line(line_index);
