@@ -1,63 +1,57 @@
-export class Buffer {
-  #text: string;
+import type { Reader } from "./reader.ts";
 
+export interface Buffer {
+  readonly reader: Reader;
+  text: string;
   len: number;
-  eol_starts: number[] = [];
-  eol_ends: number[] = [];
+  eol_starts: number[];
+  eol_ends: number[];
+}
 
-  constructor(text: string) {
-    this.#text = text;
-    this.len = [...text].length;
+export function new_buffer(reader: Reader, text: string): Buffer {
+  const buf: Buffer = {
+    reader,
+    text,
+    len: reader.len(text),
+    eol_starts: [],
+    eol_ends: [],
+  };
 
-    this.#add_eols(text);
-  }
+  reader.eols(text, 0, buf.eol_starts, buf.eol_ends);
 
-  append(text: string): void {
-    this.#add_eols(text, this.len);
+  return buf;
+}
 
-    this.#text += text;
-    this.len += [...text].length;
-  }
+export function grow_buffer(buf: Buffer, text: string): void {
+  buf.reader.eols(text, buf.len, buf.eol_starts, buf.eol_ends);
 
-  read(start: number, count: number): IteratorObject<string> {
-    return this.#text[Symbol.iterator]().drop(start).take(count);
-  }
+  buf.len = buf.reader.len(text);
+  buf.text += text;
+}
 
-  find_eol(eols_start: number, index: number): number {
-    let a = eols_start;
-    let b = this.eol_starts.length - 1;
-    let i = 0;
-    let v = 0;
+export function find_eol(
+  buf: Buffer,
+  eols_start: number,
+  index: number,
+): number {
+  let a = eols_start;
+  let b = buf.eol_starts.length - 1;
+  let i = 0;
+  let v = 0;
 
-    while (a <= b) {
-      i = Math.trunc((a + b) / 2);
-      v = this.eol_starts[i]!;
+  while (a <= b) {
+    i = Math.trunc((a + b) / 2);
+    v = buf.eol_starts[i]!;
 
-      if (v < index) {
-        a = i + 1;
-      } else if (v > index) {
-        b = i - 1;
-      } else {
-        a = i;
-        break;
-      }
-    }
-
-    return a;
-  }
-
-  #add_eols(text: string, start = 0): void {
-    let i = 0;
-    let prev: string | undefined;
-
-    for (const char of text) {
-      if (char === "\n") {
-        this.eol_starts.push(start + i - (prev === "\r" ? 1 : 0));
-        this.eol_ends.push(start + i + 1);
-      }
-
-      prev = char;
-      i += 1;
+    if (v < index) {
+      a = i + 1;
+    } else if (v > index) {
+      b = i - 1;
+    } else {
+      a = i;
+      break;
     }
   }
+
+  return a;
 }
