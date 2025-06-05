@@ -265,6 +265,19 @@ export class SliceTree {
    * @param `line_index` Index of the line at witch to insert the text.
    * @param `column_index` Index of the column at witch to insert the text.
    * @param `text` Text to insert.
+   *
+   * @example Usage
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\ndolor");
+   *
+   * text.write_line(1, 0, "ipsum\n");
+   *
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\ndolor");
+   * ```
    */
   write_line(line_index: number, column_index: number, text: string): void {
     const range = this.find_line(line_index);
@@ -359,6 +372,11 @@ export class SliceTree {
    * Removes the line of text in the buffer at the specified index.
    *
    * @param `line_index` Index of the line to remove.
+   *
+   * @example Usage
+   *
+   * ```ts
+   * ```
    */
   erase_line(line_index: number): void {
     const range = this.find_line(line_index);
@@ -374,6 +392,11 @@ export class SliceTree {
    * @param `line_index` Index of the line at witch to start removing the text.
    * @param `column_index` Index of the column at witch to start removing the text.
    * @param `count` Number of characters to remove.
+   *
+   * @example Usage
+   *
+   * ```ts
+   * ```
    */
   erase_from_line(
     line_index: number,
