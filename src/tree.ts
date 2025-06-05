@@ -281,11 +281,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text starting at the specified index.
+   * Removes the text in the buffer starting at the specified index.
    *
-   * @param index Index at witch to start removing the text.
-   * @param count Number of characters to remove.
-   * @returns A void value.
+   * @param `index` Index at witch to start removing the text.
+   * @param `count` Number of characters to remove.
    *
    * @example Usage
    *
