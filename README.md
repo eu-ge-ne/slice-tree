@@ -270,6 +270,19 @@ Syntax
 write_line(line_index: number, column_index: number, text: string): void
 ```
 
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\ndolor");
+
+text.write_line(1, 0, "ipsum\n");
+
+assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\ndolor");
+```
+
 ### `SliceTree.proto.erase()`
 
 Removes the text in the buffer starting at the specified index.
