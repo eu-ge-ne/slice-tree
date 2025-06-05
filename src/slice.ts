@@ -28,7 +28,7 @@ export function new_slice(
 export function slice_from_text(reader: Reader, text: string): Slice {
   const buf = new_buffer(reader, text);
 
-  return new_slice(buf, 0, buf.len, 0, buf.eol_starts.length);
+  return new_slice(buf, 0, buf.len, 0, buf.eols_i0.length);
 }
 
 export function slice_growable(x: Slice): boolean {
