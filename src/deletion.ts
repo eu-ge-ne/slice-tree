@@ -1,4 +1,4 @@
-import { bubble_update, NIL, type Node, type Tree } from "./node.ts";
+import { NIL, type Node, type Tree } from "./node.ts";
 import { minimum } from "./querying.ts";
 import { left_rotate, right_rotate } from "./rotation.ts";
 
@@ -11,12 +11,12 @@ export function delete_node(tree: Tree, z: Node): void {
     x = z.right;
 
     transplant(tree, z, z.right);
-    bubble_update(z.right.p);
+    z.right.p.bubble_update();
   } else if (z.right === NIL) {
     x = z.left;
 
     transplant(tree, z, z.left);
-    bubble_update(z.left.p);
+    z.left.p.bubble_update();
   } else {
     y = minimum(z.right);
 
@@ -25,7 +25,7 @@ export function delete_node(tree: Tree, z: Node): void {
 
     if (y !== z.right) {
       transplant(tree, y, y.right);
-      bubble_update(y.right.p);
+      y.right.p.bubble_update();
 
       y.right = z.right;
       y.right.p = y;
@@ -39,7 +39,7 @@ export function delete_node(tree: Tree, z: Node): void {
     y.left.p = y;
     y.red = z.red;
 
-    bubble_update(y);
+    y.bubble_update();
   }
 
   if (!y_original_color) {

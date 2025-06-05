@@ -1,12 +1,12 @@
 import { insert_after } from "./insertion.ts";
-import { bubble_update, create_node, type Node, type Tree } from "./node.ts";
+import { Node, type Tree } from "./node.ts";
 
 export function split(tree: Tree, x: Node, index: number, gap: number): Node {
   const slice = x.slice.split(index, gap);
 
-  bubble_update(x);
+  x.bubble_update();
 
-  const node = create_node(slice);
+  const node = new Node(slice);
 
   insert_after(tree, x, node);
 
