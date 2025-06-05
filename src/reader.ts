@@ -11,8 +11,8 @@ export const code_unit_reader: Reader = {
     return text.length;
   },
 
-  *read(text: string, index: number, count: number): Generator<string> {
-    yield text.slice(index, index + count);
+  read(text: string, index: number, count: number): IteratorObject<string> {
+    return text.slice(index, index + count)[Symbol.iterator]();
   },
 
   eols(text: string, index: number, starts: number[], ends: number[]): void {

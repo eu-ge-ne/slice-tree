@@ -4,7 +4,7 @@ import { SliceTree } from "../src/tree.ts";
 import { assert_tree } from "./assert.ts";
 
 Deno.test("Find line at valid index", () => {
-  const text = SliceTree.of_code_units(
+  const text = SliceTree.of_code_points(
     "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄",
   );
 
@@ -20,7 +20,7 @@ Deno.test("Find line at valid index", () => {
 });
 
 Deno.test("Find line at index == line_count", () => {
-  const text = SliceTree.of_code_units(
+  const text = SliceTree.of_code_points(
     "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄",
   );
 
@@ -33,7 +33,7 @@ Deno.test("Find line at index == line_count", () => {
 });
 
 Deno.test("Find line at index > line_count", () => {
-  const text = SliceTree.of_code_units(
+  const text = SliceTree.of_code_points(
     "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄",
   );
 
@@ -46,7 +46,7 @@ Deno.test("Find line at index > line_count", () => {
 });
 
 Deno.test("Find line at index < 0", () => {
-  const text = SliceTree.of_code_units(
+  const text = SliceTree.of_code_points(
     "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄",
   );
 
