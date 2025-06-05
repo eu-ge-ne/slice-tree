@@ -14,21 +14,23 @@ Deno.test("Create empty", () => {
 });
 
 Deno.test("Create with code_units", () => {
-  const text = SliceTree.of_code_units("Lorem\nipsum\ndolor\nsit\namet");
+  const text = SliceTree.of_code_units("Lorem \nipsum \ndolor \nsit \namet");
 
-  assert_iterator(text.read(0), "Lorem\nipsum\ndolor\nsit\namet");
-  assertEquals(text.count, 26);
+  assert_iterator(text.read(0), "Lorem \nipsum \ndolor \nsit \namet");
+  assertEquals(text.count, 30);
   assertEquals(text.line_count, 5);
 
   assert_tree(text);
 });
 
 Deno.test("Create with code_points", () => {
-  const text = SliceTree.of_code_points("😄");
+  const text = SliceTree.of_code_points(
+    "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet",
+  );
 
-  assert_iterator(text.read(0), "😄");
-  assertEquals(text.count, 1);
-  assertEquals(text.line_count, 1);
+  assert_iterator(text.read(0), "Lorem😄\nipsum😄\ndolor😄\nsit😄\namet");
+  assertEquals(text.count, 30);
+  assertEquals(text.line_count, 5);
 
   assert_tree(text);
 });
