@@ -121,7 +121,7 @@ assertEquals(text.read_line(0).toArray().join(""), "ipsum");
 
 ### `SliceTree()`
 
-Creates a `SliceTree` instance with optional initial text.
+Creates an instance of `SliceTree` with some optional initial text.
 
 Syntax
 
@@ -131,7 +131,7 @@ new SliceTree(text?: string)
 
 ### `SliceTree:count`
 
-Returns the total number of characters in the text content.
+Returns the number of characters in the text buffer.
 
 Syntax
 
@@ -152,7 +152,7 @@ assertEquals(text.count, 11);
 
 ### `SliceTree:line_count`
 
-Returns the number of lines in the text content.
+Returns the number of lines in the text buffer.
 
 Syntax
 
@@ -173,7 +173,7 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.proto.read()`
 
-Returns the content starting at the specified index.
+Returns the characters in the text buffer starting at the specified index.
 
 Syntax
 
@@ -194,12 +194,12 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.proto.read_line()`
 
-Returns the content of the line at the specified index.
+Returns the characters in the line of text buffer.
 
 Syntax
 
 ```ts ignore
-*read_line(index: number, stop_at_eol = false): Generator<string>
+*read_line(line_index: number): Generator<string>
 ```
 
 Example
@@ -215,12 +215,12 @@ assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 
 ### `SliceTree.proto.read_from_line()`
 
-Returns the content starting at the specified line index.
+Returns the characters in the text buffer starting at the specified line index.
 
 Syntax
 
 ```ts ignore
-*read_from_line(index: number): Generator<string>
+*read_from_line(line_index: number): Generator<string>
 ```
 
 Example
@@ -239,7 +239,7 @@ assertEquals(
 
 ### `SliceTree.proto.write()`
 
-Inserts the text at the specified index in the content.
+Inserts a text into the buffer at the specified index.
 
 Syntax
 
@@ -262,7 +262,7 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.proto.write_line()`
 
-Inserts the text at the specified column in the specified line.
+Inserts a text into the buffer at the specified line and column indexes.
 
 Syntax
 
@@ -272,7 +272,7 @@ write_line(line_index: number, column_index: number, text: string): void
 
 ### `SliceTree.proto.erase()`
 
-Removes the text starting at the specified index.
+Removes the text in the buffer starting at the specified index.
 
 Syntax
 
@@ -295,7 +295,7 @@ assertEquals(text.read(0).toArray().join(""), "Lorem");
 
 ### `SliceTree.proto.erase_line()`
 
-Removes the line at the specified index.
+Removes the line of text in the buffer at the specified index.
 
 Syntax
 
@@ -305,12 +305,19 @@ erase_line(line_index: number): void
 
 ### `SliceTree.proto.erase_from_line()`
 
-Removes the text starting at the specified line and column indexes.
+Removes the text in the buffer starting at the specified line and column
+indexes.
+
+Syntax
+
+```ts ignore
+erase_from_line(line_index: number, column_index: number, count = Number.MAX_SAFE_INTEGER): void
+```
 
 ### `SliceTree.proto.find_line()`
 
-Returns the start index (inclusive) and the end index (exclusive) of the line at
-the specified index.
+Returns the start index (inclusive) and the end index (exclusive) of the line of
+text in the buffer at the specified index.
 
 Syntax
 

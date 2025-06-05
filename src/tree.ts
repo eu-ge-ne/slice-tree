@@ -5,7 +5,7 @@ import { search, search_eol, successor } from "./querying.ts";
 import { split } from "./splitting.ts";
 
 /**
- * Implements a `piece table` data structure to represent text content.
+ * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
   /**
@@ -15,9 +15,10 @@ export class SliceTree {
   root = NIL;
 
   /**
-   * Creates a `SliceTree` instance with optional initial text.
+   * Creates an instance of `SliceTree` with some optional initial text.
    *
-   * @param text Optional initial text.
+   * @param `text` Initial text.
+   * @returns `SliceTree` instance.
    */
   constructor(text?: string) {
     if (text && text.length > 0) {
@@ -28,9 +29,9 @@ export class SliceTree {
   }
 
   /**
-   * Returns the total number of characters in the text content.
+   * Returns the number of characters in the text buffer.
    *
-   * @returns The number of characters.
+   * @returns Number of characters.
    *
    * @example Usage
    *
@@ -48,9 +49,9 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of lines in the text content.
+   * Returns the number of lines in the text buffer.
    *
-   * @returns The number of lines.
+   * @returns Number of lines.
    *
    * @example Usage
    *
@@ -68,10 +69,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content starting at the specified index.
+   * Returns the characters in the text buffer starting at the specified index.
    *
-   * @param index Start index.
-   * @returns An iterator over the text content.
+   * @param `index` Start index.
+   * @yields Characters.
    *
    * @example Usage
    *
@@ -107,10 +108,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content of the line at the specified index.
+   * Returns the characters in the line of text buffer.
    *
-   * @param index Line index.
-   * @returns An iterator over the text content.
+   * @param `line_index` Line index.
+   * @yields Characters.
    *
    * @example Usage
    *
@@ -146,10 +147,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the content starting at the specified line index.
+   * Returns the characters in the text buffer starting at the specified line index.
    *
-   * @param index Line index.
-   * @returns An iterator over the text content.
+   * @param `line_index` Line index.
+   * @yields Characters.
    *
    * @example Usage
    *
@@ -177,11 +178,10 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text at the specified index in the content.
+   * Inserts a text into the buffer at the specified index.
    *
-   * @param index Index at witch to insert the text.
-   * @param text Text to insert.
-   * @returns A void value.
+   * @param `index` Index at witch to insert the text.
+   * @param `text` Text to insert.
    *
    * @example Usage
    *
@@ -260,7 +260,11 @@ export class SliceTree {
   }
 
   /**
-   * Inserts the text at the specified column in the specified line.
+   * Inserts a text into the buffer at the specified line and column indexes.
+   *
+   * @param `line_index` Index of the line at witch to insert the text.
+   * @param `column_index` Index of the column at witch to insert the text.
+   * @param `text` Text to insert.
    */
   write_line(line_index: number, column_index: number, text: string): void {
     const range = this.find_line(line_index);
@@ -277,11 +281,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text starting at the specified index.
+   * Removes the text in the buffer starting at the specified index.
    *
-   * @param index Index at witch to start removing the text.
-   * @param count Number of characters to remove.
-   * @returns A void value.
+   * @param `index` Index at witch to start removing the text.
+   * @param `count` Number of characters to remove.
    *
    * @example Usage
    *
@@ -353,7 +356,9 @@ export class SliceTree {
   }
 
   /**
-   * Removes the line at the specified index.
+   * Removes the line of text in the buffer at the specified index.
+   *
+   * @param `line_index` Index of the line to remove.
    */
   erase_line(line_index: number): void {
     const range = this.find_line(line_index);
@@ -364,7 +369,11 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text starting at the specified line and column indexes.
+   * Removes the text in the buffer starting at the specified line and column indexes.
+   *
+   * @param `line_index` Index of the line at witch to start removing the text.
+   * @param `column_index` Index of the column at witch to start removing the text.
+   * @param `count` Number of characters to remove.
    */
   erase_from_line(
     line_index: number,
@@ -379,10 +388,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the start index (inclusive) and the end index (exclusive) of the line at the specified index.
+   * Returns the start index (inclusive) and the end index (exclusive) of the line of text in the buffer at the specified index.
    *
-   * @param index Line index.
-   * @returns A tuple of [start, end] indexes
+   * @param `line_index` Line index.
+   * @returns Tuple of [start, end] indexes
    *
    * @example Usage
    *
