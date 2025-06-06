@@ -2,7 +2,7 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
-import { point_reader, type Reader, unit_reader } from "./reader.ts";
+import { new_point_reader, new_unit_reader, type Reader } from "./reader.ts";
 import {
   grow_slice,
   slice_growable,
@@ -39,7 +39,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static units(text?: string): SliceTree {
-    return new SliceTree(unit_reader, text);
+    return new SliceTree(new_unit_reader(), text);
   }
 
   /**
@@ -49,7 +49,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static points(text?: string): SliceTree {
-    return new SliceTree(point_reader, text);
+    return new SliceTree(new_point_reader(), text);
   }
 
   /**
