@@ -67,15 +67,13 @@ export function new_grapheme_reader(): Reader {
 
     eols(text: string, index: number, starts: number[], ends: number[]): void {
       let i = 0;
-      let prev: string | undefined;
 
       for (const { segment } of segmenter.segment(text)) {
-        if (segment === "\n") {
-          starts.push(index + i - (prev === "\r" ? 1 : 0));
-          ends.push(index + i + 1);
+        if (segment === "\n" || segment === "\r\n") {
+          starts.push(index + i);
+          ends.push(index + i + segment.length);
         }
 
-        prev = segment;
         i += 1;
       }
     },
