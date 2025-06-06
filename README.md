@@ -15,7 +15,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Bun](#bun)
   - [Examples](#examples)
   - [API](#api)
-    - [`SliceTree()`](#slicetree)
+    - [`SliceTree.units()`](#slicetreeunits)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
@@ -119,7 +119,7 @@ assertEquals(text.read_line(0).toArray().join(""), "ipsum");
 
 ## API
 
-### `SliceTree()`
+### `SliceTree.units()`
 
 Creates an instance of `SliceTree` with some optional initial text.
 
