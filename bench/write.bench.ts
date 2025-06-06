@@ -8,7 +8,7 @@ Deno.bench("Appending into a SliceTree", {
   group: "Append",
   baseline: true,
 }, (b) => {
-  const text = SliceTree.of_units();
+  const text = SliceTree.units();
 
   b.start();
 
@@ -37,7 +37,7 @@ Deno.bench("Inserting into a SliceTree", {
   group: "Insert",
   baseline: true,
 }, (b) => {
-  const text = SliceTree.of_units(str(2));
+  const text = SliceTree.units(str(2));
 
   b.start();
 

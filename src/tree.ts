@@ -38,7 +38,7 @@ export class SliceTree {
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
-  static of_units(text?: string): SliceTree {
+  static units(text?: string): SliceTree {
     return new SliceTree(unit_reader, text);
   }
 
@@ -48,7 +48,7 @@ export class SliceTree {
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
-  static of_points(text?: string): SliceTree {
+  static points(text?: string): SliceTree {
     return new SliceTree(point_reader, text);
   }
 
@@ -63,7 +63,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -83,7 +83,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
@@ -104,7 +104,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -146,7 +146,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
    * ```
@@ -185,7 +185,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
    * ```
@@ -216,7 +216,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units();
+   * const text = SliceTree.units();
    *
    * text.write(0, "Lorem ipsum");
    *
@@ -299,7 +299,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\ndolor");
+   * const text = SliceTree.units("Lorem\ndolor");
    *
    * text.write_line(1, 0, "ipsum\n");
    *
@@ -332,7 +332,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * text.erase(5, 6);
    *
@@ -406,7 +406,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum\ndolor");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor");
    *
    * text.erase_line(1);
    *
@@ -434,7 +434,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum\ndolor");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor");
    *
    * text.erase_from_line(1, 0);
    *
@@ -465,7 +465,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.of_units("Lorem\nipsum");
+   * const text = SliceTree.units("Lorem\nipsum");
    *
    * assertEquals(text.find_line(0), [0, 6]);
    * ```

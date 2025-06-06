@@ -8,7 +8,7 @@ Deno.bench("Accessing a line in a SliceTree", {
   group: "Line",
   baseline: true,
 }, (b) => {
-  const text = SliceTree.of_units(lines(N));
+  const text = SliceTree.units(lines(N));
 
   b.start();
 
