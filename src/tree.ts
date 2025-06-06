@@ -138,17 +138,16 @@ export class SliceTree {
       return "";
     }
 
-    let x = first.node;
-    let offset = first.offset;
+    let { node, offset } = first;
 
-    while (x !== NIL) {
-      yield* x.slice.buf.reader.read(
-        x.slice.buf.text,
-        x.slice.start + offset,
-        x.slice.len - offset,
+    while (node !== NIL) {
+      yield* node.slice.buf.reader.read(
+        node.slice.buf.text,
+        node.slice.start + offset,
+        node.slice.len - offset,
       );
-      x = successor(x);
 
+      node = successor(node);
       offset = 0;
     }
   }
