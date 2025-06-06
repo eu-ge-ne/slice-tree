@@ -16,6 +16,8 @@ A `piece table` data structure implemented using `red-black tree`.
   - [Examples](#examples)
   - [API](#api)
     - [`SliceTree.units()`](#slicetreeunits)
+    - [`SliceTree.points()`](#slicetreepoints)
+    - [`SliceTree.graphemes()`](#slicetreegraphemes)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
@@ -127,6 +129,26 @@ Syntax
 
 ```ts ignore
 SliceTree.units(text?: string)
+```
+
+### `SliceTree.points()`
+
+Creates an instance of `SliceTree` with some optional initial text.
+
+Syntax
+
+```ts ignore
+SliceTree.points(text?: string)
+```
+
+### `SliceTree.graphemes()`
+
+Creates an instance of `SliceTree` with some optional initial text.
+
+Syntax
+
+```ts ignore
+SliceTree.graphemes(text?: string)
 ```
 
 ### `SliceTree:count`
