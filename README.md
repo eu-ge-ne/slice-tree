@@ -15,7 +15,9 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Bun](#bun)
   - [Examples](#examples)
   - [API](#api)
-    - [`SliceTree()`](#slicetree)
+    - [`SliceTree.units()`](#slicetreeunits)
+    - [`SliceTree.points()`](#slicetreepoints)
+    - [`SliceTree.graphemes()`](#slicetreegraphemes)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
@@ -77,7 +79,7 @@ bunx jsr add @eu-ge-ne/slice-tree
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree();
+const text = SliceTree.units();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
@@ -119,14 +121,43 @@ assertEquals(text.read_line(0).toArray().join(""), "ipsum");
 
 ## API
 
-### `SliceTree()`
+### `SliceTree.units()`
 
-Creates an instance of `SliceTree` with some optional initial text.
+Creates an instance of `SliceTree` interpreting text characters as
+`UTF-16 code units`. Visit
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
+for more details. Accepts optional initial text.
 
 Syntax
 
 ```ts ignore
-new SliceTree(text?: string)
+SliceTree.units(text?: string)
+```
+
+### `SliceTree.points()`
+
+Creates an instance of `SliceTree` interpreting text characters as
+`Unicode code points`. Visit
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
+for more details. Accepts optional initial text.
+
+Syntax
+
+```ts ignore
+SliceTree.points(text?: string)
+```
+
+### `SliceTree.graphemes()`
+
+Creates an instance of `SliceTree` interpreting text characters as
+`Unicode graphemes`. Visit
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
+for more details. Accepts optional initial text.
+
+Syntax
+
+```ts ignore
+SliceTree.graphemes(text?: string)
 ```
 
 ### `SliceTree:count`
@@ -145,7 +176,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem ipsum");
+const text = SliceTree.units("Lorem ipsum");
 
 assertEquals(text.count, 11);
 ```
@@ -166,7 +197,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.line_count, 5);
 ```
@@ -187,7 +218,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem ipsum");
+const text = SliceTree.units("Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
@@ -208,7 +239,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 ```
@@ -229,7 +260,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(
   text.read_from_line(1).toArray().join(""),
@@ -253,7 +284,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree();
+const text = SliceTree.units();
 
 text.write(0, "Lorem ipsum");
 
@@ -276,7 +307,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\ndolor");
+const text = SliceTree.units("Lorem\ndolor");
 
 text.write_line(1, 0, "ipsum\n");
 
@@ -299,7 +330,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem ipsum");
+const text = SliceTree.units("Lorem ipsum");
 
 text.erase(5, 6);
 
@@ -322,7 +353,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum\ndolor");
+const text = SliceTree.units("Lorem\nipsum\ndolor");
 
 text.erase_line(1);
 
@@ -346,7 +377,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum\ndolor");
+const text = SliceTree.units("Lorem\nipsum\ndolor");
 
 text.erase_from_line(1, 0);
 
@@ -370,7 +401,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = new SliceTree("Lorem\nipsum");
+const text = SliceTree.units("Lorem\nipsum");
 
 assertEquals(text.find_line(0), [0, 6]);
 ```

@@ -1,4 +1,5 @@
-import { Slice } from "./slice.ts";
+import type { Reader } from "./reader.ts";
+import { type Slice, slice_from_text } from "./slice.ts";
 
 export interface Tree {
   root: Node;
@@ -9,7 +10,7 @@ export interface Node {
   p: Node;
   left: Node;
   right: Node;
-  slice: Slice;
+  readonly slice: Slice;
   len: number;
   eols_len: number;
 }
@@ -20,7 +21,7 @@ NIL.p = NIL;
 NIL.left = NIL;
 NIL.right = NIL;
 
-export function create_node(slice: Slice): Node {
+export function new_node(slice: Slice): Node {
   return {
     red: true,
     p: NIL,
@@ -32,8 +33,8 @@ export function create_node(slice: Slice): Node {
   };
 }
 
-export function node_from_text(text: string): Node {
-  return create_node(Slice.from_text(text));
+export function node_from_text(reader: Reader, text: string): Node {
+  return new_node(slice_from_text(reader, text));
 }
 
 export function bubble_update(x: Node): void {

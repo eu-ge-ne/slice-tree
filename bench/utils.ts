@@ -14,10 +14,10 @@ export function lines(n: number): string {
   return lines;
 }
 
-const LINE_BREAKS_RE = /r?\n/gm;
+const EOL_RE = /\r?\n/gm;
 
 export function read_line(text: string, index: number): string {
-  const matches = Array.from(text.matchAll(LINE_BREAKS_RE));
+  const matches = Array.from(text.matchAll(EOL_RE));
 
   const line_breaks = matches.map((x) => x.index + x[0].length);
 

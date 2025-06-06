@@ -2,30 +2,69 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
+import {
+  new_grapheme_reader,
+  new_point_reader,
+  new_unit_reader,
+  type Reader,
+} from "./reader.ts";
+import {
+  grow_slice,
+  slice_growable,
+  trim_slice_end,
+  trim_slice_start,
+} from "./slice.ts";
 import { split } from "./splitting.ts";
 
 /**
  * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
+  #reader: Reader;
+
   /**
    * @ignore
    * @internal
    */
   root = NIL;
 
+  private constructor(reader: Reader, text?: string) {
+    this.#reader = reader;
+
+    if (text && text.length > 0) {
+      this.root = node_from_text(reader, text);
+      this.root.red = false;
+    }
+  }
+
   /**
-   * Creates an instance of `SliceTree` with some optional initial text.
+   * Creates an instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
-  constructor(text?: string) {
-    if (text && text.length > 0) {
-      this.root = node_from_text(text);
+  static units(text?: string): SliceTree {
+    return new SliceTree(new_unit_reader(), text);
+  }
 
-      this.root.red = false;
-    }
+  /**
+   * Creates an instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   *
+   * @param `text` Initial text.
+   * @returns `SliceTree` instance.
+   */
+  static points(text?: string): SliceTree {
+    return new SliceTree(new_point_reader(), text);
+  }
+
+  /**
+   * Creates an instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   *
+   * @param `text` Initial text.
+   * @returns `SliceTree` instance.
+   */
+  static graphemes(text?: string): SliceTree {
+    return new SliceTree(new_grapheme_reader(), text);
   }
 
   /**
@@ -39,7 +78,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -59,7 +98,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
@@ -80,7 +119,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
@@ -99,8 +138,11 @@ export class SliceTree {
     let offset = first.offset;
 
     while (x !== NIL) {
-      yield* x.slice.read(offset, x.slice.len - offset);
-
+      yield* x.slice.buf.reader.read(
+        x.slice.buf.text,
+        x.slice.start + offset,
+        x.slice.len - offset,
+      );
       x = successor(x);
 
       offset = 0;
@@ -119,7 +161,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
    * ```
@@ -158,7 +200,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
    * ```
@@ -189,7 +231,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree();
+   * const text = SliceTree.units();
    *
    * text.write(0, "Lorem ipsum");
    *
@@ -226,12 +268,12 @@ export class SliceTree {
       }
     }
 
-    if (insert_case === InsertionCase.Right && p.slice.growable) {
-      p.slice.append(text);
+    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
+      grow_slice(p.slice, text);
 
       bubble_update(p);
     } else {
-      const child = node_from_text(text);
+      const child = node_from_text(this.#reader, text);
 
       switch (insert_case) {
         case InsertionCase.Root: {
@@ -272,7 +314,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\ndolor");
+   * const text = SliceTree.units("Lorem\ndolor");
    *
    * text.write_line(1, 0, "ipsum\n");
    *
@@ -305,7 +347,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem ipsum");
+   * const text = SliceTree.units("Lorem ipsum");
    *
    * text.erase(5, 6);
    *
@@ -333,12 +375,12 @@ export class SliceTree {
       if (offset === 0) {
         delete_node(this, node);
       } else {
-        node.slice.trim_end(count);
+        trim_slice_end(node.slice, count);
         bubble_update(node);
       }
     } else if (offset2 < node.slice.len) {
       if (offset === 0) {
-        node.slice.trim_start(count);
+        trim_slice_start(node.slice, count);
         bubble_update(node);
       } else {
         split(this, node, offset, count);
@@ -379,7 +421,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum\ndolor");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor");
    *
    * text.erase_line(1);
    *
@@ -407,7 +449,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum\ndolor");
+   * const text = SliceTree.units("Lorem\nipsum\ndolor");
    *
    * text.erase_from_line(1, 0);
    *
@@ -438,7 +480,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = new SliceTree("Lorem\nipsum");
+   * const text = SliceTree.units("Lorem\nipsum");
    *
    * assertEquals(text.find_line(0), [0, 6]);
    * ```

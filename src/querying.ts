@@ -30,7 +30,8 @@ export function search_eol(x: Node, j: number): number | undefined {
       i += x.left.len;
 
       if (j < x.slice.eols_len) {
-        return i + x.slice.get_eol_end(x.slice.eols_start + j) - x.slice.start;
+        return i + x.slice.buf.eol_ends[x.slice.eols_start + j]! -
+          x.slice.start;
       } else {
         j -= x.slice.eols_len;
         i += x.slice.len;

@@ -1,31 +1,60 @@
 import { assertEquals } from "@std/assert";
 
-import { Buffer } from "../src/buffer.ts";
+import { new_buffer } from "../src/buffer.ts";
+import { new_point_reader, new_unit_reader } from "../src/reader.ts";
 
-Deno.test("parse no newlines", () => {
-  const buffer = new Buffer("Lorem ipsum");
+Deno.test("0 newlines with unit_reader", () => {
+  const buf = new_buffer(new_unit_reader(), "Lorem ipsum");
 
-  assertEquals(buffer.eol_starts, []);
-  assertEquals(buffer.eol_ends, []);
+  assertEquals(buf.eol_starts, []);
+  assertEquals(buf.eol_ends, []);
 });
 
-Deno.test("parse \n", () => {
-  const buffer = new Buffer("Lorem😄\nipsum😄\n");
+Deno.test("0 newlines with point_reader", () => {
+  const buf = new_buffer(new_point_reader(), "Lorem😄ipsum");
 
-  assertEquals(buffer.eol_starts, [6, 13]);
-  assertEquals(buffer.eol_ends, [7, 14]);
+  assertEquals(buf.eol_starts, []);
+  assertEquals(buf.eol_ends, []);
 });
 
-Deno.test("parse \r\n", () => {
-  const buffer = new Buffer("Lorem😄\r\nipsum😄\r\n");
+Deno.test("\n with unit_reader", () => {
+  const buf = new_buffer(new_unit_reader(), "Lorem \nipsum \n");
 
-  assertEquals(buffer.eol_starts, [6, 14]);
-  assertEquals(buffer.eol_ends, [8, 16]);
+  assertEquals(buf.eol_starts, [6, 13]);
+  assertEquals(buf.eol_ends, [7, 14]);
 });
 
-Deno.test("parse \n and \r\n", () => {
-  const buffer = new Buffer("Lorem😄\nipsum😄\r\n");
+Deno.test("\n with point_reader", () => {
+  const buf = new_buffer(new_point_reader(), "Lorem😄\nipsum😄\n");
 
-  assertEquals(buffer.eol_starts, [6, 13]);
-  assertEquals(buffer.eol_ends, [7, 15]);
+  assertEquals(buf.eol_starts, [6, 13]);
+  assertEquals(buf.eol_ends, [7, 14]);
+});
+
+Deno.test("\r\n with unit_reader", () => {
+  const buf = new_buffer(new_unit_reader(), "Lorem \r\nipsum \r\n");
+
+  assertEquals(buf.eol_starts, [6, 14]);
+  assertEquals(buf.eol_ends, [8, 16]);
+});
+
+Deno.test("\r\n with point_reader", () => {
+  const buf = new_buffer(new_point_reader(), "Lorem😄\r\nipsum😄\r\n");
+
+  assertEquals(buf.eol_starts, [6, 14]);
+  assertEquals(buf.eol_ends, [8, 16]);
+});
+
+Deno.test("\n and \r\n with unit_reader", () => {
+  const buf = new_buffer(new_unit_reader(), "Lorem \nipsum \r\n");
+
+  assertEquals(buf.eol_starts, [6, 13]);
+  assertEquals(buf.eol_ends, [7, 15]);
+});
+
+Deno.test("\n and \r\n with point_reader", () => {
+  const buf = new_buffer(new_point_reader(), "Lorem😄\nipsum😄\r\n");
+
+  assertEquals(buf.eol_starts, [6, 13]);
+  assertEquals(buf.eol_ends, [7, 15]);
 });

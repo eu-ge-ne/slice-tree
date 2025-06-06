@@ -8,7 +8,7 @@ Deno.bench("Creating a SliceTree", {
   group: "Create",
   baseline: true,
 }, () => {
-  const _ = new SliceTree(str(N));
+  const _ = SliceTree.units(str(N));
 });
 
 Deno.bench("Creating a string", {
