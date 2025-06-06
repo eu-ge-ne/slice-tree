@@ -22,7 +22,6 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.read_line()`](#slicetreeprotoread_line)
-    - [`SliceTree.proto.read_from_line()`](#slicetreeprotoread_from_line)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.write_line()`](#slicetreeprotowrite_line)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
@@ -242,30 +241,6 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
-```
-
-### `SliceTree.proto.read_from_line()`
-
-Returns the characters in the text buffer starting at the specified line index.
-
-Syntax
-
-```ts ignore
-*read_from_line(line_index: number): Generator<string>
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-
-assertEquals(
-  text.read_from_line(1).toArray().join(""),
-  "ipsum\ndolor\nsit\namet",
-);
 ```
 
 ### `SliceTree.proto.write()`

@@ -16,6 +16,8 @@ import {
 } from "./slice.ts";
 import { split } from "./splitting.ts";
 
+export type Index = number | readonly [number, number];
+
 /**
  * Implements `piece table` data structure to represent text buffer.
  */
@@ -122,14 +124,16 @@ export class SliceTree {
    * const text = SliceTree.units("Lorem ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read([0, 0]).toArray().join(""), "Lorem ipsum");
    * ```
    */
-  *read(index: number): Generator<string> {
-    if (index < 0) {
-      index = Math.max(index + this.count, 0);
+  *read(index: Index): Generator<string> {
+    const i = this.#index(index);
+    if (typeof i === "undefined") {
+      return "";
     }
 
-    const first = search(this.root, index);
+    const first = search(this.root, i);
     if (!first) {
       return "";
     }
@@ -185,37 +189,6 @@ export class SliceTree {
       } else {
         yield* iter.take(end - start);
       }
-    }
-  }
-
-  /**
-   * Returns the characters in the text buffer starting at the specified line index.
-   *
-   * @param `line_index` Line index.
-   * @yields Characters.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-   *
-   * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
-   * ```
-   */
-  *read_from_line(line_index: number): Generator<string> {
-    if (line_index < 0) {
-      line_index = Math.max(line_index + this.line_count, 0);
-    }
-
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
-
-    if (typeof start === "undefined") {
-      yield "";
-    } else {
-      yield* this.read(start);
     }
   }
 
@@ -503,5 +476,32 @@ export class SliceTree {
 
       return [start, end];
     }
+  }
+
+  #index(index: Index): number | undefined {
+    let i: number | undefined;
+
+    if (typeof index === "number") {
+      i = index;
+    } else {
+      let [ln, col] = index;
+      if (ln < 0) {
+        ln = Math.max(ln + this.line_count, 0);
+      }
+      i = ln === 0 ? 0 : search_eol(this.root, ln - 1);
+      if (typeof i === "undefined") {
+        return;
+      }
+      i += col;
+    }
+
+    if (typeof i === "undefined") {
+      return;
+    }
+    if (i < 0) {
+      i = Math.max(i + this.count, 0);
+    }
+
+    return i;
   }
 }
