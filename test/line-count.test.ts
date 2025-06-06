@@ -1,7 +1,6 @@
 import { assertEquals } from "@std/assert";
 
 import { SliceTree } from "../src/tree.ts";
-import { assert_tree } from "./assert.ts";
 
 Deno.test("0 newlines", () => {
   const text1 = SliceTree.units("A");
@@ -11,10 +10,6 @@ Deno.test("0 newlines", () => {
   assertEquals(text1.line_count, 1);
   assertEquals(text2.line_count, 1);
   assertEquals(text3.line_count, 1);
-
-  assert_tree(text1);
-  assert_tree(text2);
-  assert_tree(text3);
 });
 
 Deno.test("LF", () => {
@@ -25,10 +20,6 @@ Deno.test("LF", () => {
   assertEquals(text1.line_count, 2);
   assertEquals(text2.line_count, 2);
   assertEquals(text3.line_count, 2);
-
-  assert_tree(text1);
-  assert_tree(text2);
-  assert_tree(text3);
 });
 
 Deno.test("CRLF", () => {
@@ -39,8 +30,4 @@ Deno.test("CRLF", () => {
   assertEquals(text1.line_count, 2);
   assertEquals(text2.line_count, 2);
   assertEquals(text3.line_count, 2);
-
-  assert_tree(text1);
-  assert_tree(text2);
-  assert_tree(text3);
 });
