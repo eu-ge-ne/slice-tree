@@ -38,7 +38,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` with some optional initial text.
+   * Creates an instance of `SliceTree` interpreting text characters as [UTF-16 code units](https://en.wikipedia.org/wiki/UTF-16). Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -48,7 +48,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` with some optional initial text.
+   * Creates an instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -58,7 +58,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` with some optional initial text.
+   * Creates an instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
