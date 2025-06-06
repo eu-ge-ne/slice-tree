@@ -2,7 +2,12 @@ import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { search, search_eol, successor } from "./querying.ts";
-import { new_point_reader, new_unit_reader, type Reader } from "./reader.ts";
+import {
+  new_grapheme_reader,
+  new_point_reader,
+  new_unit_reader,
+  type Reader,
+} from "./reader.ts";
 import {
   grow_slice,
   slice_growable,
@@ -50,6 +55,16 @@ export class SliceTree {
    */
   static points(text?: string): SliceTree {
     return new SliceTree(new_point_reader(), text);
+  }
+
+  /**
+   * Creates an instance of `SliceTree` with some optional initial text.
+   *
+   * @param `text` Initial text.
+   * @returns `SliceTree` instance.
+   */
+  static graphemes(text?: string): SliceTree {
+    return new SliceTree(new_grapheme_reader(), text);
   }
 
   /**

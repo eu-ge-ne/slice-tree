@@ -51,3 +51,33 @@ export function new_point_reader(): Reader {
     },
   };
 }
+
+export function new_grapheme_reader(): Reader {
+  const segmenter = new Intl.Segmenter();
+
+  return {
+    len(text: string): number {
+      return [...segmenter.segment(text)].length;
+    },
+
+    read(text: string, index: number, count: number): IteratorObject<string> {
+      return segmenter.segment(text)[Symbol.iterator]().drop(index).take(count)
+        .map((x) => x.segment);
+    },
+
+    eols(text: string, index: number, starts: number[], ends: number[]): void {
+      let i = 0;
+      let prev: string | undefined;
+
+      for (const { segment } of segmenter.segment(text)) {
+        if (segment === "\n") {
+          starts.push(index + i - (prev === "\r" ? 1 : 0));
+          ends.push(index + i + 1);
+        }
+
+        prev = segment;
+        i += 1;
+      }
+    },
+  };
+}
