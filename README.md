@@ -23,8 +23,6 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
-    - [`SliceTree.proto.erase_line()`](#slicetreeprotoerase_line)
-    - [`SliceTree.proto.erase_from_line()`](#slicetreeprotoerase_from_line)
     - [`SliceTree.proto.find_line()`](#slicetreeprotofind_line)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
@@ -263,56 +261,9 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units("Lorem ipsum");
 
-text.erase(5, 6);
+text.erase(5, 11);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
-```
-
-### `SliceTree.proto.erase_line()`
-
-Removes the line of text in the buffer at the specified index.
-
-Syntax
-
-```ts ignore
-erase_line(line_index: number): void
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor");
-
-text.erase_line(1);
-
-assertEquals(text.read(0).toArray().join(""), "Lorem\ndolor");
-```
-
-### `SliceTree.proto.erase_from_line()`
-
-Removes the text in the buffer starting at the specified line and column
-indexes.
-
-Syntax
-
-```ts ignore
-erase_from_line(line_index: number, column_index: number, count = Number.MAX_SAFE_INTEGER): void
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor");
-
-text.erase_from_line(1, 0);
-
-assertEquals(text.read(0).toArray().join(""), "Lorem\n");
 ```
 
 ### `SliceTree.proto.find_line()`
