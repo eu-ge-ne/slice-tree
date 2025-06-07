@@ -169,7 +169,8 @@ export class SliceTree {
    *
    * const text = SliceTree.units();
    *
-   * text.write(0, "Lorem ipsum");
+   * text.write(0, "Lorem");
+   * text.write([0, 5], " ipsum");
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```

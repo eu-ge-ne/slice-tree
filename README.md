@@ -228,7 +228,7 @@ Inserts a text into the buffer at the specified index.
 Syntax
 
 ```ts ignore
-write(index: number, text: string): void
+write(index: Index, text: string): void
 ```
 
 Example
@@ -239,7 +239,8 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units();
 
-text.write(0, "Lorem ipsum");
+text.write(0, "Lorem");
+text.write([0, 5], " ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 ```
