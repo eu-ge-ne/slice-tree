@@ -442,20 +442,19 @@ export class SliceTree {
     if (typeof index === "number") {
       i = index;
     } else {
-      let [ln, col] = index;
+      let ln = index[0];
       if (ln < 0) {
         ln = Math.max(ln + this.line_count, 0);
       }
+
       i = ln === 0 ? 0 : find_eol(this.root, ln - 1);
       if (typeof i === "undefined") {
         return;
       }
-      i += col;
+
+      i += index[1];
     }
 
-    if (typeof i === "undefined") {
-      return;
-    }
     if (i < 0) {
       i = Math.max(i + this.count, 0);
     }
