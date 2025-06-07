@@ -121,10 +121,12 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem ipsum");
+   * const text = SliceTree.points("Lorem\nipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
-   * assertEquals(text.read([0, 0]).toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.read(6).toArray().join(""), "ipsum");
+   * assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+   * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
   read(start: Index, end?: Index): IteratorObject<string> {
