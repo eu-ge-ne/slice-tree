@@ -1,4 +1,5 @@
 import type { Reader } from "./reader.ts";
+import { successor } from "./querying.ts";
 import { type Slice, slice_from_text } from "./slice.ts";
 
 export interface Tree {
@@ -35,6 +36,19 @@ export function new_node(slice: Slice): Node {
 
 export function node_from_text(reader: Reader, text: string): Node {
   return new_node(slice_from_text(reader, text));
+}
+
+export function* iter(x: Node, offset: number): Generator<string> {
+  while (x !== NIL) {
+    yield* x.slice.buf.reader.read(
+      x.slice.buf.text,
+      x.slice.start + offset,
+      x.slice.len - offset,
+    );
+
+    x = successor(x);
+    offset = 0;
+  }
 }
 
 export function bubble_update(x: Node): void {

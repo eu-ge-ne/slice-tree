@@ -1,6 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, NIL, node_from_text } from "./node.ts";
+import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
 import {
   new_grapheme_reader,
@@ -127,68 +127,24 @@ export class SliceTree {
    * assertEquals(text.read([0, 0]).toArray().join(""), "Lorem ipsum");
    * ```
    */
-  *read(index: Index): Generator<string> {
-    const i = this.#index(index);
-    if (typeof i === "undefined") {
-      return;
-    }
+  read(start: Index, end?: Index): IteratorObject<string> {
+    const start_index = this.#index(start);
 
-    const first = find_node(this.root, i);
-    if (!first) {
-      return "";
-    }
+    if (typeof start_index === "number") {
+      const first = find_node(this.root, start_index);
 
-    let { node, offset } = first;
+      if (first) {
+        const chars = iter(first.node, first.offset);
 
-    while (node !== NIL) {
-      yield* node.slice.buf.reader.read(
-        node.slice.buf.text,
-        node.slice.start + offset,
-        node.slice.len - offset,
-      );
+        const end_index = end ? this.#index(end) : undefined;
 
-      node = successor(node);
-      offset = 0;
-    }
-  }
-
-  /**
-   * Returns the characters in the line of text buffer.
-   *
-   * @param `line_index` Line index.
-   * @yields Characters.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-   *
-   * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
-   * ```
-   */
-  *read_line(line_index: number): Generator<string> {
-    if (line_index < 0) {
-      line_index = Math.max(line_index + this.line_count, 0);
-    }
-
-    const start = line_index === 0 ? 0 : find_eol(this.root, line_index - 1);
-
-    if (typeof start === "undefined") {
-      yield "";
-    } else {
-      const iter = this.read(start);
-
-      const end = find_eol(this.root, line_index);
-
-      if (typeof end === "undefined") {
-        yield* iter;
-      } else {
-        yield* iter.take(end - start);
+        return typeof end_index === "number"
+          ? chars.take(end_index - start_index)
+          : chars;
       }
     }
+
+    return [][Symbol.iterator]();
   }
 
   /**

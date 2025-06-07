@@ -193,7 +193,7 @@ Deno.test("Erase removes lines", () => {
   assertEquals(text.count, 5);
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0).toArray().join(""), "ipsum");
-  assertEquals(text.read_line(0).toArray().join(""), "ipsum");
+  assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
 
   assert_tree(text);
 });

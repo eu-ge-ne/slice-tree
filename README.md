@@ -21,7 +21,6 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
-    - [`SliceTree.proto.read_line()`](#slicetreeprotoread_line)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.write_line()`](#slicetreeprotowrite_line)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
@@ -83,21 +82,18 @@ const text = SliceTree.units();
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
 assertEquals(text.read(0).toArray().join(""), "");
-assertEquals(text.read_line(0).toArray().join(""), "");
 
 text.write(0, "Lorem");
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "Lorem");
-assertEquals(text.read_line(0).toArray().join(""), "Lorem");
 
 text.write(5, "ipsum");
 
 assertEquals(text.count, 10);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "Loremipsum");
-assertEquals(text.read_line(0).toArray().join(""), "Loremipsum");
 
 text.write(5, "\n");
 text.write(11, "\n");
@@ -105,9 +101,9 @@ text.write(11, "\n");
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
 assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.read_line(0).toArray().join(""), "Lorem\n");
-assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
-assertEquals(text.read_line(2).toArray().join(""), "");
+assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum\n");
+assertEquals(text.read([2, 0], [3, 0]).toArray().join(""), "");
 
 text.erase(0, 6);
 text.erase(5, 6);
@@ -115,7 +111,7 @@ text.erase(5, 6);
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
 assertEquals(text.read(0).toArray().join(""), "ipsum");
-assertEquals(text.read_line(0).toArray().join(""), "ipsum");
+assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
 ```
 
 ## API
@@ -220,27 +216,6 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 const text = SliceTree.units("Lorem ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
-```
-
-### `SliceTree.proto.read_line()`
-
-Returns the characters in the line of text buffer.
-
-Syntax
-
-```ts ignore
-*read_line(line_index: number): Generator<string>
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-
-assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
 ```
 
 ### `SliceTree.proto.write()`
