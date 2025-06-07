@@ -427,6 +427,8 @@ export class SliceTree {
       i = Math.max(i + this.count, 0);
     }
 
-    return i;
+    if (i <= this.count) {
+      return i;
+    }
   }
 }
