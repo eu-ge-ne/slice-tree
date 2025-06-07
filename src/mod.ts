@@ -1,1 +1,1 @@
-export { SliceTree } from "./tree.ts";
+export { type Index, SliceTree } from "./tree.ts";
