@@ -1,7 +1,7 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
-import { find, search_eol, successor } from "./querying.ts";
+import { find_eol, find_node, successor } from "./querying.ts";
 import {
   new_grapheme_reader,
   new_point_reader,
@@ -128,7 +128,12 @@ export class SliceTree {
    * ```
    */
   *read(index: Index): Generator<string> {
-    const first = find(this.root, this.#index(index));
+    const i = this.#index(index);
+    if (typeof i === "undefined") {
+      return;
+    }
+
+    const first = find_node(this.root, i);
     if (!first) {
       return "";
     }
@@ -169,14 +174,14 @@ export class SliceTree {
       line_index = Math.max(line_index + this.line_count, 0);
     }
 
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
+    const start = line_index === 0 ? 0 : find_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       yield "";
     } else {
       const iter = this.read(start);
 
-      const end = search_eol(this.root, line_index);
+      const end = find_eol(this.root, line_index);
 
       if (typeof end === "undefined") {
         yield* iter;
@@ -326,7 +331,7 @@ export class SliceTree {
       index = Math.max(index + this.count, 0);
     }
 
-    const first = find(this.root, index);
+    const first = find_node(this.root, index);
     if (!first) {
       return;
     }
@@ -360,7 +365,7 @@ export class SliceTree {
         x = split(this, node, offset, 0);
       }
 
-      const last = find(this.root, index + count);
+      const last = find_node(this.root, index + count);
       if (last && last.offset !== 0) {
         split(this, last.node, last.offset, 0);
       }
@@ -461,12 +466,12 @@ export class SliceTree {
       return [this.count, this.count];
     }
 
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
+    const start = line_index === 0 ? 0 : find_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_eol(this.root, line_index) ?? this.count;
+      const end = find_eol(this.root, line_index) ?? this.count;
 
       return [start, end];
     }
@@ -482,7 +487,7 @@ export class SliceTree {
       if (ln < 0) {
         ln = Math.max(ln + this.line_count, 0);
       }
-      i = ln === 0 ? 0 : search_eol(this.root, ln - 1);
+      i = ln === 0 ? 0 : find_eol(this.root, ln - 1);
       if (typeof i === "undefined") {
         return;
       }
