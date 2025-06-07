@@ -266,7 +266,6 @@ export class SliceTree {
         const count = end_index - start_index;
 
         const { node, offset } = first;
-
         const offset2 = offset + count;
 
         if (offset2 === node.slice.len) {
