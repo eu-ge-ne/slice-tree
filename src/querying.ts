@@ -1,21 +1,23 @@
 import { NIL, type Node } from "./node.ts";
 
-export function search(
+export function find(
   x: Node,
-  i: number,
+  i?: number,
 ): { node: Node; offset: number } | undefined {
-  while (x !== NIL) {
-    if (i < x.left.len) {
-      x = x.left;
-    } else {
-      i -= x.left.len;
-
-      if (i < x.slice.len) {
-        return { node: x, offset: i };
+  if (typeof i === "number") {
+    while (x !== NIL) {
+      if (i < x.left.len) {
+        x = x.left;
       } else {
-        i -= x.slice.len;
+        i -= x.left.len;
 
-        x = x.right;
+        if (i < x.slice.len) {
+          return { node: x, offset: i };
+        } else {
+          i -= x.slice.len;
+
+          x = x.right;
+        }
       }
     }
   }

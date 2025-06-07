@@ -1,7 +1,7 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, NIL, node_from_text } from "./node.ts";
-import { search, search_eol, successor } from "./querying.ts";
+import { find, search_eol, successor } from "./querying.ts";
 import {
   new_grapheme_reader,
   new_point_reader,
@@ -128,12 +128,7 @@ export class SliceTree {
    * ```
    */
   *read(index: Index): Generator<string> {
-    const i = this.#index(index);
-    if (typeof i === "undefined") {
-      return "";
-    }
-
-    const first = search(this.root, i);
+    const first = find(this.root, this.#index(index));
     if (!first) {
       return "";
     }
@@ -331,7 +326,7 @@ export class SliceTree {
       index = Math.max(index + this.count, 0);
     }
 
-    const first = search(this.root, index);
+    const first = find(this.root, index);
     if (!first) {
       return;
     }
@@ -365,7 +360,7 @@ export class SliceTree {
         x = split(this, node, offset, 0);
       }
 
-      const last = search(this.root, index + count);
+      const last = find(this.root, index + count);
       if (last && last.offset !== 0) {
         split(this, last.node, last.offset, 0);
       }
