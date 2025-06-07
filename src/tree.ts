@@ -45,7 +45,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -55,7 +55,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -65,7 +65,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -75,7 +75,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of characters in the text buffer.
+   * Returns number of characters in the text buffer.
    *
    * @returns Number of characters.
    *
@@ -95,7 +95,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of lines in the text buffer.
+   * Returns number of lines in the text buffer.
    *
    * @returns Number of lines.
    *
@@ -115,7 +115,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
+   * Returns characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
    *
    * @param `start` Start index.
    * @param `end` Optional end index.
@@ -156,7 +156,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts a text into the buffer at the specified index.
+   * Inserts text into the buffer at the specified index.
    *
    * @param `index` Index at witch to insert the text.
    * @param `text` Text to insert.
@@ -236,10 +236,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the buffer starting at the specified index.
+   * Removes characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
    *
-   * @param `index` Index at witch to start removing the text.
-   * @param `count` Number of characters to remove.
+   * @param `start` Start index.
+   * @param `end` Optional end index.
    *
    * @example
    *
