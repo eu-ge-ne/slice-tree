@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 
-import { SliceTree } from "../src/tree.ts";
+import { SliceTree } from "../src/mod.ts";
 
 Deno.test("0 newlines", () => {
   const text1 = SliceTree.units("A");
