@@ -174,101 +174,64 @@ export class SliceTree {
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
    */
-  write(index: number, text: string): void {
-    if (index < 0) {
-      index = Math.max(index + this.count, 0);
-    }
+  write(index: Index, text: string): void {
+    let i = this.#index(index);
 
-    let p = NIL;
-    let insert_case = InsertionCase.Root;
+    if (typeof i === "number") {
+      let p = NIL;
+      let insert_case = InsertionCase.Root;
 
-    for (let x = this.root; x !== NIL;) {
-      if (index <= x.left.len) {
-        p = x;
-        x = x.left;
-        insert_case = InsertionCase.Left;
-      } else {
-        index -= x.left.len;
-
-        if (index < x.slice.len) {
+      for (let x = this.root; x !== NIL;) {
+        if (i <= x.left.len) {
+          insert_case = InsertionCase.Left;
           p = x;
-          x = NIL;
-          insert_case = InsertionCase.Split;
+          x = x.left;
         } else {
-          index -= x.slice.len;
+          i -= x.left.len;
 
-          p = x;
-          x = x.right;
-          insert_case = InsertionCase.Right;
+          if (i < x.slice.len) {
+            insert_case = InsertionCase.Split;
+            p = x;
+            x = NIL;
+          } else {
+            i -= x.slice.len;
+
+            insert_case = InsertionCase.Right;
+            p = x;
+            x = x.right;
+          }
+        }
+      }
+
+      if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
+        grow_slice(p.slice, text);
+
+        bubble_update(p);
+      } else {
+        const child = node_from_text(this.#reader, text);
+
+        switch (insert_case) {
+          case InsertionCase.Root: {
+            this.root = child;
+            this.root.red = false;
+            break;
+          }
+          case InsertionCase.Left: {
+            insert_left(this, p, child);
+            break;
+          }
+          case InsertionCase.Right: {
+            insert_right(this, p, child);
+            break;
+          }
+          case InsertionCase.Split: {
+            const y = split(this, p, i, 0);
+            insert_left(this, y, child);
+            break;
+          }
         }
       }
     }
-
-    if (insert_case === InsertionCase.Right && slice_growable(p.slice)) {
-      grow_slice(p.slice, text);
-
-      bubble_update(p);
-    } else {
-      const child = node_from_text(this.#reader, text);
-
-      switch (insert_case) {
-        case InsertionCase.Root: {
-          this.root = child;
-          this.root.red = false;
-          break;
-        }
-
-        case InsertionCase.Left: {
-          insert_left(this, p, child);
-          break;
-        }
-
-        case InsertionCase.Right: {
-          insert_right(this, p, child);
-          break;
-        }
-
-        case InsertionCase.Split: {
-          const y = split(this, p, index, 0);
-          insert_left(this, y, child);
-          break;
-        }
-      }
-    }
-  }
-
-  /**
-   * Inserts a text into the buffer at the specified line and column indexes.
-   *
-   * @param `line_index` Index of the line at witch to insert the text.
-   * @param `column_index` Index of the column at witch to insert the text.
-   * @param `text` Text to insert.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\ndolor");
-   *
-   * text.write_line(1, 0, "ipsum\n");
-   *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\ndolor");
-   * ```
-   */
-  write_line(line_index: number, column_index: number, text: string): void {
-    const range = this.find_line(line_index);
-    if (!range) {
-      return;
-    }
-
-    const index = range[0] + column_index;
-    if (index > range[1]) {
-      return;
-    }
-
-    this.write(index, text);
   }
 
   /**
