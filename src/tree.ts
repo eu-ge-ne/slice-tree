@@ -136,7 +136,7 @@ export class SliceTree {
    * ```
    */
   read(start: Index, end?: Index): IteratorObject<string> {
-    const start_index = this.#index(start);
+    const start_index = this.resolve_index(start);
 
     if (typeof start_index === "number") {
       const first = find_node(this.root, start_index);
@@ -144,7 +144,7 @@ export class SliceTree {
       if (first) {
         const chars = iter(first.node, first.offset);
 
-        const end_index = end ? this.#index(end) : undefined;
+        const end_index = end ? this.resolve_index(end) : undefined;
 
         return typeof end_index === "number"
           ? chars.take(end_index - start_index)
@@ -176,7 +176,7 @@ export class SliceTree {
    * ```
    */
   write(index: Index, text: string): void {
-    let i = this.#index(index);
+    let i = this.resolve_index(index);
 
     if (typeof i === "number") {
       let p = NIL;
@@ -255,13 +255,13 @@ export class SliceTree {
    * ```
    */
   erase(start: Index, end?: Index): void {
-    const start_index = this.#index(start);
+    const start_index = this.resolve_index(start);
 
     if (typeof start_index === "number") {
       const first = find_node(this.root, start_index);
 
       if (first) {
-        const end_index = (end ? this.#index(end) : undefined) ??
+        const end_index = (end ? this.resolve_index(end) : undefined) ??
           Number.MAX_SAFE_INTEGER;
         const count = end_index - start_index;
 
@@ -323,30 +323,10 @@ export class SliceTree {
    *
    * const text = SliceTree.units("Lorem\nipsum");
    *
-   * assertEquals(text.find_line(0), [0, 6]);
+   * assertEquals(text.resolve_index([1, 0]), 6);
    * ```
    */
-  find_line(line_index: number): readonly [number, number] | undefined {
-    if (line_index < 0) {
-      line_index = Math.max(line_index + this.line_count, 0);
-    }
-
-    if (line_index === this.line_count) {
-      return [this.count, this.count];
-    }
-
-    const start = line_index === 0 ? 0 : find_eol(this.root, line_index - 1);
-
-    if (typeof start === "undefined") {
-      return undefined;
-    } else {
-      const end = find_eol(this.root, line_index) ?? this.count;
-
-      return [start, end];
-    }
-  }
-
-  #index(index: Index): number | undefined {
+  resolve_index(index: Index): number | undefined {
     let i: number | undefined;
 
     if (typeof index === "number") {

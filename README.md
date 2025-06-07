@@ -23,7 +23,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
-    - [`SliceTree.proto.find_line()`](#slicetreeprotofind_line)
+    - [`SliceTree.proto.resolve_index()`](#slicetreeprotoresolve_index)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
@@ -267,7 +267,7 @@ text.erase(5, 11);
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
 
-### `SliceTree.proto.find_line()`
+### `SliceTree.proto.resolve_index()`
 
 Returns the start index (inclusive) and the end index (exclusive) of the line of
 text in the buffer at the specified index.
@@ -275,7 +275,7 @@ text in the buffer at the specified index.
 Syntax
 
 ```ts ignore
-find_line(line_index: number): readonly [number, number] | undefined
+resolve_index(index: Index): number | undefined
 ```
 
 Example
@@ -286,7 +286,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units("Lorem\nipsum");
 
-assertEquals(text.find_line(0), [0, 6]);
+assertEquals(text.resolve_index([1, 0]), 6);
 ```
 
 ## Benchmarks
