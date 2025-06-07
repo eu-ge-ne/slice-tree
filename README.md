@@ -23,7 +23,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
-    - [`SliceTree.proto.resolve_index()`](#slicetreeprotoresolve_index)
+    - [`SliceTree.proto.to_index()`](#slicetreeprototo_index)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
@@ -202,7 +202,7 @@ and end (exclusive) indexes.
 Syntax
 
 ```ts ignore
-read(start: Index, end?: Index): IteratorObject<string>
+read(start: Position, end?: Position): IteratorObject<string>
 ```
 
 Example
@@ -226,7 +226,7 @@ Inserts text into the buffer at the specified index.
 Syntax
 
 ```ts ignore
-write(index: Index, text: string): void
+write(position: Position, text: string): void
 ```
 
 Example
@@ -251,7 +251,7 @@ and end (exclusive) indexes.
 Syntax
 
 ```ts ignore
-erase(start: Index, end?: Index): void
+erase(start: Position, end?: Position): void
 ```
 
 Example
@@ -267,7 +267,7 @@ text.erase(5, 11);
 assertEquals(text.read(0).toArray().join(""), "Lorem");
 ```
 
-### `SliceTree.proto.resolve_index()`
+### `SliceTree.proto.to_index()`
 
 Returns the start index (inclusive) and the end index (exclusive) of the line of
 text in the buffer at the specified index.
@@ -275,7 +275,7 @@ text in the buffer at the specified index.
 Syntax
 
 ```ts ignore
-resolve_index(index: Index): number | undefined
+to_index(position: Position): number | undefined
 ```
 
 Example
@@ -286,7 +286,7 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units("Lorem\nipsum");
 
-assertEquals(text.resolve_index([1, 0]), 6);
+assertEquals(text.to_index([1, 0]), 6);
 ```
 
 ## Benchmarks

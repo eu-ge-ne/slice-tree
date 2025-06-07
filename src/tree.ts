@@ -21,7 +21,7 @@ import { split } from "./splitting.ts";
  * - `number` is an offset from the start of buffer
  * - `[number, number]` are [line, column] indexes
  */
-export type Index = number | readonly [number, number];
+export type Position = number | readonly [number, number];
 
 /**
  * Implements `piece table` data structure to represent text buffer.
@@ -135,8 +135,8 @@ export class SliceTree {
    * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  read(start: Index, end?: Index): IteratorObject<string> {
-    const start_index = this.resolve_index(start);
+  read(start: Position, end?: Position): IteratorObject<string> {
+    const start_index = this.to_index(start);
 
     if (typeof start_index === "number") {
       const first = find_node(this.root, start_index);
@@ -144,7 +144,7 @@ export class SliceTree {
       if (first) {
         const chars = iter(first.node, first.offset);
 
-        const end_index = end ? this.resolve_index(end) : undefined;
+        const end_index = end ? this.to_index(end) : undefined;
 
         return typeof end_index === "number"
           ? chars.take(end_index - start_index)
@@ -175,27 +175,27 @@ export class SliceTree {
    * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
    */
-  write(index: Index, text: string): void {
-    let i = this.resolve_index(index);
+  write(position: Position, text: string): void {
+    let index = this.to_index(position);
 
-    if (typeof i === "number") {
+    if (typeof index === "number") {
       let p = NIL;
       let insert_case = InsertionCase.Root;
 
       for (let x = this.root; x !== NIL;) {
-        if (i <= x.left.len) {
+        if (index <= x.left.len) {
           insert_case = InsertionCase.Left;
           p = x;
           x = x.left;
         } else {
-          i -= x.left.len;
+          index -= x.left.len;
 
-          if (i < x.slice.len) {
+          if (index < x.slice.len) {
             insert_case = InsertionCase.Split;
             p = x;
             x = NIL;
           } else {
-            i -= x.slice.len;
+            index -= x.slice.len;
 
             insert_case = InsertionCase.Right;
             p = x;
@@ -226,7 +226,7 @@ export class SliceTree {
             break;
           }
           case InsertionCase.Split: {
-            const y = split(this, p, i, 0);
+            const y = split(this, p, index, 0);
             insert_left(this, y, child);
             break;
           }
@@ -254,14 +254,14 @@ export class SliceTree {
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
    */
-  erase(start: Index, end?: Index): void {
-    const start_index = this.resolve_index(start);
+  erase(start: Position, end?: Position): void {
+    const start_index = this.to_index(start);
 
     if (typeof start_index === "number") {
       const first = find_node(this.root, start_index);
 
       if (first) {
-        const end_index = (end ? this.resolve_index(end) : undefined) ??
+        const end_index = (end ? this.to_index(end) : undefined) ??
           Number.MAX_SAFE_INTEGER;
         const count = end_index - start_index;
 
@@ -323,34 +323,34 @@ export class SliceTree {
    *
    * const text = SliceTree.units("Lorem\nipsum");
    *
-   * assertEquals(text.resolve_index([1, 0]), 6);
+   * assertEquals(text.to_index([1, 0]), 6);
    * ```
    */
-  resolve_index(index: Index): number | undefined {
-    let i: number | undefined;
+  to_index(position: Position): number | undefined {
+    let index: number | undefined;
+
+    if (typeof position === "number") {
+      index = position;
+    } else {
+      let line = position[0];
+      if (line < 0) {
+        line = Math.max(this.line_count + line, 0);
+      }
+
+      index = line === 0 ? 0 : find_eol(this.root, line - 1);
+      if (typeof index === "number") {
+        index += position[1];
+      }
+    }
 
     if (typeof index === "number") {
-      i = index;
-    } else {
-      let ln = index[0];
-      if (ln < 0) {
-        ln = Math.max(ln + this.line_count, 0);
+      if (index < 0) {
+        index = Math.max(this.count + index, 0);
       }
 
-      i = ln === 0 ? 0 : find_eol(this.root, ln - 1);
-      if (typeof i === "undefined") {
-        return;
+      if (index <= this.count) {
+        return index;
       }
-
-      i += index[1];
-    }
-
-    if (i < 0) {
-      i = Math.max(i + this.count, 0);
-    }
-
-    if (i <= this.count) {
-      return i;
     }
   }
 }
