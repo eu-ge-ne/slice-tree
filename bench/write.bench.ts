@@ -1,4 +1,4 @@
-import { SliceTree } from "../src/tree.ts";
+import { SliceTree } from "../src/mod.ts";
 
 import { str } from "./utils.ts";
 

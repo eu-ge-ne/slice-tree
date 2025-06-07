@@ -1,4 +1,4 @@
-import { SliceTree } from "../src/tree.ts";
+import { SliceTree } from "../src/mod.ts";
 import { assert_iterator, assert_tree } from "./assert.ts";
 
 Deno.test("Line at valid index", () => {
