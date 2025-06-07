@@ -45,7 +45,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -55,7 +55,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -65,7 +65,7 @@ export class SliceTree {
   }
 
   /**
-   * Creates an instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
+   * Creates instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
    *
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
@@ -75,7 +75,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of characters in the text buffer.
+   * Returns number of characters in the text buffer.
    *
    * @returns Number of characters.
    *
@@ -95,7 +95,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the number of lines in the text buffer.
+   * Returns number of lines in the text buffer.
    *
    * @returns Number of lines.
    *
@@ -115,7 +115,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
+   * Returns characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
    *
    * @param `start` Start index.
    * @param `end` Optional end index.
@@ -156,7 +156,7 @@ export class SliceTree {
   }
 
   /**
-   * Inserts a text into the buffer at the specified index.
+   * Inserts text into the buffer at the specified index.
    *
    * @param `index` Index at witch to insert the text.
    * @param `text` Text to insert.
@@ -236,10 +236,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes the text in the buffer starting at the specified index.
+   * Removes characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
    *
-   * @param `index` Index at witch to start removing the text.
-   * @param `count` Number of characters to remove.
+   * @param `start` Start index.
+   * @param `end` Optional end index.
    *
    * @example
    *
@@ -249,122 +249,63 @@ export class SliceTree {
    *
    * const text = SliceTree.units("Lorem ipsum");
    *
-   * text.erase(5, 6);
+   * text.erase(5, 11);
    *
    * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
    */
-  erase(index: number, count = Number.MAX_SAFE_INTEGER): void {
-    if (index < 0) {
-      index = Math.max(index + this.count, 0);
-    }
+  erase(start: Index, end?: Index): void {
+    const start_index = this.#index(start);
 
-    const first = find_node(this.root, index);
-    if (!first) {
-      return;
-    }
+    if (typeof start_index === "number") {
+      const first = find_node(this.root, start_index);
 
-    if (count <= 0) {
-      return;
-    }
+      if (first) {
+        const end_index = (end ? this.#index(end) : undefined) ??
+          Number.MAX_SAFE_INTEGER;
+        const count = end_index - start_index;
 
-    const { node, offset } = first;
-    const offset2 = offset + count;
+        const { node, offset } = first;
+        const offset2 = offset + count;
 
-    if (offset2 === node.slice.len) {
-      if (offset === 0) {
-        delete_node(this, node);
-      } else {
-        trim_slice_end(node.slice, count);
-        bubble_update(node);
+        if (offset2 === node.slice.len) {
+          if (offset === 0) {
+            delete_node(this, node);
+          } else {
+            trim_slice_end(node.slice, count);
+            bubble_update(node);
+          }
+        } else if (offset2 < node.slice.len) {
+          if (offset === 0) {
+            trim_slice_start(node.slice, count);
+            bubble_update(node);
+          } else {
+            split(this, node, offset, count);
+          }
+        } else {
+          let x = node;
+          let i = 0;
+
+          if (offset !== 0) {
+            x = split(this, node, offset, 0);
+          }
+
+          const last = find_node(this.root, end_index);
+          if (last && last.offset !== 0) {
+            split(this, last.node, last.offset, 0);
+          }
+
+          while ((x !== NIL) && (i < count)) {
+            i += x.slice.len;
+
+            const next = successor(x);
+
+            delete_node(this, x);
+
+            x = next;
+          }
+        }
       }
-    } else if (offset2 < node.slice.len) {
-      if (offset === 0) {
-        trim_slice_start(node.slice, count);
-        bubble_update(node);
-      } else {
-        split(this, node, offset, count);
-      }
-    } else {
-      let x = node;
-      let i = 0;
-
-      if (offset !== 0) {
-        x = split(this, node, offset, 0);
-      }
-
-      const last = find_node(this.root, index + count);
-      if (last && last.offset !== 0) {
-        split(this, last.node, last.offset, 0);
-      }
-
-      while ((x !== NIL) && (i < count)) {
-        i += x.slice.len;
-
-        const next = successor(x);
-
-        delete_node(this, x);
-
-        x = next;
-      }
-    }
-  }
-
-  /**
-   * Removes the line of text in the buffer at the specified index.
-   *
-   * @param `line_index` Index of the line to remove.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor");
-   *
-   * text.erase_line(1);
-   *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem\ndolor");
-   * ```
-   */
-  erase_line(line_index: number): void {
-    const range = this.find_line(line_index);
-
-    if (range) {
-      this.erase(range[0], range[1] - range[0]);
-    }
-  }
-
-  /**
-   * Removes the text in the buffer starting at the specified line and column indexes.
-   *
-   * @param `line_index` Index of the line at witch to start removing the text.
-   * @param `column_index` Index of the column at witch to start removing the text.
-   * @param `count` Number of characters to remove.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor");
-   *
-   * text.erase_from_line(1, 0);
-   *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem\n");
-   * ```
-   */
-  erase_from_line(
-    line_index: number,
-    column_index: number,
-    count = Number.MAX_SAFE_INTEGER,
-  ): void {
-    const range = this.find_line(line_index);
-
-    if (range) {
-      this.erase(range[0] + column_index, count);
     }
   }
 

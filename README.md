@@ -23,8 +23,6 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
-    - [`SliceTree.proto.erase_line()`](#slicetreeprotoerase_line)
-    - [`SliceTree.proto.erase_from_line()`](#slicetreeprotoerase_from_line)
     - [`SliceTree.proto.find_line()`](#slicetreeprotofind_line)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
@@ -117,7 +115,7 @@ assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
 
 ### `SliceTree.units()`
 
-Creates an instance of `SliceTree` interpreting text characters as
+Creates instance of `SliceTree` interpreting text characters as
 `UTF-16 code units`. Visit
 [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
 for more details. Accepts optional initial text.
@@ -130,7 +128,7 @@ SliceTree.units(text?: string)
 
 ### `SliceTree.points()`
 
-Creates an instance of `SliceTree` interpreting text characters as
+Creates instance of `SliceTree` interpreting text characters as
 `Unicode code points`. Visit
 [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
 for more details. Accepts optional initial text.
@@ -143,7 +141,7 @@ SliceTree.points(text?: string)
 
 ### `SliceTree.graphemes()`
 
-Creates an instance of `SliceTree` interpreting text characters as
+Creates instance of `SliceTree` interpreting text characters as
 `Unicode graphemes`. Visit
 [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
 for more details. Accepts optional initial text.
@@ -156,7 +154,7 @@ SliceTree.graphemes(text?: string)
 
 ### `SliceTree:count`
 
-Returns the number of characters in the text buffer.
+Returns number of characters in the text buffer.
 
 Syntax
 
@@ -177,7 +175,7 @@ assertEquals(text.count, 11);
 
 ### `SliceTree:line_count`
 
-Returns the number of lines in the text buffer.
+Returns number of lines in the text buffer.
 
 Syntax
 
@@ -198,8 +196,8 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.proto.read()`
 
-Returns the characters in the text buffer's section, specified by start
-(inclusive) and end (exclusive) indexes.
+Returns characters in the text buffer's section, specified by start (inclusive)
+and end (exclusive) indexes.
 
 Syntax
 
@@ -223,7 +221,7 @@ assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
 
 ### `SliceTree.proto.write()`
 
-Inserts a text into the buffer at the specified index.
+Inserts text into the buffer at the specified index.
 
 Syntax
 
@@ -247,12 +245,13 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.proto.erase()`
 
-Removes the text in the buffer starting at the specified index.
+Removes characters in the text buffer's section, specified by start (inclusive)
+and end (exclusive) indexes.
 
 Syntax
 
 ```ts ignore
-erase(index: number, count = Number.MAX_SAFE_INTEGER): void
+erase(start: Index, end?: Index): void
 ```
 
 Example
@@ -263,56 +262,9 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units("Lorem ipsum");
 
-text.erase(5, 6);
+text.erase(5, 11);
 
 assertEquals(text.read(0).toArray().join(""), "Lorem");
-```
-
-### `SliceTree.proto.erase_line()`
-
-Removes the line of text in the buffer at the specified index.
-
-Syntax
-
-```ts ignore
-erase_line(line_index: number): void
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor");
-
-text.erase_line(1);
-
-assertEquals(text.read(0).toArray().join(""), "Lorem\ndolor");
-```
-
-### `SliceTree.proto.erase_from_line()`
-
-Removes the text in the buffer starting at the specified line and column
-indexes.
-
-Syntax
-
-```ts ignore
-erase_from_line(line_index: number, column_index: number, count = Number.MAX_SAFE_INTEGER): void
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\nipsum\ndolor");
-
-text.erase_from_line(1, 0);
-
-assertEquals(text.read(0).toArray().join(""), "Lorem\n");
 ```
 
 ### `SliceTree.proto.find_line()`

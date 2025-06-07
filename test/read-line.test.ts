@@ -54,8 +54,8 @@ Deno.test("Line at index < 0", () => {
   const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.read([0, 0], [1, 0]), "Lorem\n");
-  //assert_iterator(text.read_line(-1), "amet");
-  //assert_iterator(text.read_line(-2), "sit\n");
+  assert_iterator(text.read([-1, 0], [text.line_count, 0]), "amet");
+  assert_iterator(text.read([-2, 0], [-1, 0]), "sit\n");
 
   assert_tree(text);
 });
