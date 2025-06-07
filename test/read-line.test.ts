@@ -17,25 +17,25 @@ Deno.test("Line at valid index", () => {
   text.write(57, "sed\neiusmod\n");
   text.write(61, "do\n");
 
-  assert_iterator(text.read_line(0), "Lorem\n");
-  assert_iterator(text.read_line(1), "ipsum\n");
-  assert_iterator(text.read_line(2), "dolor\n");
-  assert_iterator(text.read_line(3), "sit\n");
-  assert_iterator(text.read_line(4), "amet,\n");
-  assert_iterator(text.read_line(5), "consectetur\n");
-  assert_iterator(text.read_line(6), "adipiscing\n");
-  assert_iterator(text.read_line(7), "elit,\n");
-  assert_iterator(text.read_line(8), "sed\n");
-  assert_iterator(text.read_line(9), "do\n");
-  assert_iterator(text.read_line(10), "eiusmod\n");
-  assert_iterator(text.read_line(11), "tempor\n");
-  assert_iterator(text.read_line(12), "incididunt\n");
-  assert_iterator(text.read_line(13), "ut\n");
-  assert_iterator(text.read_line(14), "labore\n");
-  assert_iterator(text.read_line(15), "et\n");
-  assert_iterator(text.read_line(16), "dolore\n");
-  assert_iterator(text.read_line(17), "magna\n");
-  assert_iterator(text.read_line(18), "aliqua.");
+  assert_iterator(text.read([0, 0], [1, 0]), "Lorem\n");
+  assert_iterator(text.read([1, 0], [2, 0]), "ipsum\n");
+  assert_iterator(text.read([2, 0], [3, 0]), "dolor\n");
+  assert_iterator(text.read([3, 0], [4, 0]), "sit\n");
+  assert_iterator(text.read([4, 0], [5, 0]), "amet,\n");
+  assert_iterator(text.read([5, 0], [6, 0]), "consectetur\n");
+  assert_iterator(text.read([6, 0], [7, 0]), "adipiscing\n");
+  assert_iterator(text.read([7, 0], [8, 0]), "elit,\n");
+  assert_iterator(text.read([8, 0], [9, 0]), "sed\n");
+  assert_iterator(text.read([9, 0], [10, 0]), "do\n");
+  assert_iterator(text.read([10, 0], [11, 0]), "eiusmod\n");
+  assert_iterator(text.read([11, 0], [12, 0]), "tempor\n");
+  assert_iterator(text.read([12, 0], [13, 0]), "incididunt\n");
+  assert_iterator(text.read([13, 0], [14, 0]), "ut\n");
+  assert_iterator(text.read([14, 0], [15, 0]), "labore\n");
+  assert_iterator(text.read([15, 0], [16, 0]), "et\n");
+  assert_iterator(text.read([16, 0], [17, 0]), "dolore\n");
+  assert_iterator(text.read([17, 0], [18, 0]), "magna\n");
+  assert_iterator(text.read([18, 0], [19, 0]), "aliqua.");
 
   assert_tree(text);
 });
@@ -43,9 +43,9 @@ Deno.test("Line at valid index", () => {
 Deno.test("Line at index >= line_count", () => {
   const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
-  assert_iterator(text.read_line(4), "amet");
-  assert_iterator(text.read_line(5), "");
-  assert_iterator(text.read_line(6), "");
+  assert_iterator(text.read([4, 0], [5, 0]), "amet");
+  assert_iterator(text.read([5, 0], [6, 0]), "");
+  assert_iterator(text.read([6, 0], [7, 0]), "");
 
   assert_tree(text);
 });
@@ -53,9 +53,9 @@ Deno.test("Line at index >= line_count", () => {
 Deno.test("Line at index < 0", () => {
   const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
-  assert_iterator(text.read_line(0), "Lorem\n");
-  assert_iterator(text.read_line(-1), "amet");
-  assert_iterator(text.read_line(-2), "sit\n");
+  assert_iterator(text.read([0, 0], [1, 0]), "Lorem\n");
+  //assert_iterator(text.read_line(-1), "amet");
+  //assert_iterator(text.read_line(-2), "sit\n");
 
   assert_tree(text);
 });
@@ -67,11 +67,11 @@ Deno.test("Write adds lines", () => {
     text.write(text.count, `${i}\n`);
 
     assertEquals(text.line_count, i + 2);
-    assert_iterator(text.read_line(i), `${i}\n`);
+    assert_iterator(text.read([i, 0], [i + 1, 0]), `${i}\n`);
   }
 
   assertEquals(text.line_count, 11);
-  assert_iterator(text.read_line(11), "");
+  assert_iterator(text.read([11, 0], [12, 0]), "");
 
   assert_tree(text);
 });

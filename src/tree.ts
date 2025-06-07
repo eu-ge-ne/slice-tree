@@ -1,7 +1,7 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, NIL, node_from_text } from "./node.ts";
-import { search, search_eol, successor } from "./querying.ts";
+import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
+import { find_eol, find_node, successor } from "./querying.ts";
 import {
   new_grapheme_reader,
   new_point_reader,
@@ -15,6 +15,13 @@ import {
   trim_slice_start,
 } from "./slice.ts";
 import { split } from "./splitting.ts";
+
+/**
+ * Represents position in text buffer. Can be either `number` or `[number, number]`:
+ * - `number` is an offset from the start of buffer
+ * - `[number, number]` are [line, column] indexes
+ */
+export type Index = number | readonly [number, number];
 
 /**
  * Implements `piece table` data structure to represent text buffer.
@@ -108,9 +115,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the characters in the text buffer starting at the specified index.
+   * Returns the characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
    *
-   * @param `index` Start index.
+   * @param `start` Start index.
+   * @param `end` Optional end index.
    * @yields Characters.
    *
    * @example
@@ -119,104 +127,32 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem ipsum");
+   * const text = SliceTree.points("Lorem\nipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.read(6).toArray().join(""), "ipsum");
+   * assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+   * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  *read(index: number): Generator<string> {
-    if (index < 0) {
-      index = Math.max(index + this.count, 0);
-    }
+  read(start: Index, end?: Index): IteratorObject<string> {
+    const start_index = this.#index(start);
 
-    const first = search(this.root, index);
-    if (!first) {
-      return "";
-    }
+    if (typeof start_index === "number") {
+      const first = find_node(this.root, start_index);
 
-    let x = first.node;
-    let offset = first.offset;
+      if (first) {
+        const chars = iter(first.node, first.offset);
 
-    while (x !== NIL) {
-      yield* x.slice.buf.reader.read(
-        x.slice.buf.text,
-        x.slice.start + offset,
-        x.slice.len - offset,
-      );
-      x = successor(x);
+        const end_index = end ? this.#index(end) : undefined;
 
-      offset = 0;
-    }
-  }
-
-  /**
-   * Returns the characters in the line of text buffer.
-   *
-   * @param `line_index` Line index.
-   * @yields Characters.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-   *
-   * assertEquals(text.read_line(1).toArray().join(""), "ipsum\n");
-   * ```
-   */
-  *read_line(line_index: number): Generator<string> {
-    if (line_index < 0) {
-      line_index = Math.max(line_index + this.line_count, 0);
-    }
-
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
-
-    if (typeof start === "undefined") {
-      yield "";
-    } else {
-      const iter = this.read(start);
-
-      const end = search_eol(this.root, line_index);
-
-      if (typeof end === "undefined") {
-        yield* iter;
-      } else {
-        yield* iter.take(end - start);
+        return typeof end_index === "number"
+          ? chars.take(end_index - start_index)
+          : chars;
       }
     }
-  }
 
-  /**
-   * Returns the characters in the text buffer starting at the specified line index.
-   *
-   * @param `line_index` Line index.
-   * @yields Characters.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
-   *
-   * assertEquals(text.read_from_line(1).toArray().join(""), "ipsum\ndolor\nsit\namet");
-   * ```
-   */
-  *read_from_line(line_index: number): Generator<string> {
-    if (line_index < 0) {
-      line_index = Math.max(line_index + this.line_count, 0);
-    }
-
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
-
-    if (typeof start === "undefined") {
-      yield "";
-    } else {
-      yield* this.read(start);
-    }
+    return [][Symbol.iterator]();
   }
 
   /**
@@ -359,7 +295,7 @@ export class SliceTree {
       index = Math.max(index + this.count, 0);
     }
 
-    const first = search(this.root, index);
+    const first = find_node(this.root, index);
     if (!first) {
       return;
     }
@@ -393,7 +329,7 @@ export class SliceTree {
         x = split(this, node, offset, 0);
       }
 
-      const last = search(this.root, index + count);
+      const last = find_node(this.root, index + count);
       if (last && last.offset !== 0) {
         split(this, last.node, last.offset, 0);
       }
@@ -494,14 +430,40 @@ export class SliceTree {
       return [this.count, this.count];
     }
 
-    const start = line_index === 0 ? 0 : search_eol(this.root, line_index - 1);
+    const start = line_index === 0 ? 0 : find_eol(this.root, line_index - 1);
 
     if (typeof start === "undefined") {
       return undefined;
     } else {
-      const end = search_eol(this.root, line_index) ?? this.count;
+      const end = find_eol(this.root, line_index) ?? this.count;
 
       return [start, end];
     }
+  }
+
+  #index(index: Index): number | undefined {
+    let i: number | undefined;
+
+    if (typeof index === "number") {
+      i = index;
+    } else {
+      let ln = index[0];
+      if (ln < 0) {
+        ln = Math.max(ln + this.line_count, 0);
+      }
+
+      i = ln === 0 ? 0 : find_eol(this.root, ln - 1);
+      if (typeof i === "undefined") {
+        return;
+      }
+
+      i += index[1];
+    }
+
+    if (i < 0) {
+      i = Math.max(i + this.count, 0);
+    }
+
+    return i;
   }
 }

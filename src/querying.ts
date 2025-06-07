@@ -1,19 +1,19 @@
 import { NIL, type Node } from "./node.ts";
 
-export function search(
+export function find_node(
   x: Node,
-  i: number,
+  index: number,
 ): { node: Node; offset: number } | undefined {
   while (x !== NIL) {
-    if (i < x.left.len) {
+    if (index < x.left.len) {
       x = x.left;
     } else {
-      i -= x.left.len;
+      index -= x.left.len;
 
-      if (i < x.slice.len) {
-        return { node: x, offset: i };
+      if (index < x.slice.len) {
+        return { node: x, offset: index };
       } else {
-        i -= x.slice.len;
+        index -= x.slice.len;
 
         x = x.right;
       }
@@ -21,19 +21,19 @@ export function search(
   }
 }
 
-export function search_eol(x: Node, j: number): number | undefined {
+export function find_eol(x: Node, eol_index: number): number | undefined {
   for (let i = 0; x !== NIL;) {
-    if (j < x.left.eols_len) {
+    if (eol_index < x.left.eols_len) {
       x = x.left;
     } else {
-      j -= x.left.eols_len;
+      eol_index -= x.left.eols_len;
       i += x.left.len;
 
-      if (j < x.slice.eols_len) {
-        return i + x.slice.buf.eol_ends[x.slice.eols_start + j]! -
+      if (eol_index < x.slice.eols_len) {
+        return i + x.slice.buf.eol_ends[x.slice.eols_start + eol_index]! -
           x.slice.start;
       } else {
-        j -= x.slice.eols_len;
+        eol_index -= x.slice.eols_len;
         i += x.slice.len;
 
         x = x.right;

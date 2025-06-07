@@ -29,8 +29,7 @@ export function grow_buffer(x: Buffer, text: string): void {
   x.text += text;
 }
 
-export function find_eol(x: Buffer, eols_start: number, index: number): number {
-  let a = eols_start;
+export function find_eol(x: Buffer, a: number, index: number): number {
   let b = x.eol_starts.length - 1;
   let i = 0;
   let v = 0;
