@@ -4,7 +4,7 @@ import { assert_iterator, assert_tree } from "./assert.ts";
 Deno.test("Write to 0 line", () => {
   const text = SliceTree.units();
 
-  text.write_line(0, 0, "Lorem ipsum");
+  text.write([0, 0], "Lorem ipsum");
 
   assert_iterator(text.read(0), "Lorem ipsum");
   assert_iterator(text.read([0, 0], [1, 0]), "Lorem ipsum");
@@ -16,7 +16,7 @@ Deno.test("Write to a line", () => {
   const text = SliceTree.units();
   text.write(0, "Lorem");
 
-  text.write_line(0, 5, " ipsum");
+  text.write([0, 5], " ipsum");
 
   assert_iterator(text.read(0), "Lorem ipsum");
   assert_iterator(text.read([0, 0], [1, 0]), "Lorem ipsum");
@@ -27,7 +27,7 @@ Deno.test("Write to a line", () => {
 Deno.test("Write to a line which does not exist", () => {
   const text = SliceTree.units();
 
-  text.write_line(1, 0, "Lorem ipsum");
+  text.write([1, 0], "Lorem ipsum");
 
   assert_iterator(text.read(0), "");
   assert_iterator(text.read([0, 0], [1, 0]), "");
@@ -38,7 +38,7 @@ Deno.test("Write to a line which does not exist", () => {
 Deno.test("Write to a column which does not exist", () => {
   const text = SliceTree.units();
 
-  text.write_line(0, 1, "Lorem ipsum");
+  text.write([0, 1], "Lorem ipsum");
 
   assert_iterator(text.read(0), "");
   assert_iterator(text.read([0, 0], [1, 0]), "");

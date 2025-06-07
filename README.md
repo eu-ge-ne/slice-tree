@@ -22,7 +22,6 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
-    - [`SliceTree.proto.write_line()`](#slicetreeprotowrite_line)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
     - [`SliceTree.proto.erase_line()`](#slicetreeprotoerase_line)
     - [`SliceTree.proto.erase_from_line()`](#slicetreeprotoerase_from_line)
@@ -229,7 +228,7 @@ Inserts a text into the buffer at the specified index.
 Syntax
 
 ```ts ignore
-write(index: number, text: string): void
+write(index: Index, text: string): void
 ```
 
 Example
@@ -240,32 +239,10 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.units();
 
-text.write(0, "Lorem ipsum");
+text.write(0, "Lorem");
+text.write([0, 5], " ipsum");
 
 assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
-```
-
-### `SliceTree.proto.write_line()`
-
-Inserts a text into the buffer at the specified line and column indexes.
-
-Syntax
-
-```ts ignore
-write_line(line_index: number, column_index: number, text: string): void
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = SliceTree.units("Lorem\ndolor");
-
-text.write_line(1, 0, "ipsum\n");
-
-assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\ndolor");
 ```
 
 ### `SliceTree.proto.erase()`
