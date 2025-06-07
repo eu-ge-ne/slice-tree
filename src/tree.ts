@@ -16,6 +16,11 @@ import {
 } from "./slice.ts";
 import { split } from "./splitting.ts";
 
+/**
+ * Represents position in text buffer. Can be either `number` or `[number, number]`:
+ * - `number` is an offset from the start of buffer
+ * - `[number, number]` are [line, column] indexes
+ */
 export type Index = number | readonly [number, number];
 
 /**
