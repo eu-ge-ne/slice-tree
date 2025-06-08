@@ -1,52 +1,168 @@
-import type { Reader } from "./reader.ts";
+export abstract class Buffer {
+  len = 0;
+  eol_starts: number[] = [];
+  eol_ends: number[] = [];
 
-export interface Buffer {
-  readonly reader: Reader;
-  text: string;
-  len: number;
-  eol_starts: number[];
-  eol_ends: number[];
-}
+  abstract append(text: string): void;
+  abstract read(index: number, n: number): IteratorObject<string>;
 
-export function new_buffer(reader: Reader, text: string): Buffer {
-  const buf: Buffer = {
-    reader,
-    text,
-    len: reader.len(text),
-    eol_starts: [],
-    eol_ends: [],
-  };
+  find_eol(a: number, index: number): number {
+    let b = this.eol_starts.length - 1;
+    let i = 0;
+    let v = 0;
 
-  reader.eols(text, 0, buf.eol_starts, buf.eol_ends);
+    while (a <= b) {
+      i = Math.trunc((a + b) / 2);
+      v = this.eol_starts[i]!;
 
-  return buf;
-}
-
-export function grow_buffer(x: Buffer, text: string): void {
-  x.reader.eols(text, x.len, x.eol_starts, x.eol_ends);
-
-  x.len = x.reader.len(text);
-  x.text += text;
-}
-
-export function find_eol(x: Buffer, a: number, index: number): number {
-  let b = x.eol_starts.length - 1;
-  let i = 0;
-  let v = 0;
-
-  while (a <= b) {
-    i = Math.trunc((a + b) / 2);
-    v = x.eol_starts[i]!;
-
-    if (v < index) {
-      a = i + 1;
-    } else if (v > index) {
-      b = i - 1;
-    } else {
-      a = i;
-      break;
+      if (v < index) {
+        a = i + 1;
+      } else if (v > index) {
+        b = i - 1;
+      } else {
+        a = i;
+        break;
+      }
     }
+
+    return a;
+  }
+}
+
+export abstract class BufferFactory {
+  abstract create(text: string): Buffer;
+}
+
+export class UnitBuffer extends Buffer {
+  #eol_re: RegExp;
+  #text = "";
+
+  constructor(text: string, eol_re: RegExp) {
+    super();
+    this.#eol_re = eol_re;
+    this.append(text);
   }
 
-  return a;
+  append(text: string): void {
+    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
+    this.len += text.length;
+    this.#text += text;
+  }
+
+  read(index: number, n: number): IteratorObject<string> {
+    return this.#text.slice(index, index + n)[Symbol.iterator]();
+  }
+
+  #append_eols(
+    text: string,
+    index: number,
+    starts: number[],
+    ends: number[],
+  ): void {
+    for (const x of text.matchAll(this.#eol_re)) {
+      starts.push(index + x.index);
+      ends.push(index + x.index + x[0].length);
+    }
+  }
+}
+
+export class UnitBufferFactory extends BufferFactory {
+  eol_re = /\r?\n/gm;
+
+  create(text: string): Buffer {
+    return new UnitBuffer(text, this.eol_re);
+  }
+}
+
+export class PointBuffer extends Buffer {
+  #text = "";
+
+  constructor(text: string) {
+    super();
+    this.append(text);
+  }
+
+  append(text: string): void {
+    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
+    this.len += [...text].length;
+    this.#text += text;
+  }
+
+  read(index: number, count: number): IteratorObject<string> {
+    return this.#text[Symbol.iterator]().drop(index).take(count);
+  }
+
+  #append_eols(
+    text: string,
+    index: number,
+    starts: number[],
+    ends: number[],
+  ): void {
+    let i = 0;
+    let prev: string | undefined;
+
+    for (const char of text) {
+      if (char === "\n") {
+        starts.push(index + i - (prev === "\r" ? 1 : 0));
+        ends.push(index + i + 1);
+      }
+
+      prev = char;
+      i += 1;
+    }
+  }
+}
+
+export class PointBufferFactory extends BufferFactory {
+  create(text: string): Buffer {
+    return new PointBuffer(text);
+  }
+}
+
+export class GraphemeBuffer extends Buffer {
+  #segmenter: Intl.Segmenter;
+  #text = "";
+
+  constructor(text: string, segmenter: Intl.Segmenter) {
+    super();
+    this.#segmenter = segmenter;
+    this.append(text);
+  }
+
+  append(text: string): void {
+    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
+    this.len += [...this.#segmenter.segment(text)].length;
+    this.#text += text;
+  }
+
+  read(index: number, count: number): IteratorObject<string> {
+    return this.#segmenter.segment(this.#text)[Symbol.iterator]().drop(index)
+      .take(count).map((x) => x.segment);
+  }
+
+  #append_eols(
+    text: string,
+    index: number,
+    starts: number[],
+    ends: number[],
+  ): void {
+    let i = 0;
+
+    for (const { segment } of this.#segmenter.segment(text)) {
+      if (segment === "\n" || segment === "\r\n") {
+        starts.push(index + i);
+        ends.push(index + i + segment.length);
+      }
+
+      i += 1;
+    }
+  }
+}
+
+export class GraphemeBufferFactory extends BufferFactory {
+  segmenter = new Intl.Segmenter();
+
+  create(text: string): Buffer {
+    return new GraphemeBuffer(text, this.segmenter);
+  }
 }
