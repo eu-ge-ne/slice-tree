@@ -1,13 +1,10 @@
+import type { BufferFactory } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
+import { GraphemeBufferFactory } from "./grapheme.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
+import { PointBufferFactory } from "./point.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
-import {
-  new_grapheme_reader,
-  new_point_reader,
-  new_unit_reader,
-  type Reader,
-} from "./reader.ts";
 import {
   grow_slice,
   slice_growable,
@@ -15,6 +12,7 @@ import {
   trim_slice_start,
 } from "./slice.ts";
 import { split } from "./splitting.ts";
+import { UnitBufferFactory } from "../src/unit.ts";
 
 /**
  * Represents position in text buffer. Can be either `number` or `[number, number]`:
@@ -27,7 +25,7 @@ export type Position = number | readonly [number, number];
  * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
-  #reader: Reader;
+  #factory: BufferFactory;
 
   /**
    * @ignore
@@ -35,11 +33,11 @@ export class SliceTree {
    */
   root = NIL;
 
-  private constructor(reader: Reader, text?: string) {
-    this.#reader = reader;
+  private constructor(factory: BufferFactory, text?: string) {
+    this.#factory = factory;
 
     if (text && text.length > 0) {
-      this.root = node_from_text(reader, text);
+      this.root = node_from_text(factory, text);
       this.root.red = false;
     }
   }
@@ -51,7 +49,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static units(text?: string): SliceTree {
-    return new SliceTree(new_unit_reader(), text);
+    return new SliceTree(new UnitBufferFactory(), text);
   }
 
   /**
@@ -61,7 +59,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static points(text?: string): SliceTree {
-    return new SliceTree(new_point_reader(), text);
+    return new SliceTree(new PointBufferFactory(10_000), text);
   }
 
   /**
@@ -71,7 +69,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static graphemes(text?: string): SliceTree {
-    return new SliceTree(new_grapheme_reader(), text);
+    return new SliceTree(new GraphemeBufferFactory(10_000), text);
   }
 
   /**
@@ -207,7 +205,7 @@ export class SliceTree {
 
         bubble_update(p);
       } else {
-        const child = node_from_text(this.#reader, text);
+        const child = node_from_text(this.#factory, text);
 
         switch (insert_case) {
           case InsertionCase.Root: {

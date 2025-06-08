@@ -1,52 +1,34 @@
-import type { Reader } from "./reader.ts";
-
-export interface Buffer {
-  readonly reader: Reader;
-  text: string;
-  len: number;
-  eol_starts: number[];
-  eol_ends: number[];
+export abstract class BufferFactory {
+  abstract create(text: string): Buffer;
 }
 
-export function new_buffer(reader: Reader, text: string): Buffer {
-  const buf: Buffer = {
-    reader,
-    text,
-    len: reader.len(text),
-    eol_starts: [],
-    eol_ends: [],
-  };
+export abstract class Buffer {
+  len = 0;
+  eol_starts: number[] = [];
+  eol_ends: number[] = [];
 
-  reader.eols(text, 0, buf.eol_starts, buf.eol_ends);
+  abstract append(text: string): void;
+  abstract read(index: number, n: number): IteratorObject<string>;
 
-  return buf;
-}
+  find_eol(a: number, index: number): number {
+    let b = this.eol_starts.length - 1;
+    let i = 0;
+    let v = 0;
 
-export function grow_buffer(x: Buffer, text: string): void {
-  x.reader.eols(text, x.len, x.eol_starts, x.eol_ends);
+    while (a <= b) {
+      i = Math.trunc((a + b) / 2);
+      v = this.eol_starts[i]!;
 
-  x.len = x.reader.len(text);
-  x.text += text;
-}
-
-export function find_eol(x: Buffer, a: number, index: number): number {
-  let b = x.eol_starts.length - 1;
-  let i = 0;
-  let v = 0;
-
-  while (a <= b) {
-    i = Math.trunc((a + b) / 2);
-    v = x.eol_starts[i]!;
-
-    if (v < index) {
-      a = i + 1;
-    } else if (v > index) {
-      b = i - 1;
-    } else {
-      a = i;
-      break;
+      if (v < index) {
+        a = i + 1;
+      } else if (v > index) {
+        b = i - 1;
+      } else {
+        a = i;
+        break;
+      }
     }
-  }
 
-  return a;
+    return a;
+  }
 }
