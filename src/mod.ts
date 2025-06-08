@@ -129,10 +129,10 @@ export class SliceTree {
    *
    * const text = SliceTree.points("Lorem\nipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
-   * assertEquals(text.read(6).toArray().join(""), "ipsum");
-   * assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-   * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
+   * assertEquals(text.read(0)?.toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.read(6)?.toArray().join(""), "ipsum");
+   * assertEquals(text.read([0, 0], [1, 0])?.toArray().join(""), "Lorem\n");
+   * assertEquals(text.read([1, 0], [2, 0])?.toArray().join(""), "ipsum");
    * ```
    */
   read(start: Position, end?: Position): IteratorObject<string> | undefined {
@@ -170,7 +170,7 @@ export class SliceTree {
    * text.write(0, "Lorem");
    * text.write([0, 5], " ipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read(0)?.toArray().join(""), "Lorem ipsum");
    * ```
    */
   write(position: Position, text: string): void {
@@ -249,7 +249,7 @@ export class SliceTree {
    *
    * text.erase(5, 11);
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem");
+   * assertEquals(text.read(0)?.toArray().join(""), "Lorem");
    * ```
    */
   erase(start: Position, end?: Position): void {
