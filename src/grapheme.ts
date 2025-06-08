@@ -1,41 +1,49 @@
 import { Buffer, BufferFactory } from "./buffer.ts";
 
+const INDEX_STEP = 10_000;
+
 export class GraphemeBufferFactory extends BufferFactory {
-  segmenter = new Intl.Segmenter();
+  seg = new Intl.Segmenter();
 
   create(text: string): Buffer {
-    return new GraphemeBuffer(text, this.segmenter);
+    return new GraphemeBuffer(text, this.seg);
   }
 }
 
 class GraphemeBuffer extends Buffer {
-  #segmenter: Intl.Segmenter;
+  #seg: Intl.Segmenter;
   #text = "";
+  #index: number[] = [];
 
-  constructor(text: string, segmenter: Intl.Segmenter) {
+  constructor(text: string, seg: Intl.Segmenter) {
     super();
 
-    this.#segmenter = segmenter;
+    this.#seg = seg;
 
     this.append(text);
   }
 
   append(text: string): void {
-    let i = 0;
-    for (const { segment } of this.#segmenter.segment(text)) {
+    for (const { segment, index } of this.#seg.segment(text)) {
       if (segment === "\n" || segment === "\r\n") {
-        this.eol_starts.push(this.len + i);
-        this.eol_ends.push(this.len + i + segment.length);
+        this.eol_starts.push(this.len);
+        this.eol_ends.push(this.len + segment.length);
       }
-      i += 1;
+
+      this.len += 1;
+
+      if (this.len % INDEX_STEP === 0) {
+        this.#index.push(index);
+      }
     }
 
-    this.len += [...this.#segmenter.segment(text)].length;
     this.#text += text;
   }
 
-  read(i: number, n: number): IteratorObject<string> {
-    return this.#segmenter.segment(this.#text)[Symbol.iterator]().drop(i)
+  read(index: number, n: number): IteratorObject<string> {
+    const text = this.#text.slice(this.#index[Math.trunc(index / INDEX_STEP)]!);
+
+    return this.#seg.segment(text)[Symbol.iterator]().drop(index % INDEX_STEP)
       .take(n).map((x) => x.segment);
   }
 }
