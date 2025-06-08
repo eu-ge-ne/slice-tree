@@ -1,6 +1,6 @@
 import { Buffer, BufferFactory } from "./buffer.ts";
 
-const INDEX_STEP = 10_000;
+const INDEX_STEP = 1;
 
 export class GraphemeBufferFactory extends BufferFactory {
   seg = new Intl.Segmenter();
@@ -33,7 +33,7 @@ class GraphemeBuffer extends Buffer {
       this.len += 1;
 
       if (this.len % INDEX_STEP === 0) {
-        this.#index.push(index);
+        this.#index.push(this.#text.length + index);
       }
     }
 
