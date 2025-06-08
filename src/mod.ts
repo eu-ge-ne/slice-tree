@@ -1,5 +1,6 @@
-import { type BufferFactory, GraphemeBufferFactory } from "./buffer.ts";
+import type { BufferFactory } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
+import { GraphemeBufferFactory } from "./grapheme.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
 import { PointBufferFactory } from "./point.ts";
