@@ -75,7 +75,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns number of characters in the text buffer.
+   * Returns number of characters in the buffer.
    *
    * @returns Number of characters.
    *
@@ -95,7 +95,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns number of lines in the text buffer.
+   * Returns number of lines in the buffer.
    *
    * @returns Number of lines.
    *
@@ -115,7 +115,7 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters in the text buffer's section, specified by start (inclusive) and end (exclusive) positions.
+   * Returns characters in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
    * @param `start` Start position.
    * @param `end` Optional end position.
@@ -236,7 +236,7 @@ export class SliceTree {
   }
 
   /**
-   * Removes characters in the text buffer's section, specified by start (inclusive) and end (exclusive) positions.
+   * Removes characters in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
    * @param `start` Start position.
    * @param `end` Optional end position.
