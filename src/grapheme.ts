@@ -14,36 +14,28 @@ class GraphemeBuffer extends Buffer {
 
   constructor(text: string, segmenter: Intl.Segmenter) {
     super();
+
     this.#segmenter = segmenter;
+
     this.append(text);
   }
 
   append(text: string): void {
-    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
+    let i = 0;
+    for (const { segment } of this.#segmenter.segment(text)) {
+      if (segment === "\n" || segment === "\r\n") {
+        this.eol_starts.push(this.len + i);
+        this.eol_ends.push(this.len + i + segment.length);
+      }
+      i += 1;
+    }
+
     this.len += [...this.#segmenter.segment(text)].length;
     this.#text += text;
   }
 
-  read(index: number, n: number): IteratorObject<string> {
-    return this.#segmenter.segment(this.#text)[Symbol.iterator]().drop(index)
+  read(i: number, n: number): IteratorObject<string> {
+    return this.#segmenter.segment(this.#text)[Symbol.iterator]().drop(i)
       .take(n).map((x) => x.segment);
-  }
-
-  #append_eols(
-    text: string,
-    index: number,
-    starts: number[],
-    ends: number[],
-  ): void {
-    let i = 0;
-
-    for (const { segment } of this.#segmenter.segment(text)) {
-      if (segment === "\n" || segment === "\r\n") {
-        starts.push(index + i);
-        ends.push(index + i + segment.length);
-      }
-
-      i += 1;
-    }
   }
 }

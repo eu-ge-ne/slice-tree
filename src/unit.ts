@@ -16,6 +16,7 @@ class UnitBuffer extends Buffer {
     super();
 
     this.#regexp = regexp;
+
     this.append(text);
   }
 
