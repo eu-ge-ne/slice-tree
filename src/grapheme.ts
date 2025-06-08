@@ -1,24 +1,31 @@
 import { Buffer, BufferFactory } from "./buffer.ts";
 
-const INDEX_STEP = 1;
-
 export class GraphemeBufferFactory extends BufferFactory {
-  seg = new Intl.Segmenter();
+  #seg = new Intl.Segmenter();
+  #index_step: number;
+
+  constructor(index_step: number) {
+    super();
+
+    this.#index_step = index_step;
+  }
 
   create(text: string): Buffer {
-    return new GraphemeBuffer(text, this.seg);
+    return new GraphemeBuffer(this.#seg, this.#index_step, text);
   }
 }
 
 class GraphemeBuffer extends Buffer {
   #seg: Intl.Segmenter;
+  #index_step: number;
   #text = "";
   #index: number[] = [];
 
-  constructor(text: string, seg: Intl.Segmenter) {
+  constructor(seg: Intl.Segmenter, index_step: number, text: string) {
     super();
 
     this.#seg = seg;
+    this.#index_step = index_step;
 
     this.append(text);
   }
@@ -27,12 +34,12 @@ class GraphemeBuffer extends Buffer {
     for (const { segment, index } of this.#seg.segment(text)) {
       if (segment === "\n" || segment === "\r\n") {
         this.eol_starts.push(this.len);
-        this.eol_ends.push(this.len + segment.length);
+        this.eol_ends.push(this.len + 1);
       }
 
       this.len += 1;
 
-      if (this.len % INDEX_STEP === 0) {
+      if (this.len % this.#index_step === 0) {
         this.#index.push(this.#text.length + index);
       }
     }
@@ -41,9 +48,11 @@ class GraphemeBuffer extends Buffer {
   }
 
   read(i: number, n: number): IteratorObject<string> {
-    const text = this.#text.slice(this.#index[Math.trunc(i / INDEX_STEP)]!);
+    const text = this.#text.slice(
+      this.#index[Math.trunc(i / this.#index_step)],
+    );
 
-    return this.#seg.segment(text)[Symbol.iterator]().drop(i % INDEX_STEP)
+    return this.#seg.segment(text)[Symbol.iterator]().drop(i % this.#index_step)
       .take(n).map((x) => x.segment);
   }
 }

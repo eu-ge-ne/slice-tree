@@ -69,7 +69,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static graphemes(text?: string): SliceTree {
-    return new SliceTree(new GraphemeBufferFactory(), text);
+    return new SliceTree(new GraphemeBufferFactory(10_000), text);
   }
 
   /**
