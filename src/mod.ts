@@ -2,7 +2,6 @@ import {
   type BufferFactory,
   GraphemeBufferFactory,
   PointBufferFactory,
-  UnitBufferFactory,
 } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
@@ -15,6 +14,7 @@ import {
   trim_slice_start,
 } from "./slice.ts";
 import { split } from "./splitting.ts";
+import { UnitBufferFactory } from "../src/unit.ts";
 
 /**
  * Represents position in text buffer. Can be either `number` or `[number, number]`:

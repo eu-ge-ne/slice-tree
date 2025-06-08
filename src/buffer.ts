@@ -1,3 +1,7 @@
+export abstract class BufferFactory {
+  abstract create(text: string): Buffer;
+}
+
 export abstract class Buffer {
   len = 0;
   eol_starts: number[] = [];
@@ -26,51 +30,6 @@ export abstract class Buffer {
     }
 
     return a;
-  }
-}
-
-export abstract class BufferFactory {
-  abstract create(text: string): Buffer;
-}
-
-export class UnitBuffer extends Buffer {
-  #eol_re: RegExp;
-  #text = "";
-
-  constructor(text: string, eol_re: RegExp) {
-    super();
-    this.#eol_re = eol_re;
-    this.append(text);
-  }
-
-  append(text: string): void {
-    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
-    this.len += text.length;
-    this.#text += text;
-  }
-
-  read(index: number, n: number): IteratorObject<string> {
-    return this.#text.slice(index, index + n)[Symbol.iterator]();
-  }
-
-  #append_eols(
-    text: string,
-    index: number,
-    starts: number[],
-    ends: number[],
-  ): void {
-    for (const x of text.matchAll(this.#eol_re)) {
-      starts.push(index + x.index);
-      ends.push(index + x.index + x[0].length);
-    }
-  }
-}
-
-export class UnitBufferFactory extends BufferFactory {
-  eol_re = /\r?\n/gm;
-
-  create(text: string): Buffer {
-    return new UnitBuffer(text, this.eol_re);
   }
 }
 
