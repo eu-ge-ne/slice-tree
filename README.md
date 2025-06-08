@@ -202,7 +202,7 @@ end (exclusive) positions.
 Syntax
 
 ```ts ignore
-read(start: Position, end?: Position): IteratorObject<string>
+read(start: Position, end?: Position): IteratorObject<string> | undefined
 ```
 
 Example
