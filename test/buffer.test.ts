@@ -12,7 +12,7 @@ Deno.test("0 newlines as units", () => {
 });
 
 Deno.test("0 newlines as points", () => {
-  const buf = new PointBufferFactory().create("Lorem😄ipsum");
+  const buf = new PointBufferFactory(3).create("Lorem😄ipsum");
 
   assertEquals(buf.eol_starts, []);
   assertEquals(buf.eol_ends, []);
@@ -33,7 +33,7 @@ Deno.test("\n as units", () => {
 });
 
 Deno.test("\n as points", () => {
-  const buf = new PointBufferFactory().create("Lorem😄\nipsum😄\n");
+  const buf = new PointBufferFactory(3).create("Lorem😄\nipsum😄\n");
 
   assertEquals(buf.eol_starts, [6, 13]);
   assertEquals(buf.eol_ends, [7, 14]);
@@ -54,7 +54,7 @@ Deno.test("\r\n as units", () => {
 });
 
 Deno.test("\r\n as points", () => {
-  const buf = new PointBufferFactory().create("Lorem😄\r\nipsum😄\r\n");
+  const buf = new PointBufferFactory(3).create("Lorem😄\r\nipsum😄\r\n");
 
   assertEquals(buf.eol_starts, [6, 14]);
   assertEquals(buf.eol_ends, [8, 16]);
@@ -75,7 +75,7 @@ Deno.test("\n and \r\n as units", () => {
 });
 
 Deno.test("\n and \r\n as points", () => {
-  const buf = new PointBufferFactory().create("Lorem😄\nipsum😄\r\n");
+  const buf = new PointBufferFactory(3).create("Lorem😄\nipsum😄\r\n");
 
   assertEquals(buf.eol_starts, [6, 13]);
   assertEquals(buf.eol_ends, [7, 15]);

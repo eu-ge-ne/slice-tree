@@ -59,7 +59,7 @@ export class SliceTree {
    * @returns `SliceTree` instance.
    */
   static points(text?: string): SliceTree {
-    return new SliceTree(new PointBufferFactory(), text);
+    return new SliceTree(new PointBufferFactory(10_000), text);
   }
 
   /**
