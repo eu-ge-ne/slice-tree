@@ -30,7 +30,7 @@ class UnitBuffer extends Buffer {
     this.#text += text;
   }
 
-  read(i: number, n: number): IteratorObject<string> {
-    return this.#text.slice(i, i + n)[Symbol.iterator]();
+  read(index: number, n: number): IteratorObject<string> {
+    return this.#text.slice(index, index + n)[Symbol.iterator]();
   }
 }
