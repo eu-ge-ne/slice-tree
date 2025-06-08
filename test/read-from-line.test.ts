@@ -17,8 +17,8 @@ Deno.test("Line at index >= line_count", () => {
   const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
 
   assert_iterator(text.read([4, 0]), "amet");
-  assert_iterator(text.read([5, 0]), "");
-  assert_iterator(text.read([6, 0]), "");
+  assert_iterator(text.read([5, 0]), undefined);
+  assert_iterator(text.read([6, 0]), undefined);
 
   assert_tree(text);
 });

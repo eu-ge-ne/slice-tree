@@ -135,7 +135,7 @@ export class SliceTree {
    * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  read(start: Position, end?: Position): IteratorObject<string> {
+  read(start: Position, end?: Position): IteratorObject<string> | undefined {
     const start_index = this.to_index(start);
 
     if (typeof start_index === "number") {
@@ -151,8 +151,6 @@ export class SliceTree {
           : chars;
       }
     }
-
-    return [][Symbol.iterator]();
   }
 
   /**
