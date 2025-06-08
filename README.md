@@ -154,7 +154,7 @@ SliceTree.graphemes(text?: string)
 
 ### `SliceTree:count`
 
-Returns number of characters in the text buffer.
+Returns number of characters in the buffer.
 
 Syntax
 
@@ -175,7 +175,7 @@ assertEquals(text.count, 11);
 
 ### `SliceTree:line_count`
 
-Returns number of lines in the text buffer.
+Returns number of lines in the buffer.
 
 Syntax
 
@@ -196,8 +196,8 @@ assertEquals(text.line_count, 5);
 
 ### `SliceTree.proto.read()`
 
-Returns characters in the text buffer's section, specified by start (inclusive)
-and end (exclusive) indexes.
+Returns characters in the buffer's section, specified by start (inclusive) and
+end (exclusive) positions.
 
 Syntax
 
@@ -221,7 +221,7 @@ assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
 
 ### `SliceTree.proto.write()`
 
-Inserts text into the buffer at the specified index.
+Inserts text into the buffer at the specified position.
 
 Syntax
 
@@ -245,8 +245,8 @@ assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
 
 ### `SliceTree.proto.erase()`
 
-Removes characters in the text buffer's section, specified by start (inclusive)
-and end (exclusive) indexes.
+Removes characters in the buffer's section, specified by start (inclusive) and
+end (exclusive) positions.
 
 Syntax
 
@@ -269,8 +269,7 @@ assertEquals(text.read(0).toArray().join(""), "Lorem");
 
 ### `SliceTree.proto.to_index()`
 
-Returns the start index (inclusive) and the end index (exclusive) of the line of
-text in the buffer at the specified index.
+Returns index of the character in the buffer at the specified position.
 
 Syntax
 
