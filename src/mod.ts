@@ -156,9 +156,9 @@ export class SliceTree {
   }
 
   /**
-   * Inserts text into the buffer at the specified index.
+   * Inserts text into the buffer at the specified position.
    *
-   * @param `index` Index at witch to insert the text.
+   * @param `position` Position at witch to insert the text.
    * @param `text` Text to insert.
    *
    * @example
