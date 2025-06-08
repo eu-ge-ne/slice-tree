@@ -39,11 +39,11 @@ class PointBuffer extends Buffer {
 
       prev = char;
 
-      this.len += 1;
       if (this.len % this.#index_step === 0) {
         this.#index.push(this.#text.length + index);
       }
 
+      this.len += 1;
       index += char.length;
     }
 

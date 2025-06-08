@@ -37,10 +37,11 @@ class GraphemeBuffer extends Buffer {
         this.eol_ends.push(this.len + 1);
       }
 
-      this.len += 1;
       if (this.len % this.#index_step === 0) {
         this.#index.push(this.#text.length + index);
       }
+
+      this.len += 1;
     }
 
     this.#text += text;
