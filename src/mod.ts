@@ -310,10 +310,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns the start index (inclusive) and the end index (exclusive) of the line of text in the buffer at the specified index.
+   * Returns index of the character in the buffer at the specified position.
    *
-   * @param `position` Line index.
-   * @returns Ondexes
+   * @param `position` Position.
+   * @returns Index
    *
    * @example
    *
