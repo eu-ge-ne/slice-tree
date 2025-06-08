@@ -236,10 +236,10 @@ export class SliceTree {
   }
 
   /**
-   * Removes characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
+   * Removes characters in the text buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
-   * @param `start` Start index.
-   * @param `end` Optional end index.
+   * @param `start` Start position.
+   * @param `end` Optional end position.
    *
    * @example
    *
