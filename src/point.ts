@@ -11,36 +11,27 @@ class PointBuffer extends Buffer {
 
   constructor(text: string) {
     super();
+
     this.append(text);
   }
 
   append(text: string): void {
-    this.#append_eols(text, this.len, this.eol_starts, this.eol_ends);
+    let i = 0;
+    let prev: string | undefined;
+    for (const char of text) {
+      if (char === "\n") {
+        this.eol_starts.push(this.len + i - (prev === "\r" ? 1 : 0));
+        this.eol_ends.push(this.len + i + 1);
+      }
+      prev = char;
+      i += 1;
+    }
+
     this.len += [...text].length;
     this.#text += text;
   }
 
-  read(index: number, n: number): IteratorObject<string> {
-    return this.#text[Symbol.iterator]().drop(index).take(n);
-  }
-
-  #append_eols(
-    text: string,
-    index: number,
-    starts: number[],
-    ends: number[],
-  ): void {
-    let i = 0;
-    let prev: string | undefined;
-
-    for (const char of text) {
-      if (char === "\n") {
-        starts.push(index + i - (prev === "\r" ? 1 : 0));
-        ends.push(index + i + 1);
-      }
-
-      prev = char;
-      i += 1;
-    }
+  read(i: number, n: number): IteratorObject<string> {
+    return this.#text[Symbol.iterator]().drop(i).take(n);
   }
 }
