@@ -24,9 +24,9 @@ class GraphemeBuffer extends Buffer {
     this.#text += text;
   }
 
-  read(index: number, count: number): IteratorObject<string> {
+  read(index: number, n: number): IteratorObject<string> {
     return this.#segmenter.segment(this.#text)[Symbol.iterator]().drop(index)
-      .take(count).map((x) => x.segment);
+      .take(n).map((x) => x.segment);
   }
 
   #append_eols(

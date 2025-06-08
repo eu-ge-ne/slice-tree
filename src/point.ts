@@ -20,8 +20,8 @@ class PointBuffer extends Buffer {
     this.#text += text;
   }
 
-  read(index: number, count: number): IteratorObject<string> {
-    return this.#text[Symbol.iterator]().drop(index).take(count);
+  read(index: number, n: number): IteratorObject<string> {
+    return this.#text[Symbol.iterator]().drop(index).take(n);
   }
 
   #append_eols(
