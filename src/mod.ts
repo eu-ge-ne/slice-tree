@@ -115,10 +115,10 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters in the text buffer's section, specified by start (inclusive) and end (exclusive) indexes.
+   * Returns characters in the text buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
-   * @param `start` Start index.
-   * @param `end` Optional end index.
+   * @param `start` Start position.
+   * @param `end` Optional end position.
    * @yields Characters.
    *
    * @example
@@ -312,8 +312,8 @@ export class SliceTree {
   /**
    * Returns the start index (inclusive) and the end index (exclusive) of the line of text in the buffer at the specified index.
    *
-   * @param `line_index` Line index.
-   * @returns Tuple of [start, end] indexes
+   * @param `position` Line index.
+   * @returns Ondexes
    *
    * @example
    *
