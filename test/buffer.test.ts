@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 
-import { PointBufferFactory } from "../src/buffer.ts";
+import { PointBufferFactory } from "../src/point.ts";
 import { UnitBufferFactory } from "../src/unit.ts";
 
 Deno.test("0 newlines with unit_reader", () => {

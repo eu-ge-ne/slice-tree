@@ -8,7 +8,7 @@ export class UnitBufferFactory extends BufferFactory {
   }
 }
 
-export class UnitBuffer extends Buffer {
+class UnitBuffer extends Buffer {
   #regexp: RegExp;
   #text = "";
 

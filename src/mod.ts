@@ -1,11 +1,8 @@
-import {
-  type BufferFactory,
-  GraphemeBufferFactory,
-  PointBufferFactory,
-} from "./buffer.ts";
+import { type BufferFactory, GraphemeBufferFactory } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
 import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
+import { PointBufferFactory } from "./point.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
 import {
   grow_slice,
