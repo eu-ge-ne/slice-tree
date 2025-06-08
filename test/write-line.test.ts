@@ -29,8 +29,8 @@ Deno.test("Write to a line which does not exist", () => {
 
   text.write([1, 0], "Lorem ipsum");
 
-  assert_iterator(text.read(0), "");
-  assert_iterator(text.read([0, 0], [1, 0]), "");
+  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read([0, 0], [1, 0]), undefined);
 
   assert_tree(text);
 });
@@ -40,8 +40,8 @@ Deno.test("Write to a column which does not exist", () => {
 
   text.write([0, 1], "Lorem ipsum");
 
-  assert_iterator(text.read(0), "");
-  assert_iterator(text.read([0, 0], [1, 0]), "");
+  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read([0, 0], [1, 0]), undefined);
 
   assert_tree(text);
 });

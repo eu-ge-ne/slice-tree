@@ -78,37 +78,37 @@ const text = SliceTree.units();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
-assertEquals(text.read(0).toArray().join(""), "");
+assertEquals(text.read(0)?.toArray().join(""), undefined);
 
 text.write(0, "Lorem");
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "Lorem");
+assertEquals(text.read(0)?.toArray().join(""), "Lorem");
 
 text.write(5, "ipsum");
 
 assertEquals(text.count, 10);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "Loremipsum");
+assertEquals(text.read(0)?.toArray().join(""), "Loremipsum");
 
 text.write(5, "\n");
 text.write(11, "\n");
 
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
-assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum\n");
-assertEquals(text.read([2, 0], [3, 0]).toArray().join(""), "");
+assertEquals(text.read(0)?.toArray().join(""), "Lorem\nipsum\n");
+assertEquals(text.read([0, 0], [1, 0])?.toArray().join(""), "Lorem\n");
+assertEquals(text.read([1, 0], [2, 0])?.toArray().join(""), "ipsum\n");
+assertEquals(text.read([2, 0], [3, 0])?.toArray().join(""), undefined);
 
 text.erase(0, 6);
 text.erase(5, 6);
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "ipsum");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
+assertEquals(text.read(0)?.toArray().join(""), "ipsum");
+assertEquals(text.read([0, 0], [1, 0])?.toArray().join(""), "ipsum");
 ```
 
 ## API
@@ -213,10 +213,10 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = SliceTree.points("Lorem\nipsum");
 
-assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
-assertEquals(text.read(6).toArray().join(""), "ipsum");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
+assertEquals(text.read(0)?.toArray().join(""), "Lorem\nipsum");
+assertEquals(text.read(6)?.toArray().join(""), "ipsum");
+assertEquals(text.read([0, 0], [1, 0])?.toArray().join(""), "Lorem\n");
+assertEquals(text.read([1, 0], [2, 0])?.toArray().join(""), "ipsum");
 ```
 
 ### `SliceTree.proto.write()`
@@ -240,7 +240,7 @@ const text = SliceTree.units();
 text.write(0, "Lorem");
 text.write([0, 5], " ipsum");
 
-assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+assertEquals(text.read(0)?.toArray().join(""), "Lorem ipsum");
 ```
 
 ### `SliceTree.proto.erase()`
@@ -264,7 +264,7 @@ const text = SliceTree.units("Lorem ipsum");
 
 text.erase(5, 11);
 
-assertEquals(text.read(0).toArray().join(""), "Lorem");
+assertEquals(text.read(0)?.toArray().join(""), "Lorem");
 ```
 
 ### `SliceTree.proto.to_index()`

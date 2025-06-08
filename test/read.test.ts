@@ -4,7 +4,7 @@ import { assert_iterator, assert_tree } from "./assert.ts";
 Deno.test("Read empty", () => {
   const text = SliceTree.units();
 
-  assert_iterator(text.read(0), "");
+  assert_iterator(text.read(0), undefined);
 
   assert_tree(text);
 });
@@ -12,7 +12,7 @@ Deno.test("Read empty", () => {
 Deno.test("Read code_units", () => {
   const text = SliceTree.units("Lorem ipsum dolor");
 
-  assert_iterator(text.read(6).take(6), "ipsum ");
+  assert_iterator(text.read(6)?.take(6), "ipsum ");
 
   assert_tree(text);
 });
@@ -20,7 +20,7 @@ Deno.test("Read code_units", () => {
 Deno.test("Read code_points", () => {
   const text = SliceTree.points("Lorem😄ipsum😄dolor");
 
-  assert_iterator(text.read(6).take(6), "ipsum😄");
+  assert_iterator(text.read(6)?.take(6), "ipsum😄");
 
   assert_tree(text);
 });
@@ -29,8 +29,8 @@ Deno.test("Read at start >= count", () => {
   const text = SliceTree.units("Lorem");
 
   assert_iterator(text.read(4), "m");
-  assert_iterator(text.read(5), "");
-  assert_iterator(text.read(6), "");
+  assert_iterator(text.read(5), undefined);
+  assert_iterator(text.read(6), undefined);
 
   assert_tree(text);
 });
