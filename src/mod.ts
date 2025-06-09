@@ -112,21 +112,16 @@ export class SliceTree {
           Number.MAX_SAFE_INTEGER;
 
         let { node, offset } = first;
-        let rem = i1 - i0;
+        let n = i1 - i0;
 
-        while ((node !== NIL) && (rem > 0)) {
-          let count = node.slice.len - offset;
-          if (count > rem) {
-            count = rem;
-            rem = 0;
-          } else {
-            rem -= count;
-          }
+        while ((node !== NIL) && (n > 0)) {
+          const count = Math.min(node.slice.len - offset, n);
 
           yield node.slice.buf.read(node.slice.start + offset, count);
 
           node = successor(node);
           offset = 0;
+          n -= count;
         }
       }
     }
