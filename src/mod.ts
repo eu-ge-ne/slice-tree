@@ -153,26 +153,26 @@ export class SliceTree {
    * ```
    */
   write(position: Position, text: string): void {
-    let index = this.to_index(position);
+    let i = this.to_index(position);
 
-    if (typeof index === "number") {
+    if (typeof i === "number") {
       let p = NIL;
       let insert_case = InsertionCase.Root;
 
       for (let x = this.root; x !== NIL;) {
-        if (index <= x.left.len) {
+        if (i <= x.left.len) {
           insert_case = InsertionCase.Left;
           p = x;
           x = x.left;
         } else {
-          index -= x.left.len;
+          i -= x.left.len;
 
-          if (index < x.slice.len) {
+          if (i < x.slice.len) {
             insert_case = InsertionCase.Split;
             p = x;
             x = NIL;
           } else {
-            index -= x.slice.len;
+            i -= x.slice.len;
 
             insert_case = InsertionCase.Right;
             p = x;
@@ -203,7 +203,7 @@ export class SliceTree {
             break;
           }
           case InsertionCase.Split: {
-            const y = split(this, p, index, 0);
+            const y = split(this, p, i, 0);
             insert_left(this, y, child);
             break;
           }
@@ -232,17 +232,17 @@ export class SliceTree {
    * ```
    */
   erase(start: Position, end?: Position): void {
-    const start_index = this.to_index(start);
+    const i0 = this.to_index(start);
 
-    if (typeof start_index === "number") {
-      const first = find_node(this.root, start_index);
+    if (typeof i0 === "number") {
+      const first = find_node(this.root, i0);
 
       if (first) {
-        const end_index = (end ? this.to_index(end) : undefined) ??
+        const i1 = (end ? this.to_index(end) : undefined) ??
           Number.MAX_SAFE_INTEGER;
-        const count = end_index - start_index;
 
         const { node, offset } = first;
+        const count = i1 - i0;
         const offset2 = offset + count;
 
         if (offset2 === node.slice.len) {
@@ -267,7 +267,7 @@ export class SliceTree {
             x = split(this, node, offset, 0);
           }
 
-          const last = find_node(this.root, end_index);
+          const last = find_node(this.root, i1);
           if (last && last.offset !== 0) {
             split(this, last.node, last.offset, 0);
           }
@@ -304,29 +304,29 @@ export class SliceTree {
    * ```
    */
   to_index(position: Position): number | undefined {
-    let index: number | undefined;
+    let i: number | undefined;
 
     if (typeof position === "number") {
-      index = position;
+      i = position;
     } else {
       let line = position[0];
       if (line < 0) {
         line = Math.max(this.line_count + line, 0);
       }
 
-      index = line === 0 ? 0 : find_eol(this.root, line - 1);
-      if (typeof index === "number") {
-        index += position[1];
+      i = line === 0 ? 0 : find_eol(this.root, line - 1);
+      if (typeof i === "number") {
+        i += position[1];
       }
     }
 
-    if (typeof index === "number") {
-      if (index < 0) {
-        index = Math.max(this.count + index, 0);
+    if (typeof i === "number") {
+      if (i < 0) {
+        i = Math.max(this.count + i, 0);
       }
 
-      if (index <= this.count) {
-        return index;
+      if (i <= this.count) {
+        return i;
       }
     }
   }
