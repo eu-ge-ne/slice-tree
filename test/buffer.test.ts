@@ -1,8 +1,27 @@
 import { assertEquals } from "@std/assert";
 
+import { assert_iterator } from "./assert.ts";
 import { GraphemeBufferFactory } from "../src/grapheme.ts";
 import { PointBufferFactory } from "../src/point.ts";
 import { UnitBufferFactory } from "../src/unit.ts";
+
+Deno.test("Read units", () => {
+  const buf = new UnitBufferFactory().create("Lorem ipsum");
+
+  assert_iterator(buf.read(6, 3), "ips");
+});
+
+Deno.test("Read points", () => {
+  const buf = new PointBufferFactory(3).create("Lorem😄ipsum");
+
+  assert_iterator(buf.read(6, 3), "ips");
+});
+
+Deno.test("Read graphemes", () => {
+  const buf = new GraphemeBufferFactory(3).create("Lorem🤦ipsum");
+
+  assert_iterator(buf.read(6, 3), "ips");
+});
 
 Deno.test("0 newlines as units", () => {
   const buf = new UnitBufferFactory().create("Lorem ipsum");
