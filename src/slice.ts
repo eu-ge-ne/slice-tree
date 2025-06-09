@@ -1,4 +1,4 @@
-import type { Buffer, BufferFactory } from "./buffer.ts";
+import { Buffer } from "./buffer.ts";
 
 export interface Slice {
   readonly buf: Buffer;
@@ -24,8 +24,8 @@ export function new_slice(
   };
 }
 
-export function slice_from_text(factory: BufferFactory, text: string): Slice {
-  const buf = factory.create(text);
+export function slice_from_text(text: string): Slice {
+  const buf = new Buffer(text);
 
   return new_slice(buf, 0, buf.len, 0, buf.eol_starts.length);
 }

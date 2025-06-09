@@ -4,7 +4,7 @@ import { SliceTree } from "../src/mod.ts";
 import { assert_tree } from "./assert.ts";
 
 Deno.test("Find line at valid index", () => {
-  const text = SliceTree.points("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
+  const text = new SliceTree("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
 
   assertEquals(text.to_index([0, 0]), 0);
   assertEquals(text.to_index([1, 0]), 7);
@@ -18,7 +18,7 @@ Deno.test("Find line at valid index", () => {
 });
 
 Deno.test("Find line at index == line_count", () => {
-  const text = SliceTree.points("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
+  const text = new SliceTree("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
 
   assertEquals(text.to_index([4, 0]), 26);
   assertEquals(text.to_index([5, 0]), undefined);
@@ -29,7 +29,7 @@ Deno.test("Find line at index == line_count", () => {
 });
 
 Deno.test("Find line at index > line_count", () => {
-  const text = SliceTree.points("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
+  const text = new SliceTree("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
 
   assertEquals(text.to_index([4, 0]), 26);
   assertEquals(text.to_index([6, 0]), undefined);
@@ -40,7 +40,7 @@ Deno.test("Find line at index > line_count", () => {
 });
 
 Deno.test("Find line at index < 0", () => {
-  const text = SliceTree.points("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
+  const text = new SliceTree("Lorem😄\nipsum😄\ndolor😄\nsit😄\namet😄");
 
   assertEquals(text.to_index([0, 0]), 0);
   assertEquals(text.to_index([-1, 0]), 26);

@@ -7,7 +7,7 @@ const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
 function slice_tree(): SliceTree {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(text.count, "Lorem");
   text.write(text.count, " ipsum");
@@ -33,7 +33,7 @@ function slice_tree(): SliceTree {
 }
 
 function slice_tree_reversed(): SliceTree {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(0, " aliqua.");
   text.write(0, " magna");
@@ -147,7 +147,7 @@ for (let n = 1; n <= 10; n += 1) {
 }
 
 Deno.test("Erase causing splitting nodes", () => {
-  const text = SliceTree.units(EXPECTED);
+  const text = new SliceTree(EXPECTED);
 
   let expected = EXPECTED;
 
@@ -170,7 +170,7 @@ Deno.test("Erase causing splitting nodes", () => {
 });
 
 Deno.test("Erase count < 0", () => {
-  const text = SliceTree.units("Lorem ipsum");
+  const text = new SliceTree("Lorem ipsum");
 
   text.erase(5, -6);
 
@@ -180,7 +180,7 @@ Deno.test("Erase count < 0", () => {
 });
 
 Deno.test("Erase removes lines", () => {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(0, "Lorem");
   text.write(5, "ipsum");
@@ -199,7 +199,7 @@ Deno.test("Erase removes lines", () => {
 });
 
 Deno.test("Erasing newline char removes line", () => {
-  const text = SliceTree.units(" \n \n");
+  const text = new SliceTree(" \n \n");
 
   assertEquals(text.line_count, 3);
 
@@ -212,7 +212,7 @@ Deno.test("Erasing newline char removes line", () => {
 });
 
 Deno.test("Erasing first newline char removes line", () => {
-  const text = SliceTree.units("\n\n");
+  const text = new SliceTree("\n\n");
 
   assertEquals(text.line_count, 3);
 
@@ -225,7 +225,7 @@ Deno.test("Erasing first newline char removes line", () => {
 });
 
 Deno.test("Erasing line followed by newline", () => {
-  const text = SliceTree.units(" \n \n\n \n");
+  const text = new SliceTree(" \n \n\n \n");
 
   assertEquals(text.line_count, 5);
 

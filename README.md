@@ -74,7 +74,7 @@ bunx jsr add @eu-ge-ne/slice-tree
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units();
+const text = new SliceTree();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
@@ -168,7 +168,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units("Lorem ipsum");
+const text = new SliceTree("Lorem ipsum");
 
 assertEquals(text.count, 11);
 ```
@@ -189,7 +189,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
+const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.line_count, 5);
 ```
@@ -211,7 +211,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.points("Lorem\nipsum");
+const text = new SliceTree("Lorem\nipsum");
 
 assertEquals(text.read(0)?.toArray().join(""), "Lorem\nipsum");
 assertEquals(text.read(6)?.toArray().join(""), "ipsum");
@@ -235,7 +235,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units();
+const text = new SliceTree();
 
 text.write(0, "Lorem");
 text.write([0, 5], " ipsum");
@@ -260,7 +260,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units("Lorem ipsum");
+const text = new SliceTree("Lorem ipsum");
 
 text.erase(5, 11);
 
@@ -283,7 +283,7 @@ Example
 import { assertEquals } from "jsr:@std/assert";
 import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
-const text = SliceTree.units("Lorem\nipsum");
+const text = new SliceTree("Lorem\nipsum");
 
 assertEquals(text.to_index([1, 0]), 6);
 ```
