@@ -50,12 +50,25 @@ class PointBuffer extends Buffer {
     this.#text += text;
   }
 
-  read(index: number, count: number): IteratorObject<string> {
+  *read(index: number, count: number): Generator<string> {
     const text = this.#text.slice(
       this.#index[Math.trunc(index / this.#index_step)],
-      this.#index[Math.ceil((index + count) / this.#index_step)],
     );
 
-    return text[Symbol.iterator]().drop(index % this.#index_step).take(count);
+    let i = index % this.#index_step;
+
+    for (const char of text) {
+      if (count === 0) {
+        break;
+      }
+
+      if (i > 0) {
+        i -= 1;
+      } else {
+        yield char;
+
+        count -= 1;
+      }
+    }
   }
 }

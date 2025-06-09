@@ -9,7 +9,7 @@ Deno.test("Read empty", () => {
   assert_tree(text);
 });
 
-Deno.test("Read code_units", () => {
+Deno.test("Read units", () => {
   const text = SliceTree.units("Lorem ipsum dolor");
 
   assert_iterator(text.read(6)?.take(6), "ipsum ");
@@ -17,10 +17,18 @@ Deno.test("Read code_units", () => {
   assert_tree(text);
 });
 
-Deno.test("Read code_points", () => {
+Deno.test("Read points", () => {
   const text = SliceTree.points("Lorem😄ipsum😄dolor");
 
   assert_iterator(text.read(6)?.take(6), "ipsum😄");
+
+  assert_tree(text);
+});
+
+Deno.test("Read graphemes", () => {
+  const text = SliceTree.graphemes("Lorem🤦ipsum🤦dolor");
+
+  assert_iterator(text.read(6)?.take(6), "ipsum🤦");
 
   assert_tree(text);
 });
