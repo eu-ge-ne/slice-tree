@@ -39,7 +39,7 @@ export function node_from_text(text: string): Node {
 
 export function* iter(x: Node, offset: number): Generator<string> {
   while (x !== NIL) {
-    yield* x.slice.buf.read(x.slice.start + offset, x.slice.len - offset);
+    yield x.slice.buf.read(x.slice.start + offset, x.slice.len - offset);
     x = successor(x);
     offset = 0;
   }
