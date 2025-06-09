@@ -1,6 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
+import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
 import {
   grow_slice,
@@ -101,20 +101,33 @@ export class SliceTree {
    * assertEquals(text.read([1, 0], [2, 0])?.toArray().join(""), "ipsum");
    * ```
    */
-  read(start: Position, end?: Position): IteratorObject<string> | undefined {
-    const start_index = this.to_index(start);
+  *read(start: Position, end?: Position): Generator<string> {
+    const i0 = this.to_index(start);
 
-    if (typeof start_index === "number") {
-      const first = find_node(this.root, start_index);
+    if (typeof i0 === "number") {
+      const first = find_node(this.root, i0);
 
       if (first) {
-        const chars = iter(first.node, first.offset);
+        const i1 = (end ? this.to_index(end) : undefined) ??
+          Number.MAX_SAFE_INTEGER;
 
-        const end_index = end ? this.to_index(end) : undefined;
+        let { node, offset } = first;
+        let rem = i1 - i0;
 
-        return typeof end_index === "number"
-          ? chars.take(end_index - start_index)
-          : chars;
+        while ((node !== NIL) && (rem > 0)) {
+          let count = node.slice.len - offset;
+          if (count > rem) {
+            count = rem;
+            rem = 0;
+          } else {
+            rem -= count;
+          }
+
+          yield node.slice.buf.read(node.slice.start + offset, count);
+
+          node = successor(node);
+          offset = 0;
+        }
       }
     }
   }

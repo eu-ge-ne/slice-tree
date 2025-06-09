@@ -62,7 +62,7 @@ function test_erase_head(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -70,7 +70,7 @@ function test_erase_head(text: SliceTree, n: number): void {
     expected = expected.slice(n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -79,7 +79,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -87,7 +87,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
     expected = expected.slice(0, -n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -96,7 +96,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -105,7 +105,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
     expected = expected.slice(0, pos) + expected.slice(pos + n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -154,7 +154,7 @@ Deno.test("Erase causing splitting nodes", () => {
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
-      assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+      assert_iterator(text.read(0), expected);
       assertEquals(text.count, expected.length);
       assert_tree(text);
 
@@ -164,7 +164,7 @@ Deno.test("Erase causing splitting nodes", () => {
     n += 1;
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 });

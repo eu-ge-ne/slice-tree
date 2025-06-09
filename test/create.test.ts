@@ -6,7 +6,7 @@ import { assert_iterator, assert_tree } from "./assert.ts";
 Deno.test("Create empty", () => {
   const text = new SliceTree();
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assertEquals(text.line_count, 0);
 
@@ -14,10 +14,10 @@ Deno.test("Create empty", () => {
 });
 
 Deno.test("Create", () => {
-  const text = new SliceTree("A");
+  const text = new SliceTree("Lorem ipsum");
 
-  assert_iterator(text.read(0), "A");
-  assertEquals(text.count, 1);
+  assert_iterator(text.read(0), "Lorem ipsum");
+  assertEquals(text.count, 11);
   assertEquals(text.line_count, 1);
 
   assert_tree(text);
