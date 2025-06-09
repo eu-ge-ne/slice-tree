@@ -47,14 +47,25 @@ class GraphemeBuffer extends Buffer {
     this.#text += text;
   }
 
-  read(index: number, count: number): IteratorObject<string> {
+  *read(index: number, count: number): Generator<string> {
     const text = this.#text.slice(
       this.#index[Math.trunc(index / this.#index_step)],
-      this.#index[Math.ceil((index + count) / this.#index_step)],
     );
 
-    return this.#seg.segment(text)[Symbol.iterator]().drop(
-      index % this.#index_step,
-    ).take(count).map((x) => x.segment);
+    let i = index % this.#index_step;
+
+    for (const { segment } of this.#seg.segment(text)) {
+      if (count === 0) {
+        break;
+      }
+
+      if (i > 0) {
+        i -= 1;
+      } else {
+        yield segment;
+
+        count -= 1;
+      }
+    }
   }
 }
