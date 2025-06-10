@@ -6,7 +6,7 @@ import { assert_tree } from "./assert.ts";
 Deno.test("Create empty", () => {
   const text = new SliceTree();
 
-  assertEquals(text.read(0), "");
+  assertEquals(text.read(0), undefined);
   assertEquals(text.count, 0);
   assertEquals(text.line_count, 0);
   assert_tree(text);
