@@ -15,9 +15,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [Bun](#bun)
   - [Examples](#examples)
   - [API](#api)
-    - [`SliceTree.units()`](#slicetreeunits)
-    - [`SliceTree.points()`](#slicetreepoints)
-    - [`SliceTree.graphemes()`](#slicetreegraphemes)
+    - [`SliceTree()`](#slicetree)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
@@ -113,7 +111,7 @@ assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
 
 ## API
 
-### `SliceTree.units()`
+### `SliceTree()`
 
 Creates instance of `SliceTree` interpreting text characters as
 `UTF-16 code units`. Visit
@@ -123,33 +121,7 @@ for more details. Accepts optional initial text.
 Syntax
 
 ```ts ignore
-SliceTree.units(text?: string)
-```
-
-### `SliceTree.points()`
-
-Creates instance of `SliceTree` interpreting text characters as
-`Unicode code points`. Visit
-[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
-for more details. Accepts optional initial text.
-
-Syntax
-
-```ts ignore
-SliceTree.points(text?: string)
-```
-
-### `SliceTree.graphemes()`
-
-Creates instance of `SliceTree` interpreting text characters as
-`Unicode graphemes`. Visit
-[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
-for more details. Accepts optional initial text.
-
-Syntax
-
-```ts ignore
-SliceTree.graphemes(text?: string)
+new SliceTree(text?: string)
 ```
 
 ### `SliceTree:count`
