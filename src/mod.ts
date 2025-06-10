@@ -101,7 +101,7 @@ export class SliceTree {
    * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  *read(start: Position, end?: Position): Generator<string> {
+  *iter(start: Position, end?: Position): Generator<string> {
     const i0 = this.to_index(start);
 
     if (typeof i0 === "number") {
@@ -125,6 +125,10 @@ export class SliceTree {
         }
       }
     }
+  }
+
+  read(start: Position, end?: Position): string {
+    return this.iter(start, end).reduce((r, x) => r + x, "");
   }
 
   /**

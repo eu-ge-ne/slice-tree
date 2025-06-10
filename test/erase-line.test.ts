@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 
 import { SliceTree } from "../src/mod.ts";
-import { assert_iterator, assert_tree } from "./assert.ts";
+import { assert_tree } from "./assert.ts";
 
 Deno.test("Erase line", () => {
   const text = new SliceTree("Lorem \nipsum \ndolor \nsit \namet ");
@@ -10,25 +10,25 @@ Deno.test("Erase line", () => {
 
   text.erase([4, 0], [5, 0]);
 
-  assert_iterator(text.read(0), "Lorem \nipsum \ndolor \nsit \n");
+  assertEquals(text.read(0), "Lorem \nipsum \ndolor \nsit \n");
   assertEquals(text.count, 26);
   assertEquals(text.line_count, 5);
 
   text.erase([3, 0], [4, 0]);
 
-  assert_iterator(text.read(0), "Lorem \nipsum \ndolor \n");
+  assertEquals(text.read(0), "Lorem \nipsum \ndolor \n");
   assertEquals(text.count, 21);
   assertEquals(text.line_count, 4);
 
   text.erase([2, 0], [3, 0]);
 
-  assert_iterator(text.read(0), "Lorem \nipsum \n");
+  assertEquals(text.read(0), "Lorem \nipsum \n");
   assertEquals(text.count, 14);
   assertEquals(text.line_count, 3);
 
   text.erase([1, 0], [2, 0]);
 
-  assert_iterator(text.read(0), "Lorem \n");
+  assertEquals(text.read(0), "Lorem \n");
   assertEquals(text.count, 7);
   assertEquals(text.line_count, 2);
 
