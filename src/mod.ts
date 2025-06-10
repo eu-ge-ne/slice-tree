@@ -81,11 +81,11 @@ export class SliceTree {
   }
 
   /**
-   * Returns characters in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
+   * Returns text chunks in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
    * @param `start` Start position.
    * @param `end` Optional end position.
-   * @yields Characters.
+   * @yields Text.
    *
    * @example
    *
@@ -95,13 +95,13 @@ export class SliceTree {
    *
    * const text = new SliceTree("Lorem\nipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
-   * assertEquals(text.read(6).toArray().join(""), "ipsum");
-   * assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-   * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
+   * assertEquals(text.iter(0).toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.iter(6).toArray().join(""), "ipsum");
+   * assertEquals(text.iter([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+   * assertEquals(text.iter([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  *read(start: Position, end?: Position): Generator<string> {
+  *iter(start: Position, end?: Position): Generator<string> {
     const i0 = this.to_index(start);
 
     if (typeof i0 === "number") {
@@ -128,6 +128,31 @@ export class SliceTree {
   }
 
   /**
+   * Returns text in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
+   *
+   * @param `start` Start position.
+   * @param `end` Optional end position.
+   * @returns Text.
+   *
+   * @example
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum");
+   *
+   * assertEquals(text.read(0), "Lorem\nipsum");
+   * assertEquals(text.read(6), "ipsum");
+   * assertEquals(text.read([0, 0], [1, 0]), "Lorem\n");
+   * assertEquals(text.read([1, 0], [2, 0]), "ipsum");
+   * ```
+   */
+  read(start: Position, end?: Position): string {
+    return this.iter(start, end).reduce((r, x) => r + x, "");
+  }
+
+  /**
    * Inserts text into the buffer at the specified position.
    *
    * @param `position` Position at witch to insert the text.
@@ -144,7 +169,7 @@ export class SliceTree {
    * text.write(0, "Lorem");
    * text.write([0, 5], " ipsum");
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read(0), "Lorem ipsum");
    * ```
    */
   write(position: Position, text: string): void {
@@ -223,7 +248,7 @@ export class SliceTree {
    *
    * text.erase(5, 11);
    *
-   * assertEquals(text.read(0).toArray().join(""), "Lorem");
+   * assertEquals(text.read(0), "Lorem");
    * ```
    */
   erase(start: Position, end?: Position): void {

@@ -18,6 +18,7 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree()`](#slicetree)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
+    - [`SliceTree.proto.iter()`](#slicetreeprotoiter)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
@@ -76,37 +77,37 @@ const text = new SliceTree();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
-assertEquals(text.read(0).toArray().join(""), "");
+assertEquals(text.read(0), "");
 
 text.write(0, "Lorem");
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "Lorem");
+assertEquals(text.read(0), "Lorem");
 
 text.write(5, "ipsum");
 
 assertEquals(text.count, 10);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "Loremipsum");
+assertEquals(text.read(0), "Loremipsum");
 
 text.write(5, "\n");
 text.write(11, "\n");
 
 assertEquals(text.count, 12);
 assertEquals(text.line_count, 3);
-assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum\n");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum\n");
-assertEquals(text.read([2, 0], [3, 0]).toArray().join(""), "");
+assertEquals(text.read(0), "Lorem\nipsum\n");
+assertEquals(text.read([0, 0], [1, 0]), "Lorem\n");
+assertEquals(text.read([1, 0], [2, 0]), "ipsum\n");
+assertEquals(text.read([2, 0], [3, 0]), "");
 
 text.erase(0, 6);
 text.erase(5, 6);
 
 assertEquals(text.count, 5);
 assertEquals(text.line_count, 1);
-assertEquals(text.read(0).toArray().join(""), "ipsum");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "ipsum");
+assertEquals(text.read(0), "ipsum");
+assertEquals(text.read([0, 0], [1, 0]), "ipsum");
 ```
 
 ## API
@@ -166,15 +167,15 @@ const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 assertEquals(text.line_count, 5);
 ```
 
-### `SliceTree.proto.read()`
+### `SliceTree.proto.iter()`
 
-Returns characters in the buffer's section, specified by start (inclusive) and
+Returns text chunks in the buffer's section, specified by start (inclusive) and
 end (exclusive) positions.
 
 Syntax
 
 ```ts ignore
-read(start: Position, end?: Position): IteratorObject<string> | undefined
+*iter(start: Position, end?: Position): Generator<string>
 ```
 
 Example
@@ -185,10 +186,35 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 
 const text = new SliceTree("Lorem\nipsum");
 
-assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
-assertEquals(text.read(6).toArray().join(""), "ipsum");
-assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
+assertEquals(text.iter(0).toArray().join(""), "Lorem\nipsum");
+assertEquals(text.iter(6).toArray().join(""), "ipsum");
+assertEquals(text.iter([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+assertEquals(text.iter([1, 0], [2, 0]).toArray().join(""), "ipsum");
+```
+
+### `SliceTree.proto.read()`
+
+Returns text in the buffer's section, specified by start (inclusive) and end
+(exclusive) positions.
+
+Syntax
+
+```ts ignore
+read(start: Position, end?: Position): string
+```
+
+Example
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+
+const text = new SliceTree("Lorem\nipsum");
+
+assertEquals(text.read(0), "Lorem\nipsum");
+assertEquals(text.read(6), "ipsum");
+assertEquals(text.read([0, 0], [1, 0]), "Lorem\n");
+assertEquals(text.read([1, 0], [2, 0]), "ipsum");
 ```
 
 ### `SliceTree.proto.write()`
@@ -212,7 +238,7 @@ const text = new SliceTree();
 text.write(0, "Lorem");
 text.write([0, 5], " ipsum");
 
-assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
+assertEquals(text.read(0), "Lorem ipsum");
 ```
 
 ### `SliceTree.proto.erase()`
@@ -236,7 +262,7 @@ const text = new SliceTree("Lorem ipsum");
 
 text.erase(5, 11);
 
-assertEquals(text.read(0).toArray().join(""), "Lorem");
+assertEquals(text.read(0), "Lorem");
 ```
 
 ### `SliceTree.proto.to_index()`

@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 
 import { SliceTree } from "../src/mod.ts";
-import { assert_iterator, assert_tree } from "./assert.ts";
+import { assert_tree } from "./assert.ts";
 
 const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -62,7 +62,7 @@ function test_erase_head(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected);
+    assertEquals(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -70,7 +70,7 @@ function test_erase_head(text: SliceTree, n: number): void {
     expected = expected.slice(n);
   }
 
-  assert_iterator(text.read(0), "");
+  assertEquals(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -79,7 +79,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected);
+    assertEquals(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -87,7 +87,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
     expected = expected.slice(0, -n);
   }
 
-  assert_iterator(text.read(0), "");
+  assertEquals(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -96,7 +96,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected);
+    assertEquals(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -105,7 +105,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
     expected = expected.slice(0, pos) + expected.slice(pos + n);
   }
 
-  assert_iterator(text.read(0), "");
+  assertEquals(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -154,7 +154,7 @@ Deno.test("Erase causing splitting nodes", () => {
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
-      assert_iterator(text.read(0), expected);
+      assertEquals(text.read(0), expected);
       assertEquals(text.count, expected.length);
       assert_tree(text);
 
@@ -164,7 +164,7 @@ Deno.test("Erase causing splitting nodes", () => {
     n += 1;
   }
 
-  assert_iterator(text.read(0), "");
+  assertEquals(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 });
@@ -174,8 +174,7 @@ Deno.test("Erase count < 0", () => {
 
   text.erase(5, -6);
 
-  assert_iterator(text.read(0), "Lorem ipsum");
-
+  assertEquals(text.read(0), "Lorem ipsum");
   assert_tree(text);
 });
 
@@ -192,9 +191,8 @@ Deno.test("Erase removes lines", () => {
 
   assertEquals(text.count, 5);
   assertEquals(text.line_count, 1);
-  assert_iterator(text.read(0), "ipsum");
-  assert_iterator(text.read([0, 0], [1, 0]), "ipsum");
-
+  assertEquals(text.read(0), "ipsum");
+  assertEquals(text.read([0, 0], [1, 0]), "ipsum");
   assert_tree(text);
 });
 
@@ -205,9 +203,8 @@ Deno.test("Erasing newline char removes line", () => {
 
   text.erase(1, 2);
 
-  assert_iterator(text.read(0), "  \n");
+  assertEquals(text.read(0), "  \n");
   assertEquals(text.line_count, 2);
-
   assert_tree(text);
 });
 
@@ -218,9 +215,8 @@ Deno.test("Erasing first newline char removes line", () => {
 
   text.erase(0, 1);
 
-  assert_iterator(text.read(0), "\n");
+  assertEquals(text.read(0), "\n");
   assertEquals(text.line_count, 2);
-
   assert_tree(text);
 });
 
@@ -231,8 +227,7 @@ Deno.test("Erasing line followed by newline", () => {
 
   text.erase(2, 4);
 
-  assert_iterator(text.read(0), " \n\n \n");
+  assertEquals(text.read(0), " \n\n \n");
   assertEquals(text.line_count, 4);
-
   assert_tree(text);
 });
