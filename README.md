@@ -18,11 +18,9 @@ A `piece table` data structure implemented using `red-black tree`.
     - [`SliceTree()`](#slicetree)
     - [`SliceTree:count`](#slicetreecount)
     - [`SliceTree:line_count`](#slicetreeline_count)
-    - [`SliceTree.proto.iter()`](#slicetreeprotoiter)
     - [`SliceTree.proto.read()`](#slicetreeprotoread)
     - [`SliceTree.proto.write()`](#slicetreeprotowrite)
     - [`SliceTree.proto.erase()`](#slicetreeprotoerase)
-    - [`SliceTree.proto.to_index()`](#slicetreeprototo_index)
   - [Benchmarks](#benchmarks)
     - [Create](#create)
     - [Write](#write)
@@ -77,7 +75,7 @@ const text = new SliceTree();
 
 assertEquals(text.count, 0);
 assertEquals(text.line_count, 0);
-assertEquals(text.read(0), "");
+assertEquals(text.read(0), undefined);
 
 text.write(0, "Lorem");
 
@@ -99,7 +97,7 @@ assertEquals(text.line_count, 3);
 assertEquals(text.read(0), "Lorem\nipsum\n");
 assertEquals(text.read([0, 0], [1, 0]), "Lorem\n");
 assertEquals(text.read([1, 0], [2, 0]), "ipsum\n");
-assertEquals(text.read([2, 0], [3, 0]), "");
+assertEquals(text.read([2, 0], [3, 0]), undefined);
 
 text.erase(0, 6);
 text.erase(5, 6);
@@ -165,31 +163,6 @@ import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
 const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
 
 assertEquals(text.line_count, 5);
-```
-
-### `SliceTree.proto.iter()`
-
-Returns text chunks in the buffer's section, specified by start (inclusive) and
-end (exclusive) positions.
-
-Syntax
-
-```ts ignore
-*iter(start: Position, end?: Position): Generator<string>
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = new SliceTree("Lorem\nipsum");
-
-assertEquals(text.iter(0).toArray().join(""), "Lorem\nipsum");
-assertEquals(text.iter(6).toArray().join(""), "ipsum");
-assertEquals(text.iter([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-assertEquals(text.iter([1, 0], [2, 0]).toArray().join(""), "ipsum");
 ```
 
 ### `SliceTree.proto.read()`
@@ -263,27 +236,6 @@ const text = new SliceTree("Lorem ipsum");
 text.erase(5, 11);
 
 assertEquals(text.read(0), "Lorem");
-```
-
-### `SliceTree.proto.to_index()`
-
-Returns index of the character in the buffer at the specified position.
-
-Syntax
-
-```ts ignore
-to_index(position: Position): number | undefined
-```
-
-Example
-
-```ts
-import { assertEquals } from "jsr:@std/assert";
-import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-
-const text = new SliceTree("Lorem\nipsum");
-
-assertEquals(text.to_index([1, 0]), 6);
 ```
 
 ## Benchmarks
