@@ -7,7 +7,7 @@ const EXPECTED =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
 function slice_tree(): SliceTree {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(text.count, "Lorem");
   text.write(text.count, " ipsum");
@@ -33,7 +33,7 @@ function slice_tree(): SliceTree {
 }
 
 function slice_tree_reversed(): SliceTree {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(0, " aliqua.");
   text.write(0, " magna");
@@ -62,7 +62,7 @@ function test_erase_head(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -70,7 +70,7 @@ function test_erase_head(text: SliceTree, n: number): void {
     expected = expected.slice(n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -79,7 +79,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -87,7 +87,7 @@ function test_erase_tail(text: SliceTree, n: number): void {
     expected = expected.slice(0, -n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -96,7 +96,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
   let expected = EXPECTED;
 
   while (expected.length > 0) {
-    assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+    assert_iterator(text.read(0), expected);
     assertEquals(text.count, expected.length);
     assert_tree(text);
 
@@ -105,7 +105,7 @@ function test_erase_middle(text: SliceTree, n: number): void {
     expected = expected.slice(0, pos) + expected.slice(pos + n);
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 }
@@ -147,14 +147,14 @@ for (let n = 1; n <= 10; n += 1) {
 }
 
 Deno.test("Erase causing splitting nodes", () => {
-  const text = SliceTree.units(EXPECTED);
+  const text = new SliceTree(EXPECTED);
 
   let expected = EXPECTED;
 
   for (let n = 2; text.count > 0;) {
     const s = Math.floor(text.count / n);
     for (let i = n - 1; i >= 1; i -= 1) {
-      assert_iterator(text.read(0), expected.length > 0 ? expected : undefined);
+      assert_iterator(text.read(0), expected);
       assertEquals(text.count, expected.length);
       assert_tree(text);
 
@@ -164,13 +164,13 @@ Deno.test("Erase causing splitting nodes", () => {
     n += 1;
   }
 
-  assert_iterator(text.read(0), undefined);
+  assert_iterator(text.read(0), "");
   assertEquals(text.count, 0);
   assert_tree(text);
 });
 
 Deno.test("Erase count < 0", () => {
-  const text = SliceTree.units("Lorem ipsum");
+  const text = new SliceTree("Lorem ipsum");
 
   text.erase(5, -6);
 
@@ -180,7 +180,7 @@ Deno.test("Erase count < 0", () => {
 });
 
 Deno.test("Erase removes lines", () => {
-  const text = SliceTree.units();
+  const text = new SliceTree();
 
   text.write(0, "Lorem");
   text.write(5, "ipsum");
@@ -199,7 +199,7 @@ Deno.test("Erase removes lines", () => {
 });
 
 Deno.test("Erasing newline char removes line", () => {
-  const text = SliceTree.units(" \n \n");
+  const text = new SliceTree(" \n \n");
 
   assertEquals(text.line_count, 3);
 
@@ -212,7 +212,7 @@ Deno.test("Erasing newline char removes line", () => {
 });
 
 Deno.test("Erasing first newline char removes line", () => {
-  const text = SliceTree.units("\n\n");
+  const text = new SliceTree("\n\n");
 
   assertEquals(text.line_count, 3);
 
@@ -225,7 +225,7 @@ Deno.test("Erasing first newline char removes line", () => {
 });
 
 Deno.test("Erasing line followed by newline", () => {
-  const text = SliceTree.units(" \n \n\n \n");
+  const text = new SliceTree(" \n \n\n \n");
 
   assertEquals(text.line_count, 5);
 

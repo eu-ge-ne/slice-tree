@@ -1,9 +1,6 @@
-import type { BufferFactory } from "./buffer.ts";
 import { delete_node } from "./deletion.ts";
-import { GraphemeBufferFactory } from "./grapheme.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, iter, NIL, node_from_text } from "./node.ts";
-import { PointBufferFactory } from "./point.ts";
+import { bubble_update, NIL, node_from_text } from "./node.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
 import {
   grow_slice,
@@ -12,7 +9,6 @@ import {
   trim_slice_start,
 } from "./slice.ts";
 import { split } from "./splitting.ts";
-import { UnitBufferFactory } from "../src/unit.ts";
 
 /**
  * Represents position in text buffer. Can be either `number` or `[number, number]`:
@@ -25,22 +21,11 @@ export type Position = number | readonly [number, number];
  * Implements `piece table` data structure to represent text buffer.
  */
 export class SliceTree {
-  #factory: BufferFactory;
-
   /**
    * @ignore
    * @internal
    */
   root = NIL;
-
-  private constructor(factory: BufferFactory, text?: string) {
-    this.#factory = factory;
-
-    if (text && text.length > 0) {
-      this.root = node_from_text(factory, text);
-      this.root.red = false;
-    }
-  }
 
   /**
    * Creates instance of `SliceTree` interpreting text characters as `UTF-16 code units`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
@@ -48,28 +33,11 @@ export class SliceTree {
    * @param `text` Initial text.
    * @returns `SliceTree` instance.
    */
-  static units(text?: string): SliceTree {
-    return new SliceTree(new UnitBufferFactory(), text);
-  }
-
-  /**
-   * Creates instance of `SliceTree` interpreting text characters as `Unicode code points`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
-   *
-   * @param `text` Initial text.
-   * @returns `SliceTree` instance.
-   */
-  static points(text?: string): SliceTree {
-    return new SliceTree(new PointBufferFactory(10_000), text);
-  }
-
-  /**
-   * Creates instance of `SliceTree` interpreting text characters as `Unicode graphemes`. Visit [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters) for more details. Accepts optional initial text.
-   *
-   * @param `text` Initial text.
-   * @returns `SliceTree` instance.
-   */
-  static graphemes(text?: string): SliceTree {
-    return new SliceTree(new GraphemeBufferFactory(10_000), text);
+  constructor(text?: string) {
+    if (text && text.length > 0) {
+      this.root = node_from_text(text);
+      this.root.red = false;
+    }
   }
 
   /**
@@ -83,7 +51,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem ipsum");
+   * const text = new SliceTree("Lorem ipsum");
    *
    * assertEquals(text.count, 11);
    * ```
@@ -103,7 +71,7 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem\nipsum\ndolor\nsit\namet");
+   * const text = new SliceTree("Lorem\nipsum\ndolor\nsit\namet");
    *
    * assertEquals(text.line_count, 5);
    * ```
@@ -125,28 +93,36 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.points("Lorem\nipsum");
+   * const text = new SliceTree("Lorem\nipsum");
    *
-   * assertEquals(text.read(0)?.toArray().join(""), "Lorem\nipsum");
-   * assertEquals(text.read(6)?.toArray().join(""), "ipsum");
-   * assertEquals(text.read([0, 0], [1, 0])?.toArray().join(""), "Lorem\n");
-   * assertEquals(text.read([1, 0], [2, 0])?.toArray().join(""), "ipsum");
+   * assertEquals(text.read(0).toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.read(6).toArray().join(""), "ipsum");
+   * assertEquals(text.read([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+   * assertEquals(text.read([1, 0], [2, 0]).toArray().join(""), "ipsum");
    * ```
    */
-  read(start: Position, end?: Position): IteratorObject<string> | undefined {
-    const start_index = this.to_index(start);
+  *read(start: Position, end?: Position): Generator<string> {
+    const i0 = this.to_index(start);
 
-    if (typeof start_index === "number") {
-      const first = find_node(this.root, start_index);
+    if (typeof i0 === "number") {
+      const first = find_node(this.root, i0);
 
       if (first) {
-        const chars = iter(first.node, first.offset);
+        const i1 = (end ? this.to_index(end) : undefined) ??
+          Number.MAX_SAFE_INTEGER;
 
-        const end_index = end ? this.to_index(end) : undefined;
+        let { node, offset } = first;
+        let n = i1 - i0;
 
-        return typeof end_index === "number"
-          ? chars.take(end_index - start_index)
-          : chars;
+        while ((node !== NIL) && (n > 0)) {
+          const count = Math.min(node.slice.len - offset, n);
+
+          yield node.slice.buf.read(node.slice.start + offset, count);
+
+          node = successor(node);
+          offset = 0;
+          n -= count;
+        }
       }
     }
   }
@@ -163,35 +139,35 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units();
+   * const text = new SliceTree();
    *
    * text.write(0, "Lorem");
    * text.write([0, 5], " ipsum");
    *
-   * assertEquals(text.read(0)?.toArray().join(""), "Lorem ipsum");
+   * assertEquals(text.read(0).toArray().join(""), "Lorem ipsum");
    * ```
    */
   write(position: Position, text: string): void {
-    let index = this.to_index(position);
+    let i = this.to_index(position);
 
-    if (typeof index === "number") {
+    if (typeof i === "number") {
       let p = NIL;
       let insert_case = InsertionCase.Root;
 
       for (let x = this.root; x !== NIL;) {
-        if (index <= x.left.len) {
+        if (i <= x.left.len) {
           insert_case = InsertionCase.Left;
           p = x;
           x = x.left;
         } else {
-          index -= x.left.len;
+          i -= x.left.len;
 
-          if (index < x.slice.len) {
+          if (i < x.slice.len) {
             insert_case = InsertionCase.Split;
             p = x;
             x = NIL;
           } else {
-            index -= x.slice.len;
+            i -= x.slice.len;
 
             insert_case = InsertionCase.Right;
             p = x;
@@ -205,7 +181,7 @@ export class SliceTree {
 
         bubble_update(p);
       } else {
-        const child = node_from_text(this.#factory, text);
+        const child = node_from_text(text);
 
         switch (insert_case) {
           case InsertionCase.Root: {
@@ -222,7 +198,7 @@ export class SliceTree {
             break;
           }
           case InsertionCase.Split: {
-            const y = split(this, p, index, 0);
+            const y = split(this, p, i, 0);
             insert_left(this, y, child);
             break;
           }
@@ -243,25 +219,25 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem ipsum");
+   * const text = new SliceTree("Lorem ipsum");
    *
    * text.erase(5, 11);
    *
-   * assertEquals(text.read(0)?.toArray().join(""), "Lorem");
+   * assertEquals(text.read(0).toArray().join(""), "Lorem");
    * ```
    */
   erase(start: Position, end?: Position): void {
-    const start_index = this.to_index(start);
+    const i0 = this.to_index(start);
 
-    if (typeof start_index === "number") {
-      const first = find_node(this.root, start_index);
+    if (typeof i0 === "number") {
+      const first = find_node(this.root, i0);
 
       if (first) {
-        const end_index = (end ? this.to_index(end) : undefined) ??
+        const i1 = (end ? this.to_index(end) : undefined) ??
           Number.MAX_SAFE_INTEGER;
-        const count = end_index - start_index;
 
         const { node, offset } = first;
+        const count = i1 - i0;
         const offset2 = offset + count;
 
         if (offset2 === node.slice.len) {
@@ -286,7 +262,7 @@ export class SliceTree {
             x = split(this, node, offset, 0);
           }
 
-          const last = find_node(this.root, end_index);
+          const last = find_node(this.root, i1);
           if (last && last.offset !== 0) {
             split(this, last.node, last.offset, 0);
           }
@@ -317,35 +293,35 @@ export class SliceTree {
    * import { assertEquals } from "jsr:@std/assert";
    * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
    *
-   * const text = SliceTree.units("Lorem\nipsum");
+   * const text = new SliceTree("Lorem\nipsum");
    *
    * assertEquals(text.to_index([1, 0]), 6);
    * ```
    */
   to_index(position: Position): number | undefined {
-    let index: number | undefined;
+    let i: number | undefined;
 
     if (typeof position === "number") {
-      index = position;
+      i = position;
     } else {
       let line = position[0];
       if (line < 0) {
         line = Math.max(this.line_count + line, 0);
       }
 
-      index = line === 0 ? 0 : find_eol(this.root, line - 1);
-      if (typeof index === "number") {
-        index += position[1];
+      i = line === 0 ? 0 : find_eol(this.root, line - 1);
+      if (typeof i === "number") {
+        i += position[1];
       }
     }
 
-    if (typeof index === "number") {
-      if (index < 0) {
-        index = Math.max(this.count + index, 0);
+    if (typeof i === "number") {
+      if (i < 0) {
+        i = Math.max(this.count + i, 0);
       }
 
-      if (index <= this.count) {
-        return index;
+      if (i <= this.count) {
+        return i;
       }
     }
   }

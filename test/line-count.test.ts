@@ -3,9 +3,9 @@ import { assertEquals } from "@std/assert";
 import { SliceTree } from "../src/mod.ts";
 
 Deno.test("0 newlines", () => {
-  const text1 = SliceTree.units("A");
-  const text2 = SliceTree.points("😄");
-  const text3 = SliceTree.graphemes("🤦🏼‍♂️");
+  const text1 = new SliceTree("A");
+  const text2 = new SliceTree("😄");
+  const text3 = new SliceTree("🤦🏼‍♂️");
 
   assertEquals(text1.line_count, 1);
   assertEquals(text2.line_count, 1);
@@ -13,9 +13,9 @@ Deno.test("0 newlines", () => {
 });
 
 Deno.test("LF", () => {
-  const text1 = SliceTree.units("A\nA");
-  const text2 = SliceTree.points("😄\n😄");
-  const text3 = SliceTree.graphemes("🤦🏼‍♂️\n🤦🏼‍♂️");
+  const text1 = new SliceTree("A\nA");
+  const text2 = new SliceTree("😄\n😄");
+  const text3 = new SliceTree("🤦🏼‍♂️\n🤦🏼‍♂️");
 
   assertEquals(text1.line_count, 2);
   assertEquals(text2.line_count, 2);
@@ -23,9 +23,9 @@ Deno.test("LF", () => {
 });
 
 Deno.test("CRLF", () => {
-  const text1 = SliceTree.units("A\r\nA");
-  const text2 = SliceTree.points("😄\r\n😄");
-  const text3 = SliceTree.graphemes("🤦🏼‍♂️\r\n🤦🏼‍♂️");
+  const text1 = new SliceTree("A\r\nA");
+  const text2 = new SliceTree("😄\r\n😄");
+  const text3 = new SliceTree("🤦🏼‍♂️\r\n🤦🏼‍♂️");
 
   assertEquals(text1.line_count, 2);
   assertEquals(text2.line_count, 2);

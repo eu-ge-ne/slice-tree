@@ -8,7 +8,7 @@ Deno.bench("Trimming a SliceTree", {
   group: "Trim",
   baseline: true,
 }, (b) => {
-  const text = SliceTree.units(str(N));
+  const text = new SliceTree(str(N));
 
   b.start();
 
@@ -37,7 +37,7 @@ Deno.bench("Deleting from a SliceTree", {
   group: "Delete",
   baseline: true,
 }, (b) => {
-  const text = SliceTree.units(str(N));
+  const text = new SliceTree(str(N));
 
   b.start();
 

@@ -1,14 +1,29 @@
-export abstract class BufferFactory {
-  abstract create(text: string): Buffer;
-}
+const EOL_RE = /\r?\n/gm;
 
-export abstract class Buffer {
+export class Buffer {
+  #text = "";
+
   len = 0;
   eol_starts: number[] = [];
   eol_ends: number[] = [];
 
-  abstract append(text: string): void;
-  abstract read(index: number, n: number): IteratorObject<string>;
+  constructor(text: string) {
+    this.append(text);
+  }
+
+  append(text: string): void {
+    for (const x of text.matchAll(EOL_RE)) {
+      this.eol_starts.push(this.len + x.index);
+      this.eol_ends.push(this.len + x.index + x[0].length);
+    }
+
+    this.len += text.length;
+    this.#text += text;
+  }
+
+  read(index: number, count: number): string {
+    return this.#text.slice(index, index + count);
+  }
 
   find_eol(a: number, index: number): number {
     let b = this.eol_starts.length - 1;
