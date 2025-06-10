@@ -80,6 +80,27 @@ export class SliceTree {
     return this.root.len === 0 ? 0 : this.root.eols_len + 1;
   }
 
+  /**
+   * Returns text chunks in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
+   *
+   * @param `start` Start position.
+   * @param `end` Optional end position.
+   * @yields Text.
+   *
+   * @example
+   *
+   * ```ts
+   * import { assertEquals } from "jsr:@std/assert";
+   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
+   *
+   * const text = new SliceTree("Lorem\nipsum");
+   *
+   * assertEquals(text.iter(0).toArray().join(""), "Lorem\nipsum");
+   * assertEquals(text.iter(6).toArray().join(""), "ipsum");
+   * assertEquals(text.iter([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
+   * assertEquals(text.iter([1, 0], [2, 0]).toArray().join(""), "ipsum");
+   * ```
+   */
   *iter(start: Position, end?: Position): Generator<string> {
     const i0 = this.to_index(start);
 
