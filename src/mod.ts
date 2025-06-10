@@ -1,6 +1,6 @@
 import { delete_node } from "./deletion.ts";
 import { insert_left, insert_right, InsertionCase } from "./insertion.ts";
-import { bubble_update, NIL, node_from_text } from "./node.ts";
+import { bubble_update, NIL, node_from_text, read } from "./node.ts";
 import { find_eol, find_node, successor } from "./querying.ts";
 import {
   grow_slice,
@@ -81,53 +81,6 @@ export class SliceTree {
   }
 
   /**
-   * Returns text chunks in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
-   *
-   * @param `start` Start position.
-   * @param `end` Optional end position.
-   * @yields Text.
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = new SliceTree("Lorem\nipsum");
-   *
-   * assertEquals(text.iter(0).toArray().join(""), "Lorem\nipsum");
-   * assertEquals(text.iter(6).toArray().join(""), "ipsum");
-   * assertEquals(text.iter([0, 0], [1, 0]).toArray().join(""), "Lorem\n");
-   * assertEquals(text.iter([1, 0], [2, 0]).toArray().join(""), "ipsum");
-   * ```
-   */
-  *iter(start: Position, end?: Position): Generator<string> {
-    const i0 = this.to_index(start);
-
-    if (typeof i0 === "number") {
-      const first = find_node(this.root, i0);
-
-      if (first) {
-        const i1 = (end ? this.to_index(end) : undefined) ??
-          Number.MAX_SAFE_INTEGER;
-
-        let { node, offset } = first;
-        let n = i1 - i0;
-
-        while ((node !== NIL) && (n > 0)) {
-          const count = Math.min(node.slice.len - offset, n);
-
-          yield node.slice.buf.read(node.slice.start + offset, count);
-
-          node = successor(node);
-          offset = 0;
-          n -= count;
-        }
-      }
-    }
-  }
-
-  /**
    * Returns text in the buffer's section, specified by start (inclusive) and end (exclusive) positions.
    *
    * @param `start` Start position.
@@ -148,8 +101,22 @@ export class SliceTree {
    * assertEquals(text.read([1, 0], [2, 0]), "ipsum");
    * ```
    */
-  read(start: Position, end?: Position): string {
-    return this.iter(start, end).reduce((r, x) => r + x, "");
+  read(start: Position, end?: Position): string | undefined {
+    const i0 = this.#index(start);
+
+    if (typeof i0 === "number") {
+      const first = find_node(this.root, i0);
+
+      if (first) {
+        const { node, offset } = first;
+
+        const i1 = (end ? this.#index(end) : undefined) ??
+          Number.MAX_SAFE_INTEGER;
+        const n = i1 - i0;
+
+        return read(node, offset, n).reduce((r, x) => r + x, "");
+      }
+    }
   }
 
   /**
@@ -173,7 +140,7 @@ export class SliceTree {
    * ```
    */
   write(position: Position, text: string): void {
-    let i = this.to_index(position);
+    let i = this.#index(position);
 
     if (typeof i === "number") {
       let p = NIL;
@@ -252,13 +219,13 @@ export class SliceTree {
    * ```
    */
   erase(start: Position, end?: Position): void {
-    const i0 = this.to_index(start);
+    const i0 = this.#index(start);
 
     if (typeof i0 === "number") {
       const first = find_node(this.root, i0);
 
       if (first) {
-        const i1 = (end ? this.to_index(end) : undefined) ??
+        const i1 = (end ? this.#index(end) : undefined) ??
           Number.MAX_SAFE_INTEGER;
 
         const { node, offset } = first;
@@ -306,24 +273,7 @@ export class SliceTree {
     }
   }
 
-  /**
-   * Returns index of the character in the buffer at the specified position.
-   *
-   * @param `position` Position.
-   * @returns Index
-   *
-   * @example
-   *
-   * ```ts
-   * import { assertEquals } from "jsr:@std/assert";
-   * import { SliceTree } from "jsr:@eu-ge-ne/slice-tree";
-   *
-   * const text = new SliceTree("Lorem\nipsum");
-   *
-   * assertEquals(text.to_index([1, 0]), 6);
-   * ```
-   */
-  to_index(position: Position): number | undefined {
+  #index(position: Position): number | undefined {
     let i: number | undefined;
 
     if (typeof position === "number") {
