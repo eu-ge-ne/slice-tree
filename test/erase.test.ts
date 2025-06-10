@@ -175,7 +175,6 @@ Deno.test("Erase count < 0", () => {
   text.erase(5, -6);
 
   assertEquals(text.read(0), "Lorem ipsum");
-
   assert_tree(text);
 });
 
@@ -194,7 +193,6 @@ Deno.test("Erase removes lines", () => {
   assertEquals(text.line_count, 1);
   assertEquals(text.read(0), "ipsum");
   assertEquals(text.read([0, 0], [1, 0]), "ipsum");
-
   assert_tree(text);
 });
 
@@ -207,7 +205,6 @@ Deno.test("Erasing newline char removes line", () => {
 
   assertEquals(text.read(0), "  \n");
   assertEquals(text.line_count, 2);
-
   assert_tree(text);
 });
 
@@ -220,7 +217,6 @@ Deno.test("Erasing first newline char removes line", () => {
 
   assertEquals(text.read(0), "\n");
   assertEquals(text.line_count, 2);
-
   assert_tree(text);
 });
 
@@ -233,6 +229,5 @@ Deno.test("Erasing line followed by newline", () => {
 
   assertEquals(text.read(0), " \n\n \n");
   assertEquals(text.line_count, 4);
-
   assert_tree(text);
 });

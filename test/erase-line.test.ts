@@ -13,24 +13,26 @@ Deno.test("Erase line", () => {
   assertEquals(text.read(0), "Lorem \nipsum \ndolor \nsit \n");
   assertEquals(text.count, 26);
   assertEquals(text.line_count, 5);
+  assert_tree(text);
 
   text.erase([3, 0], [4, 0]);
 
   assertEquals(text.read(0), "Lorem \nipsum \ndolor \n");
   assertEquals(text.count, 21);
   assertEquals(text.line_count, 4);
+  assert_tree(text);
 
   text.erase([2, 0], [3, 0]);
 
   assertEquals(text.read(0), "Lorem \nipsum \n");
   assertEquals(text.count, 14);
   assertEquals(text.line_count, 3);
+  assert_tree(text);
 
   text.erase([1, 0], [2, 0]);
 
   assertEquals(text.read(0), "Lorem \n");
   assertEquals(text.count, 7);
   assertEquals(text.line_count, 2);
-
   assert_tree(text);
 });

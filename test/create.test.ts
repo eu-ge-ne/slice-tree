@@ -9,7 +9,6 @@ Deno.test("Create empty", () => {
   assertEquals(text.read(0), "");
   assertEquals(text.count, 0);
   assertEquals(text.line_count, 0);
-
   assert_tree(text);
 });
 
@@ -19,6 +18,5 @@ Deno.test("Create", () => {
   assertEquals(text.read(0), "Lorem ipsum");
   assertEquals(text.count, 11);
   assertEquals(text.line_count, 1);
-
   assert_tree(text);
 });
