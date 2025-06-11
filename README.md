@@ -1,3 +1,7 @@
+**Note: This repository is outdated and archived. The development continues in the [text-buf](https://github.com/eu-ge-ne/text-buf) repository.**
+
+<hr />
+
 # slice-tree
 
 A `piece table` data structure implemented using `red-black tree`.
